@@ -1,0 +1,39 @@
+{
+    "name": "rover",
+    "version": "0.1.0",
+    "main": "src/index.ts",
+    "private": true,
+    "engines": {
+        "node": ">= 16.2.0"
+    },
+    "scripts": {
+        "watch": "tsc -w",
+        "start": "node dist/src/index.js",
+        "test": "mocha test --recursive"
+    },
+    "dependencies": {
+        "chalk": "^4.1.2",
+        "commander": "^8.2.0",
+        "date-fns": "^2.16.1",
+        "dotenv": "^8.2.0"
+    },
+    "devDependencies": {
+        "@types/node": "^16.9.6",
+        "chai": "^4.3.4",
+        "eslint": "^7.17.0",
+        "eslint-config-airbnb-base": "^14.2.1",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-import": "^2.23.4",
+        "eslint-plugin-mocha": "^9.0.0",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-prettier": "^3.4.0",
+        "eslint-plugin-security": "^1.4.0",
+        "mocha": "^9.0.1",
+        "typescript": "^4.4.3"
+    },
+    "nodemonConfig": {
+        "ignore": [
+            "node_modules/*"
+        ]
+    }
+}
