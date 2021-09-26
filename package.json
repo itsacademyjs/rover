@@ -3,10 +3,12 @@
     "version": "0.1.0",
     "main": "src/index.ts",
     "private": true,
+    "bin": "./bin/rover",
     "engines": {
         "node": ">= 16.2.0"
     },
     "scripts": {
+        "build": "tsc && pkg ./package.json --out-path ./dist --targets node16-linux-x64,node16-win-x64,node16-macos-x64",
         "watch": "tsc -w",
         "start": "node dist/src/index.js",
         "test": "mocha test --recursive"
@@ -29,6 +31,7 @@
         "eslint-plugin-prettier": "^3.4.0",
         "eslint-plugin-security": "^1.4.0",
         "mocha": "^9.0.1",
+        "pkg": "^5.3.2",
         "typescript": "^4.4.3"
     },
     "nodemonConfig": {

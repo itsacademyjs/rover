@@ -155,7 +155,7 @@ const configureCommands = (): Command => {
             } as Configuration;
             await validateSolution(handle, configuration);
         });
-    program.addCommand(submitCommand, { isDefault: true });
+    program.addCommand(submitCommand);
     program.option(
         "-f, --exercise-file <file>",
         "specify the exercise file",
@@ -173,7 +173,7 @@ const main = () => {
     program.parse(process.argv);
 };
 
-main();
+export { main };
 
 // execute("node", ["./hello.js"], {
 //     standardOutputEncoding: "utf8",
