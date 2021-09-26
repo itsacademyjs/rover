@@ -1,38 +1,67 @@
+import Execution from "./Execution";
+
 export { default as ExecuteOptions } from "./ExecuteOptions";
 export { default as Execution } from "./Execution";
 
-export type ValidatorType =
-    | "ss-validator/v1"
-    | "node-validator/v1"
-    | "fs-validator/v1";
+export type AssertFunction<T> = (
+    options: T,
+    description?: string
+) => Promise<AssertionResult<T>>;
 
-export interface SSValidatorOptions {
+export interface AssertOutputOptions {
+    command: string;
     input?: string;
     expectedOutput?: string;
     expectedError?: string;
 }
 
-export interface NodeValidatorOptions {
-    nodeVersion?: string;
-    npmVersion?: string;
-    yarnVersion?: string;
+export interface AssertToolVersionOptions {
+    tool: string;
+    version: string;
 }
 
-export interface FSValidatorOptions {
-    exists: string[];
+export interface AssertFileOptions {
+    path: string;
+    regular?: boolean;
 }
 
-export interface Test {
+export interface AssertDirectoryOptions {
+    path: string;
+}
+
+export interface TestContext {
+    assertOutput: AssertFunction<AssertOutputOptions>;
+
+    assertToolVersion: AssertFunction<AssertToolVersionOptions>;
+
+    assertFile: AssertFunction<AssertFileOptions>;
+
+    assertDirectory: AssertFunction<AssertDirectoryOptions>;
+}
+
+export interface AssertionResult<T> {
+    type: "assert-output" | "assert-version" | string;
+    success: boolean;
     description: string;
-    validator: ValidatorType;
-    options: SSValidatorOptions | NodeValidatorOptions | FSValidatorOptions;
+    time: bigint;
+    options: T;
 }
+
+export interface OutputAssertionResult
+    extends AssertionResult<AssertOutputOptions> {
+    execution: Execution;
+}
+
+export interface FileAssertionResult
+    extends AssertionResult<AssertFileOptions> {}
+
+export interface ToolVersionAssertionResult
+    extends AssertionResult<AssertToolVersionOptions> {}
 
 export interface Excercise {
-    id: string;
     handle: string;
     statement: string;
-    tests: Test[];
+    test: (context: TestContext) => Promise<AssertionResult<any>>[];
 }
 
 export interface Configuration {
@@ -40,8 +69,3 @@ export interface Configuration {
     stdError?: boolean;
     stdOutput?: boolean;
 }
-
-export type ValidatorFunction = (
-    options: SSValidatorOptions | NodeValidatorOptions | FSValidatorOptions,
-    configuration: Configuration
-) => Promise<boolean>;

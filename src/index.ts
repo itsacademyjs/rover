@@ -1,79 +1,131 @@
 import { Command } from "commander";
 import chalk from "chalk";
-import fs from "fs";
 
-import { Excercise, Configuration } from "./types";
-import { readJSONFile } from "./util";
-import validators from "./validators";
+import {
+    Excercise,
+    Configuration,
+    AssertFunction,
+    AssertionResult,
+    OutputAssertionResult,
+} from "./types";
+import * as assertions from "./assertions";
+import excercises from "./excercises";
 
-const exercise: Excercise = {
-    id: "507f1f77bcf86cd799439011",
-    handle: "node/factorial",
-    statement: `Factorial of a non-negative integer, is multiplication of all integers smaller than or equal to n.
-For example factorial of 6 is 6 * 5 * 4 * 3 * 2 * 1 which is 720.
-
-Factorial can be calculated iteratively or recursively. You can solve using any approach.`,
-    tests: [
-        {
-            description: "Calculate the factorial of the specified integer",
-            validator: "ss-validator/v1",
-            options: {
-                input: "5\n",
-                expectedOutput: "Enter an integer: 120\n",
-            },
-        },
-        {
-            description: "Install Node v16.9.1",
-            validator: "node-validator/v1",
-            options: {
-                nodeVersion: "v16.9.1",
-            },
-        },
-        {
-            description: "Write the source code in 'index.js'",
-            validator: "fs-validator/v1",
-            options: {
-                exists: ["./index.js"],
-            },
-        },
-    ],
+const printLines = (prefix: string = "", text: string, suffix: string = "") => {
+    process.stdout.write(
+        text
+            .split("\n")
+            .map((line) => `${prefix}${line}${suffix}`)
+            .join("\n")
+    );
+    console.log("\n");
 };
 
-const downloadProblems = (handle: string) => {
-    console.log(`Fetching excercise ${handle}...`);
+const validateSolution = async (
+    handle: string,
+    configuration: Configuration
+) => {
+    const excercise = excercises[handle] as Excercise;
+    if (!excercise) {
+        console.log(
+            `${chalk.redBright.bold(
+                "[error]"
+            )} Cannot find excercise ${chalk.whiteBright.bold(
+                handle
+            )}. Try updating Rover to fix the issue.`
+        );
+        return;
+    }
 
-    setTimeout(async () => {
-        const json = JSON.stringify(exercise, null, 4);
-        await fs.promises.writeFile("rover.json", json, { encoding: "utf8" });
-        console.log(`Done. Let's get this party started!`);
+    const interceptResult =
+        <V, A extends AssertFunction<V>>(assert: A): AssertFunction<V> =>
+        async (
+            options: V,
+            description?: string
+        ): Promise<AssertionResult<V> | null> => {
+            /* Read more about this here: https://stackoverflow.com/a/14968691/3068233 */
+            const roundToHundredths = (n: number) => Math.round(n * 100) / 100;
+            const startTimeInNanoseconds = process.hrtime.bigint();
+            let durationInSeconds = 0;
+            let result: AssertionResult<V> | null = null;
+
+            try {
+                result = await assert(options, description);
+            } catch (error) {
+                console.log(
+                    `${chalk.redBright("[error]")} Something went wrong!`
+                );
+                console.log(error);
+            } finally {
+                const endTimeInNanoseconds = process.hrtime.bigint();
+                const durationInNanoseconds =
+                    endTimeInNanoseconds - startTimeInNanoseconds;
+                const durationInSeconds = roundToHundredths(
+                    Number(durationInNanoseconds) / 1e9
+                ); // https://stackoverflow.com/a/53970656/3068233
+
+                if (result) {
+                    result.time = durationInNanoseconds;
+                }
+            }
+            return result;
+        };
+
+    const { assertOutput, assertToolVersion, assertFile, assertDirectory } =
+        assertions;
+    const promises = excercise.test({
+        assertOutput: interceptResult(assertOutput),
+        assertToolVersion: interceptResult(assertToolVersion),
+        assertFile: interceptResult(assertFile),
+        assertDirectory: interceptResult(assertDirectory),
     });
-};
+    const results = await Promise.all(promises);
 
-const validateSolution = async (configuration: Configuration) => {
-    const { tests } = (await readJSONFile(
-        configuration.exerciseFile
-    )) as Excercise;
-    for (const test of tests) {
-        const { validator, options, description } = test;
-        if (Object.prototype.hasOwnProperty.call(validators, validator)) {
-            const validatorFunction = validators[validator];
-            const result = await validatorFunction(options, configuration);
-            console.log(
-                ` ${
-                    result ? chalk.greenBright("✓") : chalk.redBright("✕")
+    for (const result of results) {
+        const { type, success, description } = result;
+        console.log(
+            chalk.bold(
+                `\n ${
+                    success ? chalk.greenBright("✓") : chalk.redBright("✕")
                 }  ${description}\n`
-            );
-        } else {
-            console.log(
-                ` ${chalk.redBright(
-                    "✕"
-                )}  Cannot find validator ${chalk.whiteBright.bold(
-                    validator
-                )}.\n    Try updating Rover to fix the issue.`
-            );
+            )
+        );
+
+        if (type === "assert-output") {
+            const { execution, options } = result as OutputAssertionResult;
+
+            if (execution.standardOutput) {
+                console.log(chalk.yellowBright("    Standard Output"));
+                printLines(
+                    chalk.whiteBright.bold("        > "),
+                    execution.standardOutput
+                );
+            }
+
+            if (execution.standardError) {
+                console.log(chalk.yellowBright("    Standard Error"));
+                printLines(
+                    chalk.redBright.bold("        > "),
+                    execution.standardError
+                );
+            }
+
+            if (!success) {
+                console.log(chalk.redBright.bold("Actual"));
+                printLines(
+                    chalk.redBright.bold("        - "),
+                    execution.standardOutput
+                );
+                console.log(chalk.greenBright.bold("Expected"));
+                printLines(
+                    chalk.greenBright.bold("        + "),
+                    options.expectedOutput
+                );
+            }
         }
     }
-    console.log("Done");
+
+    console.log(`Done in ${process.uptime().toFixed(2)}s.`);
 };
 
 const configureCommands = (): Command => {
@@ -83,35 +135,27 @@ const configureCommands = (): Command => {
     const submitCommand = new Command();
     submitCommand
         .name("submit")
+        .argument("<handle>", "the handle for the exercise")
         .option(
             "--std-error",
             "print the standard error generated by the solution",
-            false
+            true
         )
         .option(
             "--std-output",
             "print the standard output generated by the solution",
-            false
+            true
         )
         .alias("x")
         .description("validate your solution and submit the results")
-        .action(async () => {
-            const options = {
+        .action(async (handle: string) => {
+            const configuration = {
                 ...program.opts(),
                 ...submitCommand.opts(),
             } as Configuration;
-            await validateSolution(options);
+            await validateSolution(handle, configuration);
         });
     program.addCommand(submitCommand, { isDefault: true });
-
-    program
-        .command("solving")
-        .alias("s")
-        .argument("<handle>", "the handle for the exercise")
-        .description("identify the excercise being solved")
-        .action((handle: string) => {
-            downloadProblems(handle);
-        });
     program.option(
         "-f, --exercise-file <file>",
         "specify the exercise file",

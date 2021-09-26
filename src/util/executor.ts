@@ -82,6 +82,10 @@ const execute = (
             resolve(result);
         });
 
+        spawnedProcess.on("error", (error) => {
+            reject(error);
+        });
+
         if (options.standardInput) {
             /* The newline ensures that someone reading from the standard input does not wait
              * forever.
