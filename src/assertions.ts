@@ -6,7 +6,7 @@
  */
 
 import AssertionError from "assertion-error";
-import _ from "lodash";
+import lodash from "lodash";
 
 /**
  * Create to your own test expressions.
@@ -153,7 +153,7 @@ const notStrictEqual = (actual: any, expected: any, message: string) => {
  */
 
 const deepEqual = (actual: any, expected: any, message: string) => {
-    if (!_.isEqual(actual, expected)) {
+    if (!lodash.isEqual(actual, expected)) {
         throw new AssertionError(message, {
             actual,
             expected,
@@ -170,7 +170,7 @@ const deepEqual = (actual: any, expected: any, message: string) => {
  */
 
 const notDeepEqual = (actual: any, expected: any, message: string) => {
-    if (_.isEqual(actual, expected)) {
+    if (lodash.isEqual(actual, expected)) {
         throw new AssertionError(message, {
             actual,
             expected,
@@ -191,7 +191,7 @@ const isAbove = function (
     valueToBeAbove: any,
     message: string
 ) {
-    if (!_.gt(valueToCheck, valueToBeAbove)) {
+    if (!lodash.gt(valueToCheck, valueToBeAbove)) {
         throw new AssertionError(message);
     }
 };
@@ -210,7 +210,7 @@ const isAtLeast = function (
     valueToBeAtLeast: any,
     message: string
 ) {
-    if (!_.gte(valueToCheck, valueToBeAtLeast)) {
+    if (!lodash.gte(valueToCheck, valueToBeAtLeast)) {
         throw new AssertionError(message);
     }
 };
@@ -228,7 +228,7 @@ const isBelow = function (
     valueToBeBelow: any,
     message: string
 ) {
-    if (!_.lt(valueToCheck, valueToBeBelow)) {
+    if (!lodash.lt(valueToCheck, valueToBeBelow)) {
         throw new AssertionError(message);
     }
 };
@@ -247,7 +247,7 @@ const isAtMost = function (
     valueToBeAtMost: any,
     message: string
 ) {
-    if (!_.lte(valueToCheck, valueToBeAtMost)) {
+    if (!lodash.lte(valueToCheck, valueToBeAtMost)) {
         throw new AssertionError(message);
     }
 };
@@ -379,7 +379,7 @@ const isNotNaN = function (value: any, message: string) {
  */
 
 const exists = function (value: any, message: string) {
-    if (!_.exists(value)) {
+    if (!lodash.exists(value)) {
         throw new AssertionError(message);
     }
 };
@@ -397,7 +397,7 @@ const exists = function (value: any, message: string) {
  */
 
 const notExists = function (value: any, message: string) {
-    if (_.exists(value)) {
+    if (lodash.exists(value)) {
         throw new AssertionError(message);
     }
 };
@@ -412,7 +412,7 @@ const notExists = function (value: any, message: string) {
  */
 
 const isUndefined = function (value: any, message: string) {
-    if (!_.isUndefined(value)) {
+    if (!lodash.isUndefined(value)) {
         throw new AssertionError(message);
     }
 };
@@ -427,7 +427,7 @@ const isUndefined = function (value: any, message: string) {
  */
 
 const isDefined = function (value: any, message: string) {
-    if (_.isUndefined(value)) {
+    if (lodash.isUndefined(value)) {
         throw new AssertionError(message);
     }
 };
@@ -442,7 +442,7 @@ const isDefined = function (value: any, message: string) {
  */
 
 const isFunction = function (value: any, message: string) {
-    if (!_.isFunction(value)) {
+    if (!lodash.isFunction(value)) {
         throw new AssertionError(message);
     }
 };
@@ -457,7 +457,7 @@ const isFunction = function (value: any, message: string) {
  */
 
 const isNotFunction = function (value: any, message: string) {
-    if (_.isFunction(value)) {
+    if (lodash.isFunction(value)) {
         throw new AssertionError(message);
     }
 };
@@ -473,7 +473,7 @@ const isNotFunction = function (value: any, message: string) {
  */
 
 const isObject = function (value: any, message: string) {
-    if (!_.isObject(value)) {
+    if (!lodash.isObject(value)) {
         throw new AssertionError(message);
     }
 };
@@ -489,7 +489,7 @@ const isObject = function (value: any, message: string) {
  */
 
 const isNotObject = function (value: any, message: string) {
-    if (_.isObject(value)) {
+    if (lodash.isObject(value)) {
         throw new AssertionError(message);
     }
 };
@@ -504,7 +504,7 @@ const isNotObject = function (value: any, message: string) {
  */
 
 const isArray = function (value: any, message: string) {
-    if (!_.isArray(value)) {
+    if (!lodash.isArray(value)) {
         throw new AssertionError(message);
     }
 };
@@ -519,7 +519,7 @@ const isArray = function (value: any, message: string) {
  */
 
 const isNotArray = function (value: any, message: string) {
-    if (_.isArray(value)) {
+    if (lodash.isArray(value)) {
         throw new AssertionError(message);
     }
 };
@@ -534,7 +534,7 @@ const isNotArray = function (value: any, message: string) {
  */
 
 const isString = function (value: any, message: string) {
-    if (!_.isString(value)) {
+    if (!lodash.isString(value)) {
         throw new AssertionError(message);
     }
 };
@@ -549,7 +549,7 @@ const isString = function (value: any, message: string) {
  */
 
 const isNotString = function (value: any, message: string) {
-    if (_.isString(value)) {
+    if (lodash.isString(value)) {
         throw new AssertionError(message);
     }
 };
@@ -564,7 +564,7 @@ const isNotString = function (value: any, message: string) {
  */
 
 const isNumber = function (value: any, message: string) {
-    if (!_.isNumber(value)) {
+    if (!lodash.isNumber(value)) {
         throw new AssertionError(message);
     }
 };
@@ -579,7 +579,7 @@ const isNumber = function (value: any, message: string) {
  */
 
 const isNotNumber = function (value: any, message: string) {
-    if (_.isNumber(value)) {
+    if (lodash.isNumber(value)) {
         throw new AssertionError(message);
     }
 };
@@ -596,7 +596,7 @@ const isNotNumber = function (value: any, message: string) {
  */
 
 const isFinite = function (value: any, message: string) {
-    if (!_.isFinite(value)) {
+    if (!lodash.isFinite(value)) {
         throw new AssertionError(message);
     }
 };
@@ -614,7 +614,7 @@ const isFinite = function (value: any, message: string) {
  */
 
 const isBoolean = function (value: any, message: string) {
-    if (!_.isBoolean(value)) {
+    if (!lodash.isBoolean(value)) {
         throw new AssertionError(message);
     }
 };
@@ -632,7 +632,7 @@ const isBoolean = function (value: any, message: string) {
  */
 
 const isNotBoolean = function (value: any, message: string) {
-    if (!_.isBoolean(value)) {
+    if (!lodash.isBoolean(value)) {
         throw new AssertionError(message);
     }
 };
@@ -684,7 +684,7 @@ const notTypeOf = function (value: any, type, message: string) {
  */
 
 const instanceOf = function (value: any, constructor, message: string) {
-    if (!_.isInstanceOf(value, constructor)) {
+    if (!lodash.isInstanceOf(value, constructor)) {
         throw new AssertionError(message);
     }
 };
@@ -701,7 +701,7 @@ const instanceOf = function (value: any, constructor, message: string) {
  */
 
 const notInstanceOf = function (value: any, constructor, message: string) {
-    if (_.isInstanceOf(value, constructor)) {
+    if (lodash.isInstanceOf(value, constructor)) {
         throw new AssertionError(message);
     }
 };
@@ -735,7 +735,7 @@ const include = function (
     includedValue: any,
     message: string
 ) {
-    if (!_.includes(expression, includedValue)) {
+    if (!lodash.includes(expression, includedValue)) {
         throw new AssertionError(message);
     }
 };
@@ -770,7 +770,7 @@ const notInclude = function (
     includedValue: any,
     message: string
 ) {
-    if (_.includes(expression, includedValue)) {
+    if (lodash.includes(expression, includedValue)) {
         throw new AssertionError(message);
     }
 };
