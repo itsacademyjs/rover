@@ -869,8 +869,8 @@ const notMatch = function (
  *     assert.property({ tea: { green: 'matcha' }}, 'toString');
  */
 
-const property = function (object: Object, property: string, message: string) {
-    if (!object[property]) {
+const property = function (value: Object, property: string, message: string) {
+    if (!value[property]) {
         throw new AssertionError(message);
     }
 };
@@ -884,11 +884,11 @@ const property = function (object: Object, property: string, message: string) {
  *     assert.notProperty({ tea: { green: 'matcha' }}, 'coffee');
  */
 const notProperty = function (
-    object: Object,
+    value: Object,
     property: string,
     message: string
 ) {
-    if (object[property]) {
+    if (value[property]) {
         throw new AssertionError(message);
     }
 };
@@ -904,12 +904,12 @@ const notProperty = function (
  */
 
 const propertyVal = function (
-    object: Object,
+    obj: Object,
     property: string,
     value: any,
     message: string
 ) {
-    if (!object[property] || object[property] !== value) {
+    if (!obj[property] || obj[property] !== value) {
         throw new AssertionError(message);
     }
 };
@@ -926,12 +926,12 @@ const propertyVal = function (
  */
 
 const notPropertyVal = function (
-    object: Object,
+    obj: Object,
     property: string,
     value: any,
     message: string
 ) {
-    if (object[property] && object[property] === value) {
+    if (obj[property] && obj[property] === value) {
         throw new AssertionError(message);
     }
 };
@@ -946,12 +946,12 @@ const notPropertyVal = function (
  */
 
 const deepPropertyVal = function (
-    object: Object,
+    obj: Object,
     property: string,
     value: any,
     message: string
 ) {
-    if (!object[property] || !lodash.isEqual(object[property], value)) {
+    if (!obj[property] || !lodash.isEqual(obj[property], value)) {
         throw new AssertionError(message);
     }
 };
@@ -968,12 +968,12 @@ const deepPropertyVal = function (
  */
 
 const notDeepPropertyVal = function (
-    object: Object,
+    obj: Object,
     property: string,
     value: any,
     message: string
 ) {
-    if (object[property] && lodash.isEqual(object[property], value)) {
+    if (obj[property] && lodash.isEqual(obj[property], value)) {
         throw new AssertionError(message);
     }
 };
@@ -987,12 +987,8 @@ const notDeepPropertyVal = function (
  *     assert.ownProperty({ tea: { green: 'matcha' }}, 'tea');
  */
 
-const ownProperty = function (
-    object: Object,
-    property: string,
-    message: string
-) {
-    if (!object.hasOwnProperty(property)) {
+const ownProperty = function (obj: Object, property: string, message: string) {
+    if (!obj.hasOwnProperty(property)) {
         throw new AssertionError(message);
     }
 };
@@ -1007,11 +1003,11 @@ const ownProperty = function (
  *     assert.notOwnProperty({}, 'toString');
  */
 const notOwnProperty = function (
-    object: Object,
+    obj: Object,
     property: string,
     message: string
 ) {
-    if (!object.hasOwnProperty(property)) {
+    if (!obj.hasOwnProperty(property)) {
         throw new AssertionError(message);
     }
 };
@@ -1034,12 +1030,12 @@ const notOwnProperty = function (
  */
 
 const ownPropertyVal = function (
-    object: Object,
+    obj: Object,
     property: string,
     value: any,
     message: string
 ) {
-    if (!object.hasOwnProperty(property) || object[property] !== value) {
+    if (!obj.hasOwnProperty(property) || obj[property] !== value) {
         throw new AssertionError(message);
     }
 };
@@ -1056,12 +1052,12 @@ const ownPropertyVal = function (
  */
 
 const notOwnPropertyVal = function (
-    object: Object,
+    obj: Object,
     property: string,
     value: any,
     message: string
 ) {
-    if (object.hasOwnProperty(property) && object[property] === value) {
+    if (obj.hasOwnProperty(property) && obj[property] === value) {
         throw new AssertionError(message);
     }
 };
@@ -1077,14 +1073,14 @@ const notOwnPropertyVal = function (
  */
 
 const deepOwnPropertyVal = function (
-    object: Object,
+    obj: Object,
     property: string,
     value: any,
     message: string
 ) {
     if (
-        !object.hasOwnProperty(property) ||
-        !lodash.isEqual(object[property], value)
+        !obj.hasOwnProperty(property) ||
+        !lodash.isEqual(obj[property], value)
     ) {
         throw new AssertionError(message);
     }
@@ -1104,15 +1100,12 @@ const deepOwnPropertyVal = function (
  */
 
 const notDeepOwnPropertyVal = function (
-    object: Object,
+    obj: Object,
     property: string,
     value: any,
     message: string
 ) {
-    if (
-        object.hasOwnProperty(property) &&
-        lodash.isEqual(object[property], value)
-    ) {
+    if (obj.hasOwnProperty(property) && lodash.isEqual(obj[property], value)) {
         throw new AssertionError(message);
     }
 };
@@ -1127,13 +1120,14 @@ const notDeepOwnPropertyVal = function (
  *     assert.nestedProperty({ tea: { green: 'matcha' }}, 'tea.green');
  */
 
-const nestedProperty = function (obj, prop, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.nestedProperty,
-        true
-    ).to.have.nested.property(prop);
+const nestedProperty = function (
+    obj: Object,
+    property: string,
+    message: string
+) {
+    if (!lodash.get(obj, property)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1146,13 +1140,14 @@ const nestedProperty = function (obj, prop, message: string) {
  *     assert.notNestedProperty({ tea: { green: 'matcha' }}, 'tea.oolong');
  */
 
-const notNestedProperty = function (obj, prop, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.notNestedProperty,
-        true
-    ).to.not.have.nested.property(prop);
+const notNestedProperty = function (
+    obj: Object,
+    property: string,
+    message: string
+) {
+    if (lodash.get(obj, property)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1165,13 +1160,15 @@ const notNestedProperty = function (obj, prop, message: string) {
  *     assert.nestedPropertyVal({ tea: { green: 'matcha' }}, 'tea.green', 'matcha');
  */
 
-const nestedPropertyVal = function (obj, prop, value, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.nestedPropertyVal,
-        true
-    ).to.have.nested.property(prop, value);
+const nestedPropertyVal = function (
+    obj: Object,
+    property: string,
+    value: any,
+    message: string
+) {
+    if (!lodash.get(obj, property) || lodash.get(obj, property) !== value) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1185,15 +1182,16 @@ const nestedPropertyVal = function (obj, prop, value, message: string) {
  *     assert.notNestedPropertyVal({ tea: { green: 'matcha' }}, 'coffee.green', 'matcha');
  */
 
-const notNestedPropertyVal = function (obj, prop, value, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.notNestedPropertyVal,
-        true
-    ).to.not.have.nested.property(prop, value);
+const notNestedPropertyVal = function (
+    obj: Object,
+    property: string,
+    value: any,
+    message: string
+) {
+    if (lodash.get(obj, property) && lodash.get(obj, property) === value) {
+        throw new AssertionError(message);
+    }
 };
-
 /**
  * ### .deepNestedPropertyVal(object, property, value, [message])
  *
@@ -1204,13 +1202,18 @@ const notNestedPropertyVal = function (obj, prop, value, message: string) {
  *     assert.deepNestedPropertyVal({ tea: { green: { matcha: 'yum' } } }, 'tea.green', { matcha: 'yum' });
  */
 
-const deepNestedPropertyVal = function (obj, prop, value, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.deepNestedPropertyVal,
-        true
-    ).to.have.deep.nested.property(prop, value);
+const deepNestedPropertyVal = function (
+    obj: Object,
+    property: string,
+    value: any,
+    message: string
+) {
+    if (
+        !lodash.get(obj, property) ||
+        !lodash.isEqual(lodash.get(obj, property), value)
+    ) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1225,13 +1228,18 @@ const deepNestedPropertyVal = function (obj, prop, value, message: string) {
  *     assert.notDeepNestedPropertyVal({ tea: { green: { matcha: 'yum' } } }, 'tea.black', { matcha: 'yum' });
  */
 
-const notDeepNestedPropertyVal = function (obj, prop, value, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.notDeepNestedPropertyVal,
-        true
-    ).to.not.have.deep.nested.property(prop, value);
+const notDeepNestedPropertyVal = function (
+    obj: Object,
+    property: string,
+    value: any,
+    message: string
+) {
+    if (
+        lodash.get(obj, property) &&
+        lodash.isEqual(lodash.get(obj, property), value)
+    ) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1245,10 +1253,10 @@ const notDeepNestedPropertyVal = function (obj, prop, value, message: string) {
  *     assert.lengthOf(new Map([['a',1],['b',2],['c',3]]), 3, 'map has size of 3');
  */
 
-const lengthOf = function (expression, len, message: string) {
-    new Assertion(expression, message, assert.lengthOf, true).to.have.lengthOf(
-        len
-    );
+const lengthOf = function (expression: any, length: number, message: string) {
+    if (lodash.size(expression) !== length) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
