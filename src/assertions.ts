@@ -789,10 +789,14 @@ const notInclude = function (
  *     assert.deepInclude({foo: obj1, bar: obj2}, {foo: {a: 1}, bar: {b: 2}});
  */
 
-const deepInclude = function (expression, inc, message: string) {
-    new Assertion(expression, message, assert.deepInclude, true).deep.include(
-        inc
-    );
+const deepInclude = function (
+    expression: any,
+    includedValue: any,
+    message: string
+) {
+    if (!lodash.includes(expression, includedValue)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -809,180 +813,14 @@ const deepInclude = function (expression, inc, message: string) {
  *     assert.notDeepInclude({foo: obj1, bar: obj2}, {foo: {a: 1}, bar: {b: 9}});
  */
 
-const notDeepInclude = function (expression, inc, message: string) {
-    new Assertion(
-        expression,
-        message,
-        assert.notDeepInclude,
-        true
-    ).not.deep.include(inc);
-};
-
-/**
- * ### .nestedInclude(haystack, needle, [message])
- *
- * Asserts that 'haystack' includes 'needle'.
- * Can be used to assert the inclusion of a subset of properties in an
- * object.
- * Enables the use of dot- and bracket-notation for referencing nested
- * properties.
- * '[]' and '.' in property names can be escaped using double backslashes.
- *
- *     assert.nestedInclude({'.a': {'b': 'x'}}, {'\\.a.[b]': 'x'});
- *     assert.nestedInclude({'a': {'[b]': 'x'}}, {'a.\\[b\\]': 'x'});
- */
-
-const nestedInclude = function (expression, inc, message: string) {
-    new Assertion(
-        expression,
-        message,
-        assert.nestedInclude,
-        true
-    ).nested.include(inc);
-};
-
-/**
- * ### .notNestedInclude(haystack, needle, [message])
- *
- * Asserts that 'haystack' does not include 'needle'.
- * Can be used to assert the absence of a subset of properties in an
- * object.
- * Enables the use of dot- and bracket-notation for referencing nested
- * properties.
- * '[]' and '.' in property names can be escaped using double backslashes.
- *
- *     assert.notNestedInclude({'.a': {'b': 'x'}}, {'\\.a.b': 'y'});
- *     assert.notNestedInclude({'a': {'[b]': 'x'}}, {'a.\\[b\\]': 'y'});
- */
-
-const notNestedInclude = function (expression, inc, message: string) {
-    new Assertion(
-        expression,
-        message,
-        assert.notNestedInclude,
-        true
-    ).not.nested.include(inc);
-};
-
-/**
- * ### .deepNestedInclude(haystack, needle, [message])
- *
- * Asserts that 'haystack' includes 'needle'.
- * Can be used to assert the inclusion of a subset of properties in an
- * object while checking for deep equality.
- * Enables the use of dot- and bracket-notation for referencing nested
- * properties.
- * '[]' and '.' in property names can be escaped using double backslashes.
- *
- *     assert.deepNestedInclude({a: {b: [{x: 1}]}}, {'a.b[0]': {x: 1}});
- *     assert.deepNestedInclude({'.a': {'[b]': {x: 1}}}, {'\\.a.\\[b\\]': {x: 1}});
- */
-
-const deepNestedInclude = function (expression, inc, message: string) {
-    new Assertion(
-        expression,
-        message,
-        assert.deepNestedInclude,
-        true
-    ).deep.nested.include(inc);
-};
-
-/**
- * ### .notDeepNestedInclude(haystack, needle, [message])
- *
- * Asserts that 'haystack' does not include 'needle'.
- * Can be used to assert the absence of a subset of properties in an
- * object while checking for deep equality.
- * Enables the use of dot- and bracket-notation for referencing nested
- * properties.
- * '[]' and '.' in property names can be escaped using double backslashes.
- *
- *     assert.notDeepNestedInclude({a: {b: [{x: 1}]}}, {'a.b[0]': {y: 1}})
- *     assert.notDeepNestedInclude({'.a': {'[b]': {x: 1}}}, {'\\.a.\\[b\\]': {y: 2}});
- */
-
-const notDeepNestedInclude = function (expression, inc, message: string) {
-    new Assertion(
-        expression,
-        message,
-        assert.notDeepNestedInclude,
-        true
-    ).not.deep.nested.include(inc);
-};
-
-/**
- * ### .ownInclude(haystack, needle, [message])
- *
- * Asserts that 'haystack' includes 'needle'.
- * Can be used to assert the inclusion of a subset of properties in an
- * object while ignoring inherited properties.
- *
- *     assert.ownInclude({ a: 1 }, { a: 1 });
- */
-
-const ownInclude = function (expression, inc, message: string) {
-    new Assertion(expression, message, assert.ownInclude, true).own.include(
-        inc
-    );
-};
-
-/**
- * ### .notOwnInclude(haystack, needle, [message])
- *
- * Asserts that 'haystack' includes 'needle'.
- * Can be used to assert the absence of a subset of properties in an
- * object while ignoring inherited properties.
- *
- *     Object.prototype.b = 2;
- *
- *     assert.notOwnInclude({ a: 1 }, { b: 2 });
- */
-
-const notOwnInclude = function (expression, inc, message: string) {
-    new Assertion(
-        expression,
-        message,
-        assert.notOwnInclude,
-        true
-    ).not.own.include(inc);
-};
-
-/**
- * ### .deepOwnInclude(haystack, needle, [message])
- *
- * Asserts that 'haystack' includes 'needle'.
- * Can be used to assert the inclusion of a subset of properties in an
- * object while ignoring inherited properties and checking for deep equality.
- *
- *      assert.deepOwnInclude({a: {b: 2}}, {a: {b: 2}});
- */
-
-const deepOwnInclude = function (expression, inc, message: string) {
-    new Assertion(
-        expression,
-        message,
-        assert.deepOwnInclude,
-        true
-    ).deep.own.include(inc);
-};
-
-/**
- * ### .notDeepOwnInclude(haystack, needle, [message])
- *
- * Asserts that 'haystack' includes 'needle'.
- * Can be used to assert the absence of a subset of properties in an
- * object while ignoring inherited properties and checking for deep equality.
- *
- *      assert.notDeepOwnInclude({a: {b: 2}}, {a: {c: 3}});
- */
-
-const notDeepOwnInclude = function (expression, inc, message: string) {
-    new Assertion(
-        expression,
-        message,
-        assert.notDeepOwnInclude,
-        true
-    ).not.deep.own.include(inc);
+const notDeepInclude = function (
+    expression: any,
+    includedValue: any,
+    message: string
+) {
+    if (lodash.includes(expression, includedValue)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -993,8 +831,14 @@ const notDeepOwnInclude = function (expression, inc, message: string) {
  *     assert.match('foobar', /^foo/, 'regexp matches');
  */
 
-const match = function (expression, re, message: string) {
-    new Assertion(expression, message, assert.match, true).to.match(re);
+const match = function (
+    expression: string,
+    regularExpression: any,
+    message: string
+) {
+    if (!expression.match(regularExpression)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1005,8 +849,14 @@ const match = function (expression, re, message: string) {
  *     assert.notMatch('foobar', /^foo/, 'regexp does not match');
  */
 
-const notMatch = function (expression, re, message: string) {
-    new Assertion(expression, message, assert.notMatch, true).to.not.match(re);
+const notMatch = function (
+    expression: string,
+    regularExpression: any,
+    message: string
+) {
+    if (expression.match(regularExpression)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1019,8 +869,10 @@ const notMatch = function (expression, re, message: string) {
  *     assert.property({ tea: { green: 'matcha' }}, 'toString');
  */
 
-const property = function (obj, prop, message: string) {
-    new Assertion(obj, message, assert.property, true).to.have.property(prop);
+const property = function (object: Object, property: string, message: string) {
+    if (!object[property]) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1031,10 +883,14 @@ const property = function (obj, prop, message: string) {
  *
  *     assert.notProperty({ tea: { green: 'matcha' }}, 'coffee');
  */
-const notProperty = function (obj, prop, message: string) {
-    new Assertion(obj, message, assert.notProperty, true).to.not.have.property(
-        prop
-    );
+const notProperty = function (
+    object: Object,
+    property: string,
+    message: string
+) {
+    if (object[property]) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1047,11 +903,15 @@ const notProperty = function (obj, prop, message: string) {
  *     assert.propertyVal({ tea: 'is good' }, 'tea', 'is good');
  */
 
-const propertyVal = function (obj, prop, value, message: string) {
-    new Assertion(obj, message, assert.propertyVal, true).to.have.property(
-        prop,
-        value
-    );
+const propertyVal = function (
+    object: Object,
+    property: string,
+    value: any,
+    message: string
+) {
+    if (!object[property] || object[property] !== value) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1065,13 +925,15 @@ const propertyVal = function (obj, prop, value, message: string) {
  *     assert.notPropertyVal({ tea: 'is good' }, 'coffee', 'is good');
  */
 
-const notPropertyVal = function (obj, prop, value, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.notPropertyVal,
-        true
-    ).to.not.have.property(prop, value);
+const notPropertyVal = function (
+    object: Object,
+    property: string,
+    value: any,
+    message: string
+) {
+    if (object[property] && object[property] === value) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1083,13 +945,15 @@ const notPropertyVal = function (obj, prop, value, message: string) {
  *     assert.deepPropertyVal({ tea: { green: 'matcha' } }, 'tea', { green: 'matcha' });
  */
 
-const deepPropertyVal = function (obj, prop, value, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.deepPropertyVal,
-        true
-    ).to.have.deep.property(prop, value);
+const deepPropertyVal = function (
+    object: Object,
+    property: string,
+    value: any,
+    message: string
+) {
+    if (!object[property] || !lodash.isEqual(object[property], value)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1103,13 +967,15 @@ const deepPropertyVal = function (obj, prop, value, message: string) {
  *     assert.notDeepPropertyVal({ tea: { green: 'matcha' } }, 'coffee', { green: 'matcha' });
  */
 
-const notDeepPropertyVal = function (obj, prop, value, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.notDeepPropertyVal,
-        true
-    ).to.not.have.deep.property(prop, value);
+const notDeepPropertyVal = function (
+    object: Object,
+    property: string,
+    value: any,
+    message: string
+) {
+    if (object[property] && lodash.isEqual(object[property], value)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1121,10 +987,14 @@ const notDeepPropertyVal = function (obj, prop, value, message: string) {
  *     assert.ownProperty({ tea: { green: 'matcha' }}, 'tea');
  */
 
-const ownProperty = function (obj, prop, message: string) {
-    new Assertion(obj, message, assert.ownProperty, true).to.have.own.property(
-        prop
-    );
+const ownProperty = function (
+    object: Object,
+    property: string,
+    message: string
+) {
+    if (!object.hasOwnProperty(property)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1136,13 +1006,14 @@ const ownProperty = function (obj, prop, message: string) {
  *     assert.notOwnProperty({ tea: { green: 'matcha' }}, 'coffee');
  *     assert.notOwnProperty({}, 'toString');
  */
-const notOwnProperty = function (obj, prop, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.notOwnProperty,
-        true
-    ).to.not.have.own.property(prop);
+const notOwnProperty = function (
+    object: Object,
+    property: string,
+    message: string
+) {
+    if (!object.hasOwnProperty(property)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1162,13 +1033,15 @@ const notOwnProperty = function (obj, prop, message: string) {
  * @api public
  */
 
-const ownPropertyVal = function (obj, prop, value, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.ownPropertyVal,
-        true
-    ).to.have.own.property(prop, value);
+const ownPropertyVal = function (
+    object: Object,
+    property: string,
+    value: any,
+    message: string
+) {
+    if (!object.hasOwnProperty(property) || object[property] !== value) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1182,13 +1055,15 @@ const ownPropertyVal = function (obj, prop, value, message: string) {
  *     assert.notOwnPropertyVal({}, 'toString', Object.prototype.toString);
  */
 
-const notOwnPropertyVal = function (obj, prop, value, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.notOwnPropertyVal,
-        true
-    ).to.not.have.own.property(prop, value);
+const notOwnPropertyVal = function (
+    object: Object,
+    property: string,
+    value: any,
+    message: string
+) {
+    if (object.hasOwnProperty(property) && object[property] === value) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1201,13 +1076,18 @@ const notOwnPropertyVal = function (obj, prop, value, message: string) {
  *     assert.deepOwnPropertyVal({ tea: { green: 'matcha' } }, 'tea', { green: 'matcha' });
  */
 
-const deepOwnPropertyVal = function (obj, prop, value, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.deepOwnPropertyVal,
-        true
-    ).to.have.deep.own.property(prop, value);
+const deepOwnPropertyVal = function (
+    object: Object,
+    property: string,
+    value: any,
+    message: string
+) {
+    if (
+        !object.hasOwnProperty(property) ||
+        !lodash.isEqual(object[property], value)
+    ) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1223,13 +1103,18 @@ const deepOwnPropertyVal = function (obj, prop, value, message: string) {
  *     assert.notDeepOwnPropertyVal({}, 'toString', Object.prototype.toString);
  */
 
-const notDeepOwnPropertyVal = function (obj, prop, value, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.notDeepOwnPropertyVal,
-        true
-    ).to.not.have.deep.own.property(prop, value);
+const notDeepOwnPropertyVal = function (
+    object: Object,
+    property: string,
+    value: any,
+    message: string
+) {
+    if (
+        object.hasOwnProperty(property) &&
+        lodash.isEqual(object[property], value)
+    ) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
