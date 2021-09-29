@@ -1,6 +1,7 @@
 import { Command } from "commander";
 import chalk from "chalk";
 
+import Driver from "./driver/mocha";
 import {
     Excercise,
     Configuration,
@@ -25,107 +26,12 @@ const validateSolution = async (
     handle: string,
     configuration: Configuration
 ) => {
-    const excercise = excercises[handle] as Excercise;
-    if (!excercise) {
-        console.log(
-            `${chalk.redBright.bold(
-                "[error]"
-            )} Cannot find excercise ${chalk.whiteBright.bold(
-                handle
-            )}. Try updating Rover to fix the issue.`
-        );
-        return;
-    }
-
-    const interceptResult =
-        <V, A extends AssertFunction<V>>(assert: A): AssertFunction<V> =>
-        async (
-            options: V,
-            description?: string
-        ): Promise<AssertionResult<V> | null> => {
-            /* Read more about this here: https://stackoverflow.com/a/14968691/3068233 */
-            const roundToHundredths = (n: number) => Math.round(n * 100) / 100;
-            const startTimeInNanoseconds = process.hrtime.bigint();
-            let durationInSeconds = 0;
-            let result: AssertionResult<V> | null = null;
-
-            try {
-                result = await assert(options, description);
-            } catch (error) {
-                console.log(
-                    `${chalk.redBright("[error]")} Something went wrong!`
-                );
-                console.log(error);
-            } finally {
-                const endTimeInNanoseconds = process.hrtime.bigint();
-                const durationInNanoseconds =
-                    endTimeInNanoseconds - startTimeInNanoseconds;
-                const durationInSeconds = roundToHundredths(
-                    Number(durationInNanoseconds) / 1e9
-                ); // https://stackoverflow.com/a/53970656/3068233
-
-                if (result) {
-                    result.time = durationInNanoseconds;
-                }
-            }
-            return result;
-        };
-
-    const { assertOutput, assertToolVersion, assertFile, assertDirectory } =
-        assertions;
-    const promises = excercise.test({
-        assertOutput: interceptResult(assertOutput),
-        assertToolVersion: interceptResult(assertToolVersion),
-        assertFile: interceptResult(assertFile),
-        assertDirectory: interceptResult(assertDirectory),
+    const driver = new Driver({
+        // dryRun: false,
     });
-    const results = await Promise.all(promises);
-
-    for (const result of results) {
-        const { type, success, description } = result;
-        console.log(
-            chalk.bold(
-                `\n ${
-                    success ? chalk.greenBright("✓") : chalk.redBright("✕")
-                }  ${description}\n`
-            )
-        );
-
-        if (type === "assert-output") {
-            const { execution, options } = result as OutputAssertionResult;
-
-            if (execution.standardOutput) {
-                console.log(chalk.yellowBright("    Standard Output"));
-                printLines(
-                    chalk.whiteBright.bold("        > "),
-                    execution.standardOutput
-                );
-            }
-
-            if (execution.standardError) {
-                console.log(chalk.yellowBright("    Standard Error"));
-                printLines(
-                    chalk.redBright.bold("        > "),
-                    execution.standardError
-                );
-            }
-
-            if (!success) {
-                console.log(chalk.redBright.bold("Actual"));
-                printLines(
-                    chalk.redBright.bold("        - "),
-                    execution.standardOutput
-                );
-                console.log(chalk.greenBright.bold("Expected"));
-                printLines(
-                    chalk.greenBright.bold("        + "),
-                    options.expectedOutput
-                );
-            }
-        }
-    }
-
-    console.log(`Done in ${process.uptime().toFixed(2)}s.`);
+    driver.addFile("./test");
+    driver.run((errors) => console.log(errors));
+    // driver.collect();
 };
 
 const configureCommands = (): Command => {
