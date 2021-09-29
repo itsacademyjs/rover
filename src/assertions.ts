@@ -2079,7 +2079,9 @@ const isNotFrozen = function (obj, message: string) {
  */
 
 const isEmpty = function (value: any, message: string) {
-    new Assertion(value, message, assert.isEmpty, true).to.be.empty;
+    if (!lodash.isEmpty(value)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -2097,5 +2099,7 @@ const isEmpty = function (value: any, message: string) {
  *     assert.isNotEmpty({ key: 7 });
  */
 const isNotEmpty = function (value: any, message: string) {
-    new Assertion(value, message, assert.isNotEmpty, true).to.not.be.empty;
+    if (lodash.isEmpty(value)) {
+        throw new AssertionError(message);
+    }
 };
