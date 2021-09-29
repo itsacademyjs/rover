@@ -1985,8 +1985,10 @@ const ifError = function (value) {
  *     assert.isExtensible({});
  */
 
-const isExtensible = function (obj, message: string) {
-    new Assertion(obj, message, assert.isExtensible, true).to.be.extensible;
+const isExtensible = function (obj: Object, message: string) {
+    if (!Object.isExtensible(obj)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -2003,9 +2005,10 @@ const isExtensible = function (obj, message: string) {
  *     assert.isNotExtensible(frozenObject);
  */
 
-const isNotExtensible = function (obj, message: string) {
-    new Assertion(obj, message, assert.isNotExtensible, true).to.not.be
-        .extensible;
+const isNotExtensible = function (obj: Object, message: string) {
+    if (Object.isExtensible(obj)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -2021,8 +2024,10 @@ const isNotExtensible = function (obj, message: string) {
  *     assert.isSealed(frozenObject);
  */
 
-const isSealed = function (obj, message: string) {
-    new Assertion(obj, message, assert.isSealed, true).to.be.sealed;
+const isSealed = function (obj: Object, message: string) {
+    if (!Object.isSealed(obj)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -2033,8 +2038,10 @@ const isSealed = function (obj, message: string) {
  *     assert.isNotSealed({});
  */
 
-const isNotSealed = function (obj, message: string) {
-    new Assertion(obj, message, assert.isNotSealed, true).to.not.be.sealed;
+const isNotSealed = function (obj: Object, message: string) {
+    if (Object.isSealed(obj)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -2047,8 +2054,10 @@ const isNotSealed = function (obj, message: string) {
  *     assert.frozen(frozenObject);
  */
 
-const isFrozen = function (obj, message: string) {
-    new Assertion(obj, message, assert.isFrozen, true).to.be.frozen;
+const isFrozen = function (obj: Object, message: string) {
+    if (!Object.isFrozen(obj)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -2059,8 +2068,10 @@ const isFrozen = function (obj, message: string) {
  *     assert.isNotFrozen({});
  */
 
-const isNotFrozen = function (obj, message: string) {
-    new Assertion(obj, message, assert.isNotFrozen, true).to.not.be.frozen;
+const isNotFrozen = function (obj: Object, message: string) {
+    if (Object.isFrozen(obj)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
