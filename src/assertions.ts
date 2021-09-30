@@ -1272,8 +1272,10 @@ const lengthOf = function (expression: any, length: number, message: string) {
  *     assert.hasAnyKeys(new Set([{foo: 'bar'}, 'anotherKey']), [{foo: 'bar'}, 'anotherKey']);
  */
 
-const hasAnyKeys = function (obj, keys, message: string) {
-    new Assertion(obj, message, assert.hasAnyKeys, true).to.have.any.keys(keys);
+const hasAnyKeys = function (obj: Object, keys: any[], message: string) {
+    if (!lodash.some(lodash.intersection(keys, lodash.keys(obj)))) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1289,8 +1291,10 @@ const hasAnyKeys = function (obj, keys, message: string) {
  *     assert.hasAllKeys(new Set([{foo: 'bar'}, 'anotherKey'], [{foo: 'bar'}, 'anotherKey']);
  */
 
-const hasAllKeys = function (obj, keys, message: string) {
-    new Assertion(obj, message, assert.hasAllKeys, true).to.have.all.keys(keys);
+const hasAllKeys = function (obj: Object, keys: any[], message: string) {
+    if (!lodash.isEqual(keys, lodash.keys(obj)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1310,13 +1314,10 @@ const hasAllKeys = function (obj, keys, message: string) {
  *     assert.containsAllKeys(new Set([{foo: 'bar'}, 'anotherKey'], [{foo: 'bar'}, 'anotherKey']);
  */
 
-const containsAllKeys = function (obj, keys, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.containsAllKeys,
-        true
-    ).to.contain.all.keys(keys);
+const containsAllKeys = function (obj: Object, keys: any[], message: string) {
+    if (!lodash.isEqual(lodash.intersection(keys, lodash.keys(obj)), keys)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1332,13 +1333,10 @@ const containsAllKeys = function (obj, keys, message: string) {
  *     assert.doesNotHaveAnyKeys(new Set([{foo: 'bar'}, 'anotherKey'], [{one: 'two'}, 'example']);
  */
 
-const doesNotHaveAnyKeys = function (obj, keys, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.doesNotHaveAnyKeys,
-        true
-    ).to.not.have.any.keys(keys);
+const doesNotHaveAnyKeys = function (obj: Object, keys: any[], message: string) {
+    if (lodash.some(lodash.intersection(keys, lodash.keys(obj)))) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1354,135 +1352,10 @@ const doesNotHaveAnyKeys = function (obj, keys, message: string) {
  *     assert.doesNotHaveAllKeys(new Set([{foo: 'bar'}, 'anotherKey'], [{one: 'two'}, 'example']);
  */
 
-const doesNotHaveAllKeys = function (obj, keys, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.doesNotHaveAllKeys,
-        true
-    ).to.not.have.all.keys(keys);
-};
-
-/**
- * ### .hasAnyDeepKeys(object, [keys], [message])
- *
- * Asserts that `object` has at least one of the `keys` provided.
- * Since Sets and Maps can have objects as keys you can use this assertion to perform
- * a deep comparison.
- * You can also provide a single object instead of a `keys` array and its keys
- * will be used as the expected set of keys.
- *
- *     assert.hasAnyDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [1, 2]]), {one: 'one'});
- *     assert.hasAnyDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [1, 2]]), [{one: 'one'}, {two: 'two'}]);
- *     assert.hasAnyDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [{two: 'two'}, 'valueTwo']]), [{one: 'one'}, {two: 'two'}]);
- *     assert.hasAnyDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), {one: 'one'});
- *     assert.hasAnyDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), [{one: 'one'}, {three: 'three'}]);
- *     assert.hasAnyDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), [{one: 'one'}, {two: 'two'}]);
- */
-
-const hasAnyDeepKeys = function (obj, keys, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.hasAnyDeepKeys,
-        true
-    ).to.have.any.deep.keys(keys);
-};
-
-/**
- * ### .hasAllDeepKeys(object, [keys], [message])
- *
- * Asserts that `object` has all and only all of the `keys` provided.
- * Since Sets and Maps can have objects as keys you can use this assertion to perform
- * a deep comparison.
- * You can also provide a single object instead of a `keys` array and its keys
- * will be used as the expected set of keys.
- *
- *     assert.hasAllDeepKeys(new Map([[{one: 'one'}, 'valueOne']]), {one: 'one'});
- *     assert.hasAllDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [{two: 'two'}, 'valueTwo']]), [{one: 'one'}, {two: 'two'}]);
- *     assert.hasAllDeepKeys(new Set([{one: 'one'}]), {one: 'one'});
- *     assert.hasAllDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), [{one: 'one'}, {two: 'two'}]);
- */
-
-const hasAllDeepKeys = function (obj, keys, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.hasAllDeepKeys,
-        true
-    ).to.have.all.deep.keys(keys);
-};
-
-/**
- * ### .containsAllDeepKeys(object, [keys], [message])
- *
- * Asserts that `object` contains all of the `keys` provided.
- * Since Sets and Maps can have objects as keys you can use this assertion to perform
- * a deep comparison.
- * You can also provide a single object instead of a `keys` array and its keys
- * will be used as the expected set of keys.
- *
- *     assert.containsAllDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [1, 2]]), {one: 'one'});
- *     assert.containsAllDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [{two: 'two'}, 'valueTwo']]), [{one: 'one'}, {two: 'two'}]);
- *     assert.containsAllDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), {one: 'one'});
- *     assert.containsAllDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), [{one: 'one'}, {two: 'two'}]);
- */
-
-const containsAllDeepKeys = function (obj, keys, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.containsAllDeepKeys,
-        true
-    ).to.contain.all.deep.keys(keys);
-};
-
-/**
- * ### .doesNotHaveAnyDeepKeys(object, [keys], [message])
- *
- * Asserts that `object` has none of the `keys` provided.
- * Since Sets and Maps can have objects as keys you can use this assertion to perform
- * a deep comparison.
- * You can also provide a single object instead of a `keys` array and its keys
- * will be used as the expected set of keys.
- *
- *     assert.doesNotHaveAnyDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [1, 2]]), {thisDoesNot: 'exist'});
- *     assert.doesNotHaveAnyDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [{two: 'two'}, 'valueTwo']]), [{twenty: 'twenty'}, {fifty: 'fifty'}]);
- *     assert.doesNotHaveAnyDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), {twenty: 'twenty'});
- *     assert.doesNotHaveAnyDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), [{twenty: 'twenty'}, {fifty: 'fifty'}]);
- */
-
-const doesNotHaveAnyDeepKeys = function (obj, keys, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.doesNotHaveAnyDeepKeys,
-        true
-    ).to.not.have.any.deep.keys(keys);
-};
-
-/**
- * ### .doesNotHaveAllDeepKeys(object, [keys], [message])
- *
- * Asserts that `object` does not have at least one of the `keys` provided.
- * Since Sets and Maps can have objects as keys you can use this assertion to perform
- * a deep comparison.
- * You can also provide a single object instead of a `keys` array and its keys
- * will be used as the expected set of keys.
- *
- *     assert.doesNotHaveAllDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [1, 2]]), {thisDoesNot: 'exist'});
- *     assert.doesNotHaveAllDeepKeys(new Map([[{one: 'one'}, 'valueOne'], [{two: 'two'}, 'valueTwo']]), [{twenty: 'twenty'}, {one: 'one'}]);
- *     assert.doesNotHaveAllDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), {twenty: 'twenty'});
- *     assert.doesNotHaveAllDeepKeys(new Set([{one: 'one'}, {two: 'two'}]), [{one: 'one'}, {fifty: 'fifty'}]);
- */
-
-const doesNotHaveAllDeepKeys = function (obj, keys, message: string) {
-    new Assertion(
-        obj,
-        message,
-        assert.doesNotHaveAllDeepKeys,
-        true
-    ).to.not.have.all.deep.keys(keys);
+const doesNotHaveAllKeys = function (obj: Object, keys: any[], message: string) {
+    if (lodash.isEqual(keys, lodash.keys(obj)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
