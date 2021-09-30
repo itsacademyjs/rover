@@ -1786,7 +1786,7 @@ const oneOf = function (inList: any, list: any[], message: string) {
  *     assert.ifError(err); // Rethrows err!
  */
 
-const ifError = function (value) {
+const ifError = function (value: any) {
     if (value) {
         throw value;
     }
