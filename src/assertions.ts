@@ -9,7 +9,7 @@ import AssertionError from "assertion-error";
 import lodash from "lodash";
 
 /**
- * Create to your own test expressions.
+ * Create your own test expressions.
  *
  * ```js
  * assert('two' !== 2, "string 'two' is not equivalent to integer 2");
@@ -21,7 +21,7 @@ import lodash from "lodash";
  *        The message displayed when the assertion fails.
  */
 
-const assert = (expression, message: string) => {
+const assert = <T>(expression, message: string): void => {
     if (!expression) {
         throw new AssertionError(message);
     }
@@ -35,7 +35,7 @@ const assert = (expression, message: string) => {
  * ```
  */
 
-const fail = (actual: any, expected: any, message: string) => {
+const fail = <T>(actual: any, expected: any, message: string): void => {
     throw new AssertionError(message, {
         actual,
         expected,
@@ -50,7 +50,7 @@ const fail = (actual: any, expected: any, message: string) => {
  * isTruthy("", "empty strings are falsy"); // This will fail.
  * ```
  */
-const isTruthy = (value: any, message: string) => {
+const isTruthy = <T>(value: any, message: string): void => {
     if (!value) {
         throw new AssertionError(message, {
             actual: value,
@@ -67,7 +67,7 @@ const isTruthy = (value: any, message: string) => {
  * isFalsy("", "empty strings are falsy");
  * ```
  */
-const isFalsy = (value: any, message: string) => {
+const isFalsy = <T>(value: any, message: string): void => {
     if (value) {
         throw new AssertionError(message, {
             actual: value,
@@ -77,14 +77,12 @@ const isFalsy = (value: any, message: string) => {
 };
 
 /**
- * ### .equal(actual, expected, [message])
- *
  * Asserts non-strict equality (`==`) of `actual` and `expected`.
  *
  *     assert.equal(3, '3', '== coerces values to strings');
  */
 
-const equal = function (actual: any, expected: any, message: string) {
+const equal = <T>(actual: any, expected: any, message: string): void => {
     if (actual != expected) {
         throw new AssertionError(message, {
             actual,
@@ -94,14 +92,12 @@ const equal = function (actual: any, expected: any, message: string) {
 };
 
 /**
- * ### .notEqual(actual, expected, [message])
- *
  * Asserts non-strict inequality (`!=`) of `actual` and `expected`.
  *
  *     assert.notEqual(3, 4, 'these numbers are not equal');
  */
 
-const notEqual = function (actual: any, expected: any, message: string) {
+const notEqual = <T>(actual: any, expected: any, message: string): void => {
     if (actual == expected) {
         throw new AssertionError(message, {
             actual,
@@ -111,14 +107,12 @@ const notEqual = function (actual: any, expected: any, message: string) {
 };
 
 /**
- * ### .strictEqual(actual, expected, [message])
- *
  * Asserts strict equality (`===`) of `actual` and `expected`.
  *
  *     assert.strictEqual(true, true, 'these booleans are strictly equal');
  */
 
-const strictEqual = (actual: any, expected: any, message: string) => {
+const strictEqual = (actual: any, expected: any, message: string): void => {
     if (actual !== expected) {
         throw new AssertionError(message, {
             actual,
@@ -128,14 +122,12 @@ const strictEqual = (actual: any, expected: any, message: string) => {
 };
 
 /**
- * ### .notStrictEqual(actual, expected, [message])
- *
  * Asserts strict inequality (`!==`) of `actual` and `expected`.
  *
  *     assert.notStrictEqual(3, '3', 'no coercion for strict equality');
  */
 
-const notStrictEqual = (actual: any, expected: any, message: string) => {
+const notStrictEqual = (actual: any, expected: any, message: string): void => {
     if (actual === expected) {
         throw new AssertionError(message, {
             actual,
@@ -145,14 +137,12 @@ const notStrictEqual = (actual: any, expected: any, message: string) => {
 };
 
 /**
- * ### .deepEqual(actual, expected, [message])
- *
  * Asserts that `actual` is deeply equal to `expected`.
  *
  *     assert.deepEqual({ tea: 'green' }, { tea: 'green' });
  */
 
-const deepEqual = (actual: any, expected: any, message: string) => {
+const deepEqual = (actual: any, expected: any, message: string): void => {
     if (!lodash.isEqual(actual, expected)) {
         throw new AssertionError(message, {
             actual,
@@ -162,14 +152,12 @@ const deepEqual = (actual: any, expected: any, message: string) => {
 };
 
 /**
- * ### .notDeepEqual(actual, expected, [message])
- *
  * Assert that `actual` is not deeply equal to `expected`.
  *
  *     assert.notDeepEqual({ tea: 'green' }, { tea: 'jasmine' });
  */
 
-const notDeepEqual = (actual: any, expected: any, message: string) => {
+const notDeepEqual = (actual: any, expected: any, message: string): void => {
     if (lodash.isEqual(actual, expected)) {
         throw new AssertionError(message, {
             actual,
@@ -179,198 +167,172 @@ const notDeepEqual = (actual: any, expected: any, message: string) => {
 };
 
 /**
- * ### .isAbove(valueToCheck, valueToBeAbove, [message])
- *
  * Asserts `valueToCheck` is strictly greater than (>) `valueToBeAbove`.
  *
  *     assert.isAbove(5, 2, '5 is strictly greater than 2');
  */
 
-const isAbove = function (
+const isAbove = <T>(
     valueToCheck: any,
     valueToBeAbove: any,
     message: string
-) {
+): void => {
     if (!lodash.gt(valueToCheck, valueToBeAbove)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isAtLeast(valueToCheck, valueToBeAtLeast, [message])
- *
  * Asserts `valueToCheck` is greater than or equal to (>=) `valueToBeAtLeast`.
  *
  *     assert.isAtLeast(5, 2, '5 is greater or equal to 2');
  *     assert.isAtLeast(3, 3, '3 is greater or equal to 3');
  */
 
-const isAtLeast = function (
+const isAtLeast = <T>(
     valueToCheck: any,
     valueToBeAtLeast: any,
     message: string
-) {
+): void => {
     if (!lodash.gte(valueToCheck, valueToBeAtLeast)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isBelow(valueToCheck, valueToBeBelow, [message])
- *
  * Asserts `valueToCheck` is strictly less than (<) `valueToBeBelow`.
  *
  *     assert.isBelow(3, 6, '3 is strictly less than 6');
  */
 
-const isBelow = function (
+const isBelow = <T>(
     valueToCheck: any,
     valueToBeBelow: any,
     message: string
-) {
+): void => {
     if (!lodash.lt(valueToCheck, valueToBeBelow)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isAtMost(valueToCheck, valueToBeAtMost, [message])
- *
  * Asserts `valueToCheck` is less than or equal to (<=) `valueToBeAtMost`.
  *
  *     assert.isAtMost(3, 6, '3 is less than or equal to 6');
  *     assert.isAtMost(4, 4, '4 is less than or equal to 4');
  */
 
-const isAtMost = function (
+const isAtMost = <T>(
     valueToCheck: any,
     valueToBeAtMost: any,
     message: string
-) {
+): void => {
     if (!lodash.lte(valueToCheck, valueToBeAtMost)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isTrue(value, [message])
- *
  * Asserts that `value` is true.
  *
  *     var teaServed = true;
  *     assert.isTrue(teaServed, 'the tea has been served');
  */
 
-const isTrue = function (value: any, message: string) {
+const isTrue = <T>(value: any, message: string): void => {
     if (!value) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNotTrue(value, [message])
- *
  * Asserts that `value` is not true.
  *
  *     var tea = 'tasty chai';
  *     assert.isNotTrue(tea, 'great, time for tea!');
  */
 
-const isNotTrue = function (value: any, message: string) {
+const isNotTrue = <T>(value: any, message: string): void => {
     if (value) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isFalse(value, [message])
- *
  * Asserts that `value` is false.
  *
  *     var teaServed = false;
  *     assert.isFalse(teaServed, 'no tea yet? hmm...');
  */
 
-const isFalse = function (value: any, message: string) {
+const isFalse = <T>(value: any, message: string): void => {
     if (value) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNotFalse(value, [message])
- *
  * Asserts that `value` is not false.
  *
  *     var tea = 'tasty chai';
  *     assert.isNotFalse(tea, 'great, time for tea!');
  */
 
-const isNotFalse = function (value: any, message: string) {
+const isNotFalse = <T>(value: any, message: string): void => {
     if (!value) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNull(value, [message])
- *
  * Asserts that `value` is null.
  *
  *     assert.isNull(err, 'there was no error');
  */
 
-const isNull = function (value: any, message: string) {
+const isNull = <T>(value: any, message: string): void => {
     if (value !== null) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNotNull(value, [message])
- *
  * Asserts that `value` is not null.
  *
  *     var tea = 'tasty chai';
  *     assert.isNotNull(tea, 'great, time for tea!');
  */
 
-const isNotNull = function (value: any, message: string) {
+const isNotNull = <T>(value: any, message: string): void => {
     if (value === null) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNaN
- *
  * Asserts that value is NaN.
  *
  *     assert.isNaN(NaN, 'NaN is NaN');
  */
 
-const isNaN = function (value: any, message: string) {
+const isNaN = <T>(value: any, message: string): void => {
     if (value !== NaN) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNotNaN
- *
  * Asserts that value is not NaN.
  *
  *     assert.isNotNaN(4, '4 is not NaN');
  */
-const isNotNaN = function (value: any, message: string) {
+const isNotNaN = <T>(value: any, message: string): void => {
     if (value === NaN) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .exists
- *
  * Asserts that the target is neither `null` nor `undefined`.
  *
  *     var foo = 'hi';
@@ -378,15 +340,13 @@ const isNotNaN = function (value: any, message: string) {
  *     assert.exists(foo, 'foo is neither `null` nor `undefined`');
  */
 
-const exists = function (value: any, message: string) {
+const exists = <T>(value: any, message: string): void => {
     if (!lodash.exists(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notExists
- *
  * Asserts that the target is either `null` or `undefined`.
  *
  *     var bar = null
@@ -396,75 +356,65 @@ const exists = function (value: any, message: string) {
  *     assert.notExists(baz, 'baz is either null or undefined');
  */
 
-const notExists = function (value: any, message: string) {
+const notExists = <T>(value: any, message: string): void => {
     if (lodash.exists(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isUndefined(value, [message])
- *
  * Asserts that `value` is `undefined`.
  *
  *     var tea;
  *     assert.isUndefined(tea, 'no tea defined');
  */
 
-const isUndefined = function (value: any, message: string) {
+const isUndefined = <T>(value: any, message: string): void => {
     if (!lodash.isUndefined(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isDefined(value, [message])
- *
  * Asserts that `value` is not `undefined`.
  *
  *     var tea = 'cup of chai';
  *     assert.isDefined(tea, 'tea has been defined');
  */
 
-const isDefined = function (value: any, message: string) {
+const isDefined = <T>(value: any, message: string): void => {
     if (lodash.isUndefined(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isFunction(value, [message])
+ * Asserts that `value` is a <T>.
  *
- * Asserts that `value` is a function.
- *
- *     function serveTea() { return 'cup of tea'; };
+ *     <T> serveTea() { return 'cup of tea'; };
  *     assert.isFunction(serveTea, 'great, we can have tea now');
  */
 
-const isFunction = function (value: any, message: string) {
+const isFunction = <T>(value: any, message: string): void => {
     if (!lodash.isFunction(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNotFunction(value, [message])
- *
- * Asserts that `value` is _not_ a function.
+ * Asserts that `value` is _not_ a <T>.
  *
  *     var serveTea = [ 'heat', 'pour', 'sip' ];
  *     assert.isNotFunction(serveTea, 'great, we have listed the steps');
  */
 
-const isNotFunction = function (value: any, message: string) {
+const isNotFunction = <T>(value: any, message: string): void => {
     if (lodash.isFunction(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isObject(value, [message])
- *
  * Asserts that `value` is an object of type 'Object' (as revealed by `Object.prototype.toString`).
  * _The assertion does not match subclassed objects._
  *
@@ -472,15 +422,13 @@ const isNotFunction = function (value: any, message: string) {
  *     assert.isObject(selection, 'tea selection is an object');
  */
 
-const isObject = function (value: any, message: string) {
+const isObject = <T>(value: any, message: string): void => {
     if (!lodash.isObject(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNotObject(value, [message])
- *
  * Asserts that `value` is _not_ an object of type 'Object' (as revealed by `Object.prototype.toString`).
  *
  *     var selection = 'chai'
@@ -488,105 +436,91 @@ const isObject = function (value: any, message: string) {
  *     assert.isNotObject(null, 'null is not an object');
  */
 
-const isNotObject = function (value: any, message: string) {
+const isNotObject = <T>(value: any, message: string): void => {
     if (lodash.isObject(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isArray(value, [message])
- *
  * Asserts that `value` is an array.
  *
  *     var menu = [ 'green', 'chai', 'oolong' ];
  *     assert.isArray(menu, 'what kind of tea do we want?');
  */
 
-const isArray = function (value: any, message: string) {
+const isArray = <T>(value: any, message: string): void => {
     if (!lodash.isArray(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNotArray(value, [message])
- *
  * Asserts that `value` is _not_ an array.
  *
  *     var menu = 'green|chai|oolong';
  *     assert.isNotArray(menu, 'what kind of tea do we want?');
  */
 
-const isNotArray = function (value: any, message: string) {
+const isNotArray = <T>(value: any, message: string): void => {
     if (lodash.isArray(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isString(value, [message])
- *
  * Asserts that `value` is a string.
  *
  *     var teaOrder = 'chai';
  *     assert.isString(teaOrder, 'order placed');
  */
 
-const isString = function (value: any, message: string) {
+const isString = <T>(value: any, message: string): void => {
     if (!lodash.isString(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNotString(value, [message])
- *
  * Asserts that `value` is _not_ a string.
  *
  *     var teaOrder = 4;
  *     assert.isNotString(teaOrder, 'order placed');
  */
 
-const isNotString = function (value: any, message: string) {
+const isNotString = <T>(value: any, message: string): void => {
     if (lodash.isString(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNumber(value, [message])
- *
  * Asserts that `value` is a number.
  *
  *     var cups = 2;
  *     assert.isNumber(cups, 'how many cups');
  */
 
-const isNumber = function (value: any, message: string) {
+const isNumber = <T>(value: any, message: string): void => {
     if (!lodash.isNumber(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNotNumber(value, [message])
- *
  * Asserts that `value` is _not_ a number.
  *
  *     var cups = '2 cups please';
  *     assert.isNotNumber(cups, 'how many cups');
  */
 
-const isNotNumber = function (value: any, message: string) {
+const isNotNumber = <T>(value: any, message: string): void => {
     if (lodash.isNumber(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isFinite(value, [message])
- *
  * Asserts that `value` is a finite number. Unlike `.isNumber`, this will fail for `NaN` and `Infinity`.
  *
  *     var cups = 2;
@@ -595,15 +529,13 @@ const isNotNumber = function (value: any, message: string) {
  *     assert.isFinite(NaN); // throws
  */
 
-const isFinite = function (value: any, message: string) {
+const isFinite = <T>(value: any, message: string): void => {
     if (!lodash.isFinite(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isBoolean(value, [message])
- *
  * Asserts that `value` is a boolean.
  *
  *     var teaReady = true
@@ -613,15 +545,13 @@ const isFinite = function (value: any, message: string) {
  *     assert.isBoolean(teaServed, 'has tea been served');
  */
 
-const isBoolean = function (value: any, message: string) {
+const isBoolean = <T>(value: any, message: string): void => {
     if (!lodash.isBoolean(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNotBoolean(value, [message])
- *
  * Asserts that `value` is _not_ a boolean.
  *
  *     var teaReady = 'yep'
@@ -631,15 +561,13 @@ const isBoolean = function (value: any, message: string) {
  *     assert.isNotBoolean(teaServed, 'has tea been served');
  */
 
-const isNotBoolean = function (value: any, message: string) {
+const isNotBoolean = <T>(value: any, message: string): void => {
     if (!lodash.isBoolean(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .typeOf(value, name, [message])
- *
  * Asserts that `value`'s type is `name`, as determined by
  * `Object.prototype.toString`.
  *
@@ -651,64 +579,56 @@ const isNotBoolean = function (value: any, message: string) {
  *     assert.typeOf(undefined, 'undefined', 'we have an undefined');
  */
 
-const typeOf = function (value: any, type: string, message: string) {
+const typeOf = <T>(value: any, type: string, message: string): void => {
     if (typeof value !== type) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notTypeOf(value, name, [message])
- *
  * Asserts that `value`'s type is _not_ `name`, as determined by
  * `Object.prototype.toString`.
  *
  *     assert.notTypeOf('tea', 'number', 'strings are not numbers');
  */
 
-const notTypeOf = function (value: any, type, message: string) {
+const notTypeOf = <T>(value: any, type, message: string): void => {
     if (typeof value === type) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .instanceOf(object, constructor, [message])
- *
  * Asserts that `value` is an instance of `constructor`.
  *
- *     var Tea = function (name) { this.name = name; }
+ *     var Tea = <T> (name) { this.name = name; }
  *       , chai = new Tea('chai');
  *
  *     assert.instanceOf(chai, Tea, 'chai is an instance of tea');
  */
 
-const instanceOf = function (value: any, constructor, message: string) {
+const instanceOf = <T>(value: any, constructor, message: string): void => {
     if (!lodash.isInstanceOf(value, constructor)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notInstanceOf(object, constructor, [message])
- *
  * Asserts `value` is not an instance of `constructor`.
  *
- *     var Tea = function (name) { this.name = name; }
+ *     var Tea = <T> (name) { this.name = name; }
  *       , chai = new String('chai');
  *
  *     assert.notInstanceOf(chai, Tea, 'chai is not an instance of tea');
  */
 
-const notInstanceOf = function (value: any, constructor, message: string) {
+const notInstanceOf = <T>(value: any, constructor, message: string): void => {
     if (lodash.isInstanceOf(value, constructor)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .include(haystack, needle, [message])
- *
  * Asserts that `haystack` includes `needle`. Can be used to assert the
  * inclusion of a value in an array, a substring in a string, or a subset of
  * properties in an object.
@@ -730,19 +650,17 @@ const notInstanceOf = function (value: any, constructor, message: string) {
  *     assert.include({foo: obj1, bar: obj2}, {foo: obj1, bar: obj2});
  */
 
-const include = function (
+const include = <T>(
     expression: any,
     includedValue: any,
     message: string
-) {
+): void => {
     if (!lodash.includes(expression, includedValue)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notInclude(haystack, needle, [message])
- *
  * Asserts that `haystack` does not include `needle`. Can be used to assert
  * the absence of a value in an array, a substring in a string, or a subset of
  * properties in an object.
@@ -765,19 +683,17 @@ const include = function (
  *     assert.notInclude({foo: obj1, bar: obj2}, {foo: obj1, bar: {b: 2}});
  */
 
-const notInclude = function (
+const notInclude = <T>(
     expression: any,
     includedValue: any,
     message: string
-) {
+): void => {
     if (lodash.includes(expression, includedValue)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .deepInclude(haystack, needle, [message])
- *
  * Asserts that `haystack` includes `needle`. Can be used to assert the
  * inclusion of a value in an array or a subset of properties in an object.
  * Deep equality is used.
@@ -789,19 +705,17 @@ const notInclude = function (
  *     assert.deepInclude({foo: obj1, bar: obj2}, {foo: {a: 1}, bar: {b: 2}});
  */
 
-const deepInclude = function (
+const deepInclude = <T>(
     expression: any,
     includedValue: any,
     message: string
-) {
+): void => {
     if (!lodash.includes(expression, includedValue)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notDeepInclude(haystack, needle, [message])
- *
  * Asserts that `haystack` does not include `needle`. Can be used to assert
  * the absence of a value in an array or a subset of properties in an object.
  * Deep equality is used.
@@ -813,55 +727,49 @@ const deepInclude = function (
  *     assert.notDeepInclude({foo: obj1, bar: obj2}, {foo: {a: 1}, bar: {b: 9}});
  */
 
-const notDeepInclude = function (
+const notDeepInclude = <T>(
     expression: any,
     includedValue: any,
     message: string
-) {
+): void => {
     if (lodash.includes(expression, includedValue)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .match(value, regexp, [message])
- *
  * Asserts that `value` matches the regular expression `regexp`.
  *
  *     assert.match('foobar', /^foo/, 'regexp matches');
  */
 
-const match = function (
+const match = <T>(
     expression: string,
     regularExpression: any,
     message: string
-) {
+): void => {
     if (!expression.match(regularExpression)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notMatch(value, regexp, [message])
- *
  * Asserts that `value` does not match the regular expression `regexp`.
  *
  *     assert.notMatch('foobar', /^foo/, 'regexp does not match');
  */
 
-const notMatch = function (
+const notMatch = <T>(
     expression: string,
     regularExpression: any,
     message: string
-) {
+): void => {
     if (expression.match(regularExpression)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .property(object, property, [message])
- *
  * Asserts that `object` has a direct or inherited property named by
  * `property`.
  *
@@ -869,33 +777,33 @@ const notMatch = function (
  *     assert.property({ tea: { green: 'matcha' }}, 'toString');
  */
 
-const property = function (value: Object, property: string, message: string) {
+const property = <T>(
+    value: Object,
+    property: string,
+    message: string
+): void => {
     if (!value[property]) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notProperty(object, property, [message])
- *
  * Asserts that `object` does _not_ have a direct or inherited property named
  * by `property`.
  *
  *     assert.notProperty({ tea: { green: 'matcha' }}, 'coffee');
  */
-const notProperty = function (
+const notProperty = <T>(
     value: Object,
     property: string,
     message: string
-) {
+): void => {
     if (value[property]) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .propertyVal(object, property, value, [message])
- *
  * Asserts that `object` has a direct or inherited property named by
  * `property` with a value given by `value`. Uses a strict equality check
  * (===).
@@ -903,20 +811,18 @@ const notProperty = function (
  *     assert.propertyVal({ tea: 'is good' }, 'tea', 'is good');
  */
 
-const propertyVal = function (
+const propertyVal = <T>(
     obj: Object,
     property: string,
     value: any,
     message: string
-) {
+): void => {
     if (!obj[property] || obj[property] !== value) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notPropertyVal(object, property, value, [message])
- *
  * Asserts that `object` does _not_ have a direct or inherited property named
  * by `property` with value given by `value`. Uses a strict equality check
  * (===).
@@ -925,40 +831,36 @@ const propertyVal = function (
  *     assert.notPropertyVal({ tea: 'is good' }, 'coffee', 'is good');
  */
 
-const notPropertyVal = function (
+const notPropertyVal = <T>(
     obj: Object,
     property: string,
     value: any,
     message: string
-) {
+): void => {
     if (obj[property] && obj[property] === value) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .deepPropertyVal(object, property, value, [message])
- *
  * Asserts that `object` has a direct or inherited property named by
  * `property` with a value given by `value`. Uses a deep equality check.
  *
  *     assert.deepPropertyVal({ tea: { green: 'matcha' } }, 'tea', { green: 'matcha' });
  */
 
-const deepPropertyVal = function (
+const deepPropertyVal = <T>(
     obj: Object,
     property: string,
     value: any,
     message: string
-) {
+): void => {
     if (!obj[property] || !lodash.isEqual(obj[property], value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notDeepPropertyVal(object, property, value, [message])
- *
  * Asserts that `object` does _not_ have a direct or inherited property named
  * by `property` with value given by `value`. Uses a deep equality check.
  *
@@ -967,54 +869,52 @@ const deepPropertyVal = function (
  *     assert.notDeepPropertyVal({ tea: { green: 'matcha' } }, 'coffee', { green: 'matcha' });
  */
 
-const notDeepPropertyVal = function (
+const notDeepPropertyVal = <T>(
     obj: Object,
     property: string,
     value: any,
     message: string
-) {
+): void => {
     if (obj[property] && lodash.isEqual(obj[property], value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .ownProperty(object, property, [message])
- *
  * Asserts that `object` has a direct property named by `property`. Inherited
  * properties aren't checked.
  *
  *     assert.ownProperty({ tea: { green: 'matcha' }}, 'tea');
  */
 
-const ownProperty = function (obj: Object, property: string, message: string) {
+const ownProperty = <T>(
+    obj: Object,
+    property: string,
+    message: string
+): void => {
     if (!obj.hasOwnProperty(property)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notOwnProperty(object, property, [message])
- *
  * Asserts that `object` does _not_ have a direct property named by
  * `property`. Inherited properties aren't checked.
  *
  *     assert.notOwnProperty({ tea: { green: 'matcha' }}, 'coffee');
  *     assert.notOwnProperty({}, 'toString');
  */
-const notOwnProperty = function (
+const notOwnProperty = <T>(
     obj: Object,
     property: string,
     message: string
-) {
+): void => {
     if (!obj.hasOwnProperty(property)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .ownPropertyVal(object, property, value, [message])
- *
  * Asserts that `object` has a direct property named by `property` and a value
  * equal to the provided `value`. Uses a strict equality check (===).
  * Inherited properties aren't checked.
@@ -1029,20 +929,18 @@ const notOwnProperty = function (
  * @api public
  */
 
-const ownPropertyVal = function (
+const ownPropertyVal = <T>(
     obj: Object,
     property: string,
     value: any,
     message: string
-) {
+): void => {
     if (!obj.hasOwnProperty(property) || obj[property] !== value) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notOwnPropertyVal(object, property, value, [message])
- *
  * Asserts that `object` does _not_ have a direct property named by `property`
  * with a value equal to the provided `value`. Uses a strict equality check
  * (===). Inherited properties aren't checked.
@@ -1051,20 +949,18 @@ const ownPropertyVal = function (
  *     assert.notOwnPropertyVal({}, 'toString', Object.prototype.toString);
  */
 
-const notOwnPropertyVal = function (
+const notOwnPropertyVal = <T>(
     obj: Object,
     property: string,
     value: any,
     message: string
-) {
+): void => {
     if (obj.hasOwnProperty(property) && obj[property] === value) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .deepOwnPropertyVal(object, property, value, [message])
- *
  * Asserts that `object` has a direct property named by `property` and a value
  * equal to the provided `value`. Uses a deep equality check. Inherited
  * properties aren't checked.
@@ -1072,12 +968,12 @@ const notOwnPropertyVal = function (
  *     assert.deepOwnPropertyVal({ tea: { green: 'matcha' } }, 'tea', { green: 'matcha' });
  */
 
-const deepOwnPropertyVal = function (
+const deepOwnPropertyVal = <T>(
     obj: Object,
     property: string,
     value: any,
     message: string
-) {
+): void => {
     if (
         !obj.hasOwnProperty(property) ||
         !lodash.isEqual(obj[property], value)
@@ -1087,8 +983,6 @@ const deepOwnPropertyVal = function (
 };
 
 /**
- * ### .notDeepOwnPropertyVal(object, property, value, [message])
- *
  * Asserts that `object` does _not_ have a direct property named by `property`
  * with a value equal to the provided `value`. Uses a deep equality check.
  * Inherited properties aren't checked.
@@ -1099,20 +993,18 @@ const deepOwnPropertyVal = function (
  *     assert.notDeepOwnPropertyVal({}, 'toString', Object.prototype.toString);
  */
 
-const notDeepOwnPropertyVal = function (
+const notDeepOwnPropertyVal = <T>(
     obj: Object,
     property: string,
     value: any,
     message: string
-) {
+): void => {
     if (obj.hasOwnProperty(property) && lodash.isEqual(obj[property], value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .nestedProperty(object, property, [message])
- *
  * Asserts that `object` has a direct or inherited property named by
  * `property`, which can be a string using dot- and bracket-notation for
  * nested reference.
@@ -1120,19 +1012,17 @@ const notDeepOwnPropertyVal = function (
  *     assert.nestedProperty({ tea: { green: 'matcha' }}, 'tea.green');
  */
 
-const nestedProperty = function (
+const nestedProperty = <T>(
     obj: Object,
     property: string,
     message: string
-) {
+): void => {
     if (!lodash.get(obj, property)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notNestedProperty(object, property, [message])
- *
  * Asserts that `object` does _not_ have a property named by `property`, which
  * can be a string using dot- and bracket-notation for nested reference. The
  * property cannot exist on the object nor anywhere in its prototype chain.
@@ -1140,19 +1030,17 @@ const nestedProperty = function (
  *     assert.notNestedProperty({ tea: { green: 'matcha' }}, 'tea.oolong');
  */
 
-const notNestedProperty = function (
+const notNestedProperty = <T>(
     obj: Object,
     property: string,
     message: string
-) {
+): void => {
     if (lodash.get(obj, property)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .nestedPropertyVal(object, property, value, [message])
- *
  * Asserts that `object` has a property named by `property` with value given
  * by `value`. `property` can use dot- and bracket-notation for nested
  * reference. Uses a strict equality check (===).
@@ -1160,20 +1048,18 @@ const notNestedProperty = function (
  *     assert.nestedPropertyVal({ tea: { green: 'matcha' }}, 'tea.green', 'matcha');
  */
 
-const nestedPropertyVal = function (
+const nestedPropertyVal = <T>(
     obj: Object,
     property: string,
     value: any,
     message: string
-) {
+): void => {
     if (!lodash.get(obj, property) || lodash.get(obj, property) !== value) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notNestedPropertyVal(object, property, value, [message])
- *
  * Asserts that `object` does _not_ have a property named by `property` with
  * value given by `value`. `property` can use dot- and bracket-notation for
  * nested reference. Uses a strict equality check (===).
@@ -1182,19 +1068,17 @@ const nestedPropertyVal = function (
  *     assert.notNestedPropertyVal({ tea: { green: 'matcha' }}, 'coffee.green', 'matcha');
  */
 
-const notNestedPropertyVal = function (
+const notNestedPropertyVal = <T>(
     obj: Object,
     property: string,
     value: any,
     message: string
-) {
+): void => {
     if (lodash.get(obj, property) && lodash.get(obj, property) === value) {
         throw new AssertionError(message);
     }
 };
 /**
- * ### .deepNestedPropertyVal(object, property, value, [message])
- *
  * Asserts that `object` has a property named by `property` with a value given
  * by `value`. `property` can use dot- and bracket-notation for nested
  * reference. Uses a deep equality check.
@@ -1202,12 +1086,12 @@ const notNestedPropertyVal = function (
  *     assert.deepNestedPropertyVal({ tea: { green: { matcha: 'yum' } } }, 'tea.green', { matcha: 'yum' });
  */
 
-const deepNestedPropertyVal = function (
+const deepNestedPropertyVal = <T>(
     obj: Object,
     property: string,
     value: any,
     message: string
-) {
+): void => {
     if (
         !lodash.get(obj, property) ||
         !lodash.isEqual(lodash.get(obj, property), value)
@@ -1217,8 +1101,6 @@ const deepNestedPropertyVal = function (
 };
 
 /**
- * ### .notDeepNestedPropertyVal(object, property, value, [message])
- *
  * Asserts that `object` does _not_ have a property named by `property` with
  * value given by `value`. `property` can use dot- and bracket-notation for
  * nested reference. Uses a deep equality check.
@@ -1228,12 +1110,12 @@ const deepNestedPropertyVal = function (
  *     assert.notDeepNestedPropertyVal({ tea: { green: { matcha: 'yum' } } }, 'tea.black', { matcha: 'yum' });
  */
 
-const notDeepNestedPropertyVal = function (
+const notDeepNestedPropertyVal = <T>(
     obj: Object,
     property: string,
     value: any,
     message: string
-) {
+): void => {
     if (
         lodash.get(obj, property) &&
         lodash.isEqual(lodash.get(obj, property), value)
@@ -1243,8 +1125,6 @@ const notDeepNestedPropertyVal = function (
 };
 
 /**
- * ### .lengthOf(object, length, [message])
- *
  * Asserts that `object` has a `length` or `size` with the expected value.
  *
  *     assert.lengthOf([1,2,3], 3, 'array has length of 3');
@@ -1253,15 +1133,17 @@ const notDeepNestedPropertyVal = function (
  *     assert.lengthOf(new Map([['a',1],['b',2],['c',3]]), 3, 'map has size of 3');
  */
 
-const lengthOf = function (expression: any, length: number, message: string) {
+const lengthOf = <T>(
+    expression: any,
+    length: number,
+    message: string
+): void => {
     if (lodash.size(expression) !== length) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .hasAnyKeys(object, [keys], [message])
- *
  * Asserts that `object` has at least one of the `keys` provided.
  * You can also provide a single object instead of a `keys` array and its keys
  * will be used as the expected set of keys.
@@ -1272,15 +1154,17 @@ const lengthOf = function (expression: any, length: number, message: string) {
  *     assert.hasAnyKeys(new Set([{foo: 'bar'}, 'anotherKey']), [{foo: 'bar'}, 'anotherKey']);
  */
 
-const hasAnyKeys = function (obj: Object, keys: any[], message: string) {
+const hasAnyKeys = <T>(
+    obj: Object,
+    keys: string[] | Symbol[],
+    message: string
+): void => {
     if (!lodash.some(lodash.intersection(keys, lodash.keys(obj)))) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .hasAllKeys(object, [keys], [message])
- *
  * Asserts that `object` has all and only all of the `keys` provided.
  * You can also provide a single object instead of a `keys` array and its keys
  * will be used as the expected set of keys.
@@ -1291,15 +1175,17 @@ const hasAnyKeys = function (obj: Object, keys: any[], message: string) {
  *     assert.hasAllKeys(new Set([{foo: 'bar'}, 'anotherKey'], [{foo: 'bar'}, 'anotherKey']);
  */
 
-const hasAllKeys = function (obj: Object, keys: any[], message: string) {
+const hasAllKeys = <T>(
+    obj: Object,
+    keys: string[] | Symbol[],
+    message: string
+): void => {
     if (!lodash.isEqual(keys, lodash.keys(obj))) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .containsAllKeys(object, [keys], [message])
- *
  * Asserts that `object` has all of the `keys` provided but may have more keys not listed.
  * You can also provide a single object instead of a `keys` array and its keys
  * will be used as the expected set of keys.
@@ -1314,15 +1200,17 @@ const hasAllKeys = function (obj: Object, keys: any[], message: string) {
  *     assert.containsAllKeys(new Set([{foo: 'bar'}, 'anotherKey'], [{foo: 'bar'}, 'anotherKey']);
  */
 
-const containsAllKeys = function (obj: Object, keys: any[], message: string) {
+const containsAllKeys = <T>(
+    obj: Object,
+    keys: string[] | Symbol[],
+    message: string
+): void => {
     if (!lodash.isEqual(lodash.intersection(keys, lodash.keys(obj)), keys)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .doesNotHaveAnyKeys(object, [keys], [message])
- *
  * Asserts that `object` has none of the `keys` provided.
  * You can also provide a single object instead of a `keys` array and its keys
  * will be used as the expected set of keys.
@@ -1333,19 +1221,17 @@ const containsAllKeys = function (obj: Object, keys: any[], message: string) {
  *     assert.doesNotHaveAnyKeys(new Set([{foo: 'bar'}, 'anotherKey'], [{one: 'two'}, 'example']);
  */
 
-const doesNotHaveAnyKeys = function (
+const doesNotHaveAnyKeys = <T>(
     obj: Object,
-    keys: any[],
+    keys: string[] | Symbol[],
     message: string
-) {
+): void => {
     if (lodash.some(lodash.intersection(keys, lodash.keys(obj)))) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .doesNotHaveAllKeys(object, [keys], [message])
- *
  * Asserts that `object` does not have at least one of the `keys` provided.
  * You can also provide a single object instead of a `keys` array and its keys
  * will be used as the expected set of keys.
@@ -1356,26 +1242,24 @@ const doesNotHaveAnyKeys = function (
  *     assert.doesNotHaveAllKeys(new Set([{foo: 'bar'}, 'anotherKey'], [{one: 'two'}, 'example']);
  */
 
-const doesNotHaveAllKeys = function (
+const doesNotHaveAllKeys = <T>(
     obj: Object,
-    keys: any[],
+    keys: string[] | Symbol[],
     message: string
-) {
+): void => {
     if (lodash.isEqual(keys, lodash.keys(obj))) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .operator(val1, operator, val2, [message])
- *
  * Compares two values using `operator`.
  *
  *     assert.operator(1, '<', 2, 'everything is ok');
  *     assert.operator(1, '>', 2, 'this will fail');
  */
 
-const operator = function (value: any, operator, val2, message: string) {
+const operator = <T>(value: any, operator, val2, message: string): void => {
     var ok;
     switch (operator) {
         case "==":
@@ -1411,148 +1295,134 @@ const operator = function (value: any, operator, val2, message: string) {
 };
 
 /**
- * ### .closeTo(actual, expected, delta, [message])
- *
  * Asserts that the target is equal `expected`, to within a +/- `delta` range.
  *
  *     assert.closeTo(1.5, 1, 0.5, 'numbers are close');
  */
 
-const closeTo = function (
+const closeTo = <T>(
     actual: number,
     expression: number,
     delta: number,
     message: string
-) {
+): void => {
     if (!(expression - delta <= actual && actual <= expression + delta)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .approximately(actual, expected, delta, [message])
- *
  * Asserts that the target is equal `expected`, to within a +/- `delta` range.
  *
  *     assert.approximately(1.5, 1, 0.5, 'numbers are close');
  */
 
-const approximately = function (
+const approximately = <T>(
     actual: number,
     expression: number,
     delta: number,
     message: string
-) {
+): void => {
     if (!(expression - delta <= actual && actual <= expression + delta)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .sameMembers(set1, set2, [message])
- *
  * Asserts that `set1` and `set2` have the same members in any order. Uses a
  * strict equality check (===).
  *
  *     assert.sameMembers([ 1, 2, 3 ], [ 2, 1, 3 ], 'same members');
  */
 
-const sameMembers = function (set1: any[], set2: any[], message: string) {
+const sameMembers = <T>(set1: any[], set2: any[], message: string): void => {
     if (!lodash.isEqual(set1.sort(), set2.sort())) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notSameMembers(set1, set2, [message])
- *
  * Asserts that `set1` and `set2` don't have the same members in any order.
  * Uses a strict equality check (===).
  *
  *     assert.notSameMembers([ 1, 2, 3 ], [ 5, 1, 3 ], 'not same members');
  */
 
-const notSameMembers = function (set1: any[], set2: any[], message: string) {
+const notSameMembers = <T>(set1: any[], set2: any[], message: string): void => {
     if (lodash.isEqual(set1.sort(), set2.sort())) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .sameDeepMembers(set1, set2, [message])
- *
  * Asserts that `set1` and `set2` have the same members in any order. Uses a
  * deep equality check.
  *
  *     assert.sameDeepMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [{ b: 2 }, { a: 1 }, { c: 3 }], 'same deep members');
  */
 
-const sameDeepMembers = function (set1: any[], set2: any[], message: string) {
+const sameDeepMembers = <T>(
+    set1: any[],
+    set2: any[],
+    message: string
+): void => {
     if (!lodash.isEqual(set1.sort(), set2.sort())) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notSameDeepMembers(set1, set2, [message])
- *
  * Asserts that `set1` and `set2` don't have the same members in any order.
  * Uses a deep equality check.
  *
  *     assert.notSameDeepMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [{ b: 2 }, { a: 1 }, { f: 5 }], 'not same deep members');
  */
 
-const notSameDeepMembers = function (
+const notSameDeepMembers = <T>(
     set1: any[],
     set2: any[],
     message: string
-) {
+): void => {
     if (lodash.isEqual(set1.sort(), set2.sort())) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .sameOrderedMembers(set1, set2, [message])
- *
  * Asserts that `set1` and `set2` have the same members in the same order.
  * Uses a strict equality check (===).
  *
  *     assert.sameOrderedMembers([ 1, 2, 3 ], [ 1, 2, 3 ], 'same ordered members');
  */
 
-const sameOrderedMembers = function (
+const sameOrderedMembers = <T>(
     set1: any[],
     set2: any[],
     message: string
-) {
+): void => {
     if (!lodash.isEqual(set1, set2)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notSameOrderedMembers(set1, set2, [message])
- *
  * Asserts that `set1` and `set2` don't have the same members in the same
  * order. Uses a strict equality check (===).
  *
  *     assert.notSameOrderedMembers([ 1, 2, 3 ], [ 2, 1, 3 ], 'not same ordered members');
  */
 
-const notSameOrderedMembers = function (
+const notSameOrderedMembers = <T>(
     set1: any[],
     set2: any[],
     message: string
-) {
+): void => {
     if (lodash.isEqual(set1, set2)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .sameDeepOrderedMembers(set1, set2, [message])
- *
  * Asserts that `set1` and `set2` have the same members in the same order.
  * Uses a deep equality check.
  *
@@ -1566,19 +1436,17 @@ const notSameOrderedMembers = function (
  * @api public
  */
 
-const sameDeepOrderedMembers = function (
+const sameDeepOrderedMembers = <T>(
     set1: any[],
     set2: any[],
     message: string
-) {
+): void => {
     if (!lodash.isEqual(set1, set2)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notSameDeepOrderedMembers(set1, set2, [message])
- *
  * Asserts that `set1` and `set2` don't have the same members in the same
  * order. Uses a deep equality check.
  *
@@ -1586,101 +1454,91 @@ const sameDeepOrderedMembers = function (
  *     assert.notSameDeepOrderedMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { b: 2 }, { a: 1 }, { c: 3 } ], 'not same deep ordered members');
  */
 
-const notSameDeepOrderedMembers = function (
+const notSameDeepOrderedMembers = <T>(
     set1: any[],
     set2: any[],
     message: string
-) {
+): void => {
     if (lodash.isEqual(set1, set2)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .includeMembers(superset, subset, [message])
- *
  * Asserts that `subset` is included in `superset` in any order. Uses a
  * strict equality check (===). Duplicates are ignored.
  *
  *     assert.includeMembers([ 1, 2, 3 ], [ 2, 1, 2 ], 'include members');
  */
 
-const isSubset = (subset: any[], superset: any[]) =>
+const isSubset = <T>(subset: any[], superset: any[]): boolean =>
     lodash.every(subset, (value, key) => value === superset[key]);
 
-const includeMembers = function (
+const includeMembers = <T>(
     superset: any[],
     subset: any[],
     message: string
-) {
+): void => {
     if (!isSubset(subset, superset)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notIncludeMembers(superset, subset, [message])
- *
  * Asserts that `subset` isn't included in `superset` in any order. Uses a
  * strict equality check (===). Duplicates are ignored.
  *
  *     assert.notIncludeMembers([ 1, 2, 3 ], [ 5, 1 ], 'not include members');
  */
 
-const notIncludeMembers = function (
+const notIncludeMembers = <T>(
     superset: any[],
     subset: any[],
     message: string
-) {
+): void => {
     if (isSubset(subset, superset)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .includeDeepMembers(superset, subset, [message])
- *
  * Asserts that `subset` is included in `superset` in any order. Uses a deep
  * equality check. Duplicates are ignored.
  *
  *     assert.includeDeepMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { b: 2 }, { a: 1 }, { b: 2 } ], 'include deep members');
  */
 
-const isDeepSubset = (subset: any[], superset: any[]) =>
+const isDeepSubset = <T>(subset: any[], superset: any[]): boolean =>
     lodash.every(subset, (value, key) => lodash.isEqual(value, superset[key]));
 
-const includeDeepMembers = function (
+const includeDeepMembers = <T>(
     superset: any[],
     subset: any[],
     message: string
-) {
+): void => {
     if (!isDeepSubset(subset, superset)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notIncludeDeepMembers(superset, subset, [message])
- *
  * Asserts that `subset` isn't included in `superset` in any order. Uses a
  * deep equality check. Duplicates are ignored.
  *
  *     assert.notIncludeDeepMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { b: 2 }, { f: 5 } ], 'not include deep members');
  */
 
-const notIncludeDeepMembers = function (
+const notIncludeDeepMembers = <T>(
     superset: any[],
     subset: any[],
     message: string
-) {
+): void => {
     if (isDeepSubset(subset, superset)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .includeOrderedMembers(superset, subset, [message])
- *
  * Asserts that `subset` is included in `superset` in the same order
  * beginning with the first element in `superset`. Uses a strict equality
  * check (===).
@@ -1688,19 +1546,17 @@ const notIncludeDeepMembers = function (
  *     assert.includeOrderedMembers([ 1, 2, 3 ], [ 1, 2 ], 'include ordered members');
  */
 
-const includeOrderedMembers = function (
+const includeOrderedMembers = <T>(
     superset: any[],
     subset: any[],
     message: string
-) {
+): void => {
     if (!isSubset(subset, superset)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notIncludeOrderedMembers(superset, subset, [message])
- *
  * Asserts that `subset` isn't included in `superset` in the same order
  * beginning with the first element in `superset`. Uses a strict equality
  * check (===).
@@ -1709,19 +1565,17 @@ const includeOrderedMembers = function (
  *     assert.notIncludeOrderedMembers([ 1, 2, 3 ], [ 2, 3 ], 'not include ordered members');
  */
 
-const notIncludeOrderedMembers = function (
+const notIncludeOrderedMembers = <T>(
     superset: any[],
     subset: any[],
     message: string
-) {
+): void => {
     if (isSubset(subset, superset)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .includeDeepOrderedMembers(superset, subset, [message])
- *
  * Asserts that `subset` is included in `superset` in the same order
  * beginning with the first element in `superset`. Uses a deep equality
  * check.
@@ -1729,19 +1583,17 @@ const notIncludeOrderedMembers = function (
  *     assert.includeDeepOrderedMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { a: 1 }, { b: 2 } ], 'include deep ordered members');
  */
 
-const includeDeepOrderedMembers = function (
+const includeDeepOrderedMembers = <T>(
     superset: any[],
     subset: any[],
     message: string
-) {
+): void => {
     if (!isDeepSubset(subset, superset)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .notIncludeDeepOrderedMembers(superset, subset, [message])
- *
  * Asserts that `subset` isn't included in `superset` in the same order
  * beginning with the first element in `superset`. Uses a deep equality
  * check.
@@ -1751,33 +1603,29 @@ const includeDeepOrderedMembers = function (
  *     assert.notIncludeDeepOrderedMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { b: 2 }, { c: 3 } ], 'not include deep ordered members');
  */
 
-const notIncludeDeepOrderedMembers = function (
+const notIncludeDeepOrderedMembers = <T>(
     superset: any[],
     subset: any[],
     message: string
-) {
+): void => {
     if (isDeepSubset(subset, superset)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .oneOf(inList, list, [message])
- *
  * Asserts that non-object, non-array value `inList` appears in the flat array `list`.
  *
  *     assert.oneOf(1, [ 2, 1 ], 'Not found in list');
  */
 
-const oneOf = function (inList: any, list: any[], message: string) {
+const oneOf = <T>(inList: any, list: any[], message: string): void => {
     if (!lodash.includes(list, inList)) {
         throw new AssertionError(message);
     }
 };
 
 /*!
- * ### .ifError(object)
- *
  * Asserts if value is not a false value, and throws if it is a true value.
  * This is added to allow for chai to be a drop-in replacement for Node's
  * assert class.
@@ -1786,29 +1634,25 @@ const oneOf = function (inList: any, list: any[], message: string) {
  *     assert.ifError(err); // Rethrows err!
  */
 
-const ifError = function (value: any) {
+const ifError = <T>(value: any): void => {
     if (value) {
         throw value;
     }
 };
 
 /**
- * ### .isExtensible(object)
- *
  * Asserts that `object` is extensible (can have new properties added to it).
  *
  *     assert.isExtensible({});
  */
 
-const isExtensible = function (obj: Object, message: string) {
+const isExtensible = <T>(obj: Object, message: string): void => {
     if (!Object.isExtensible(obj)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNotExtensible(object)
- *
  * Asserts that `object` is _not_ extensible.
  *
  *     var nonExtensibleObject = Object.preventExtensions({});
@@ -1820,15 +1664,13 @@ const isExtensible = function (obj: Object, message: string) {
  *     assert.isNotExtensible(frozenObject);
  */
 
-const isNotExtensible = function (obj: Object, message: string) {
+const isNotExtensible = <T>(obj: Object, message: string): void => {
     if (Object.isExtensible(obj)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isSealed(object)
- *
  * Asserts that `object` is sealed (cannot have new properties added to it
  * and its existing properties cannot be removed).
  *
@@ -1839,29 +1681,25 @@ const isNotExtensible = function (obj: Object, message: string) {
  *     assert.isSealed(frozenObject);
  */
 
-const isSealed = function (obj: Object, message: string) {
+const isSealed = <T>(obj: Object, message: string): void => {
     if (!Object.isSealed(obj)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNotSealed(object)
- *
  * Asserts that `object` is _not_ sealed.
  *
  *     assert.isNotSealed({});
  */
 
-const isNotSealed = function (obj: Object, message: string) {
+const isNotSealed = <T>(obj: Object, message: string): void => {
     if (Object.isSealed(obj)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isFrozen(object)
- *
  * Asserts that `object` is frozen (cannot have new properties added to it
  * and its existing properties cannot be modified).
  *
@@ -1869,33 +1707,29 @@ const isNotSealed = function (obj: Object, message: string) {
  *     assert.frozen(frozenObject);
  */
 
-const isFrozen = function (obj: Object, message: string) {
+const isFrozen = <T>(obj: Object, message: string): void => {
     if (!Object.isFrozen(obj)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNotFrozen(object)
- *
  * Asserts that `object` is _not_ frozen.
  *
  *     assert.isNotFrozen({});
  */
 
-const isNotFrozen = function (obj: Object, message: string) {
+const isNotFrozen = <T>(obj: Object, message: string): void => {
     if (Object.isFrozen(obj)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isEmpty(target)
- *
  * Asserts that the target does not contain any values.
  * For arrays and strings, it checks the `length` property.
  * For `Map` and `Set` instances, it checks the `size` property.
- * For non-function objects, it gets the count of own
+ * For non-<T> objects, it gets the count of own
  * enumerable string keys.
  *
  *     assert.isEmpty([]);
@@ -1904,19 +1738,17 @@ const isNotFrozen = function (obj: Object, message: string) {
  *     assert.isEmpty({});
  */
 
-const isEmpty = function (value: any, message: string) {
+const isEmpty = <T>(value: any, message: string): void => {
     if (!lodash.isEmpty(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * ### .isNotEmpty(target)
- *
  * Asserts that the target contains values.
  * For arrays and strings, it checks the `length` property.
  * For `Map` and `Set` instances, it checks the `size` property.
- * For non-function objects, it gets the count of own
+ * For non-<T> objects, it gets the count of own
  * enumerable string keys.
  *
  *     assert.isNotEmpty([1, 2]);
@@ -1924,7 +1756,7 @@ const isEmpty = function (value: any, message: string) {
  *     assert.isNotEmpty(new Set([5, 6]));
  *     assert.isNotEmpty({ key: 7 });
  */
-const isNotEmpty = function (value: any, message: string) {
+const isNotEmpty = <T>(value: any, message: string): void => {
     if (lodash.isEmpty(value)) {
         throw new AssertionError(message);
     }
