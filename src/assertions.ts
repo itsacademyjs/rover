@@ -1605,13 +1605,17 @@ const notSameDeepOrderedMembers = function (
  *     assert.includeMembers([ 1, 2, 3 ], [ 2, 1, 2 ], 'include members');
  */
 
-const includeMembers = function (superset, subset, message: string) {
-    new Assertion(
-        superset,
-        message,
-        assert.includeMembers,
-        true
-    ).to.include.members(subset);
+const isSubset = (subset: any[], superset: any[]) =>
+    lodash.every(subset, (value, key) => value === superset[key]);
+
+const includeMembers = function (
+    superset: any[],
+    subset: any[],
+    message: string
+) {
+    if (!isSubset(subset, superset)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1623,13 +1627,14 @@ const includeMembers = function (superset, subset, message: string) {
  *     assert.notIncludeMembers([ 1, 2, 3 ], [ 5, 1 ], 'not include members');
  */
 
-const notIncludeMembers = function (superset, subset, message: string) {
-    new Assertion(
-        superset,
-        message,
-        assert.notIncludeMembers,
-        true
-    ).to.not.include.members(subset);
+const notIncludeMembers = function (
+    superset: any[],
+    subset: any[],
+    message: string
+) {
+    if (isSubset(subset, superset)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1641,13 +1646,17 @@ const notIncludeMembers = function (superset, subset, message: string) {
  *     assert.includeDeepMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { b: 2 }, { a: 1 }, { b: 2 } ], 'include deep members');
  */
 
-const includeDeepMembers = function (superset, subset, message: string) {
-    new Assertion(
-        superset,
-        message,
-        assert.includeDeepMembers,
-        true
-    ).to.include.deep.members(subset);
+const isDeepSubset = (subset: any[], superset: any[]) =>
+    lodash.every(subset, (value, key) => lodash.isEqual(value, superset[key]));
+
+const includeDeepMembers = function (
+    superset: any[],
+    subset: any[],
+    message: string
+) {
+    if (!isDeepSubset(subset, superset)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1659,13 +1668,14 @@ const includeDeepMembers = function (superset, subset, message: string) {
  *     assert.notIncludeDeepMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { b: 2 }, { f: 5 } ], 'not include deep members');
  */
 
-const notIncludeDeepMembers = function (superset, subset, message: string) {
-    new Assertion(
-        superset,
-        message,
-        assert.notIncludeDeepMembers,
-        true
-    ).to.not.include.deep.members(subset);
+const notIncludeDeepMembers = function (
+    superset: any[],
+    subset: any[],
+    message: string
+) {
+    if (isDeepSubset(subset, superset)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1678,13 +1688,14 @@ const notIncludeDeepMembers = function (superset, subset, message: string) {
  *     assert.includeOrderedMembers([ 1, 2, 3 ], [ 1, 2 ], 'include ordered members');
  */
 
-const includeOrderedMembers = function (superset, subset, message: string) {
-    new Assertion(
-        superset,
-        message,
-        assert.includeOrderedMembers,
-        true
-    ).to.include.ordered.members(subset);
+const includeOrderedMembers = function (
+    superset: any[],
+    subset: any[],
+    message: string
+) {
+    if (!isSubset(subset, superset)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1698,13 +1709,14 @@ const includeOrderedMembers = function (superset, subset, message: string) {
  *     assert.notIncludeOrderedMembers([ 1, 2, 3 ], [ 2, 3 ], 'not include ordered members');
  */
 
-const notIncludeOrderedMembers = function (superset, subset, message: string) {
-    new Assertion(
-        superset,
-        message,
-        assert.notIncludeOrderedMembers,
-        true
-    ).to.not.include.ordered.members(subset);
+const notIncludeOrderedMembers = function (
+    superset: any[],
+    subset: any[],
+    message: string
+) {
+    if (isSubset(subset, superset)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1717,13 +1729,14 @@ const notIncludeOrderedMembers = function (superset, subset, message: string) {
  *     assert.includeDeepOrderedMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { a: 1 }, { b: 2 } ], 'include deep ordered members');
  */
 
-const includeDeepOrderedMembers = function (superset, subset, message: string) {
-    new Assertion(
-        superset,
-        message,
-        assert.includeDeepOrderedMembers,
-        true
-    ).to.include.deep.ordered.members(subset);
+const includeDeepOrderedMembers = function (
+    superset: any[],
+    subset: any[],
+    message: string
+) {
+    if (!isDeepSubset(subset, superset)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1739,16 +1752,13 @@ const includeDeepOrderedMembers = function (superset, subset, message: string) {
  */
 
 const notIncludeDeepOrderedMembers = function (
-    superset,
-    subset,
+    superset: any[],
+    subset: any[],
     message: string
 ) {
-    new Assertion(
-        superset,
-        message,
-        assert.notIncludeDeepOrderedMembers,
-        true
-    ).to.not.include.deep.ordered.members(subset);
+    if (isDeepSubset(subset, superset)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
