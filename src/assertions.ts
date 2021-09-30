@@ -1292,7 +1292,7 @@ const hasAnyKeys = function (obj: Object, keys: any[], message: string) {
  */
 
 const hasAllKeys = function (obj: Object, keys: any[], message: string) {
-    if (!lodash.isEqual(keys, lodash.keys(obj)) {
+    if (!lodash.isEqual(keys, lodash.keys(obj))) {
         throw new AssertionError(message);
     }
 };
@@ -1333,7 +1333,11 @@ const containsAllKeys = function (obj: Object, keys: any[], message: string) {
  *     assert.doesNotHaveAnyKeys(new Set([{foo: 'bar'}, 'anotherKey'], [{one: 'two'}, 'example']);
  */
 
-const doesNotHaveAnyKeys = function (obj: Object, keys: any[], message: string) {
+const doesNotHaveAnyKeys = function (
+    obj: Object,
+    keys: any[],
+    message: string
+) {
     if (lodash.some(lodash.intersection(keys, lodash.keys(obj)))) {
         throw new AssertionError(message);
     }
@@ -1352,75 +1356,14 @@ const doesNotHaveAnyKeys = function (obj: Object, keys: any[], message: string) 
  *     assert.doesNotHaveAllKeys(new Set([{foo: 'bar'}, 'anotherKey'], [{one: 'two'}, 'example']);
  */
 
-const doesNotHaveAllKeys = function (obj: Object, keys: any[], message: string) {
-    if (lodash.isEqual(keys, lodash.keys(obj)) {
+const doesNotHaveAllKeys = function (
+    obj: Object,
+    keys: any[],
+    message: string
+) {
+    if (lodash.isEqual(keys, lodash.keys(obj))) {
         throw new AssertionError(message);
     }
-};
-
-/**
- * ### .throws(fn, [errorLike/string/regexp], [string/regexp], [message])
- *
- * If `errorLike` is an `Error` constructor, asserts that `fn` will throw an error that is an
- * instance of `errorLike`.
- * If `errorLike` is an `Error` instance, asserts that the error thrown is the same
- * instance as `errorLike`.
- * If `errMsgMatcher` is provided, it also asserts that the error thrown will have a
- * message matching `errMsgMatcher`.
- *
- *     assert.throws(fn, 'Error thrown must have this message');
- *     assert.throws(fn, /Error thrown must have a message that matches this/);
- *     assert.throws(fn, ReferenceError);
- *     assert.throws(fn, errorInstance);
- *     assert.throws(fn, ReferenceError, 'Error thrown must be a ReferenceError and have this message');
- *     assert.throws(fn, errorInstance, 'Error thrown must be the same errorInstance and have this message');
- *     assert.throws(fn, ReferenceError, /Error thrown must be a ReferenceError and match this/);
- *     assert.throws(fn, errorInstance, /Error thrown must be the same errorInstance and match this/);
- */
-
-const throws = function (fn, errorLike, errMsgMatcher, message: string) {
-    if ("string" === typeof errorLike || errorLike instanceof RegExp) {
-        errMsgMatcher = errorLike;
-        errorLike = null;
-    }
-
-    var assertErr = new Assertion(fn, message, assert.throws, true).to.throw(
-        errorLike,
-        errMsgMatcher
-    );
-    return flag(assertErr, "object");
-};
-
-/**
- * ### .doesNotThrow(fn, [errorLike/string/regexp], [string/regexp], [message])
- *
- * If `errorLike` is an `Error` constructor, asserts that `fn` will _not_ throw an error that is an
- * instance of `errorLike`.
- * If `errorLike` is an `Error` instance, asserts that the error thrown is _not_ the same
- * instance as `errorLike`.
- * If `errMsgMatcher` is provided, it also asserts that the error thrown will _not_ have a
- * message matching `errMsgMatcher`.
- *
- *     assert.doesNotThrow(fn, 'Any Error thrown must not have this message');
- *     assert.doesNotThrow(fn, /Any Error thrown must not match this/);
- *     assert.doesNotThrow(fn, Error);
- *     assert.doesNotThrow(fn, errorInstance);
- *     assert.doesNotThrow(fn, Error, 'Error must not have this message');
- *     assert.doesNotThrow(fn, errorInstance, 'Error must not have this message');
- *     assert.doesNotThrow(fn, Error, /Error must not match this/);
- *     assert.doesNotThrow(fn, errorInstance, /Error must not match this/);
- */
-
-const doesNotThrow = function (fn, errorLike, errMsgMatcher, message: string) {
-    if ("string" === typeof errorLike || errorLike instanceof RegExp) {
-        errMsgMatcher = errorLike;
-        errorLike = null;
-    }
-
-    new Assertion(fn, message, assert.doesNotThrow, true).to.not.throw(
-        errorLike,
-        errMsgMatcher
-    );
 };
 
 /**
@@ -1461,28 +1404,10 @@ const operator = function (value: any, operator, val2, message: string) {
             break;
         default:
             message = message ? message + ": " : message;
-            throw new chai.AssertionError(
-                message + 'Invalid operator "' + operator + '"',
-                undefined,
-                assert.operator
+            throw new AssertionError(
+                message + 'Invalid operator "' + operator + '"'
             );
     }
-    var test = new Assertion(ok, message, assert.operator, true);
-    test.assert(
-        true === flag(test, "object"),
-        "expected " +
-            util.inspect(value) +
-            " to be " +
-            operator +
-            " " +
-            util.inspect(val2),
-        "expected " +
-            util.inspect(value) +
-            " to not be " +
-            operator +
-            " " +
-            util.inspect(val2)
-    );
 };
 
 /**
@@ -1493,11 +1418,15 @@ const operator = function (value: any, operator, val2, message: string) {
  *     assert.closeTo(1.5, 1, 0.5, 'numbers are close');
  */
 
-const closeTo = function (actual, expression, delta, message: string) {
-    new Assertion(actual, message, assert.closeTo, true).to.be.closeTo(
-        expression,
-        delta
-    );
+const closeTo = function (
+    actual: number,
+    expression: number,
+    delta: number,
+    message: string
+) {
+    if (!(expression - delta <= actual && actual <= expression + delta)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1508,13 +1437,15 @@ const closeTo = function (actual, expression, delta, message: string) {
  *     assert.approximately(1.5, 1, 0.5, 'numbers are close');
  */
 
-const approximately = function (actual, expression, delta, message: string) {
-    new Assertion(
-        actual,
-        message,
-        assert.approximately,
-        true
-    ).to.be.approximately(expression, delta);
+const approximately = function (
+    actual: number,
+    expression: number,
+    delta: number,
+    message: string
+) {
+    if (!(expression - delta <= actual && actual <= expression + delta)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1526,10 +1457,10 @@ const approximately = function (actual, expression, delta, message: string) {
  *     assert.sameMembers([ 1, 2, 3 ], [ 2, 1, 3 ], 'same members');
  */
 
-const sameMembers = function (set1, set2, message: string) {
-    new Assertion(set1, message, assert.sameMembers, true).to.have.same.members(
-        set2
-    );
+const sameMembers = function (set1: any[], set2: any[], message: string) {
+    if (!lodash.isEqual(set1.sort(), set2.sort())) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1541,13 +1472,10 @@ const sameMembers = function (set1, set2, message: string) {
  *     assert.notSameMembers([ 1, 2, 3 ], [ 5, 1, 3 ], 'not same members');
  */
 
-const notSameMembers = function (set1, set2, message: string) {
-    new Assertion(
-        set1,
-        message,
-        assert.notSameMembers,
-        true
-    ).to.not.have.same.members(set2);
+const notSameMembers = function (set1: any[], set2: any[], message: string) {
+    if (lodash.isEqual(set1.sort(), set2.sort())) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1559,13 +1487,10 @@ const notSameMembers = function (set1, set2, message: string) {
  *     assert.sameDeepMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [{ b: 2 }, { a: 1 }, { c: 3 }], 'same deep members');
  */
 
-const sameDeepMembers = function (set1, set2, message: string) {
-    new Assertion(
-        set1,
-        message,
-        assert.sameDeepMembers,
-        true
-    ).to.have.same.deep.members(set2);
+const sameDeepMembers = function (set1: any[], set2: any[], message: string) {
+    if (!lodash.isEqual(set1.sort(), set2.sort())) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1577,13 +1502,14 @@ const sameDeepMembers = function (set1, set2, message: string) {
  *     assert.notSameDeepMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [{ b: 2 }, { a: 1 }, { f: 5 }], 'not same deep members');
  */
 
-const notSameDeepMembers = function (set1, set2, message: string) {
-    new Assertion(
-        set1,
-        message,
-        assert.notSameDeepMembers,
-        true
-    ).to.not.have.same.deep.members(set2);
+const notSameDeepMembers = function (
+    set1: any[],
+    set2: any[],
+    message: string
+) {
+    if (lodash.isEqual(set1.sort(), set2.sort())) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1595,13 +1521,14 @@ const notSameDeepMembers = function (set1, set2, message: string) {
  *     assert.sameOrderedMembers([ 1, 2, 3 ], [ 1, 2, 3 ], 'same ordered members');
  */
 
-const sameOrderedMembers = function (set1, set2, message: string) {
-    new Assertion(
-        set1,
-        message,
-        assert.sameOrderedMembers,
-        true
-    ).to.have.same.ordered.members(set2);
+const sameOrderedMembers = function (
+    set1: any[],
+    set2: any[],
+    message: string
+) {
+    if (!lodash.isEqual(set1, set2)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1613,13 +1540,14 @@ const sameOrderedMembers = function (set1, set2, message: string) {
  *     assert.notSameOrderedMembers([ 1, 2, 3 ], [ 2, 1, 3 ], 'not same ordered members');
  */
 
-const notSameOrderedMembers = function (set1, set2, message: string) {
-    new Assertion(
-        set1,
-        message,
-        assert.notSameOrderedMembers,
-        true
-    ).to.not.have.same.ordered.members(set2);
+const notSameOrderedMembers = function (
+    set1: any[],
+    set2: any[],
+    message: string
+) {
+    if (lodash.isEqual(set1, set2)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1638,13 +1566,14 @@ const notSameOrderedMembers = function (set1, set2, message: string) {
  * @api public
  */
 
-const sameDeepOrderedMembers = function (set1, set2, message: string) {
-    new Assertion(
-        set1,
-        message,
-        assert.sameDeepOrderedMembers,
-        true
-    ).to.have.same.deep.ordered.members(set2);
+const sameDeepOrderedMembers = function (
+    set1: any[],
+    set2: any[],
+    message: string
+) {
+    if (!lodash.isEqual(set1, set2)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1657,13 +1586,14 @@ const sameDeepOrderedMembers = function (set1, set2, message: string) {
  *     assert.notSameDeepOrderedMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { b: 2 }, { a: 1 }, { c: 3 } ], 'not same deep ordered members');
  */
 
-const notSameDeepOrderedMembers = function (set1, set2, message: string) {
-    new Assertion(
-        set1,
-        message,
-        assert.notSameDeepOrderedMembers,
-        true
-    ).to.not.have.same.deep.ordered.members(set2);
+const notSameDeepOrderedMembers = function (
+    set1: any[],
+    set2: any[],
+    message: string
+) {
+    if (lodash.isEqual(set1, set2)) {
+        throw new AssertionError(message);
+    }
 };
 
 /**
@@ -1829,8 +1759,10 @@ const notIncludeDeepOrderedMembers = function (
  *     assert.oneOf(1, [ 2, 1 ], 'Not found in list');
  */
 
-const oneOf = function (inList, list, message: string) {
-    new Assertion(inList, message, assert.oneOf, true).to.be.oneOf(list);
+const oneOf = function (inList: any, list: any[], message: string) {
+    if (!lodash.includes(list, inList)) {
+        throw new AssertionError(message);
+    }
 };
 
 /*!
