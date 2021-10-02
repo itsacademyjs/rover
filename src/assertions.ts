@@ -14,11 +14,6 @@ import lodash from "lodash";
  * ```js
  * assert('two' !== 2, "string 'two' is not equivalent to integer 2");
  * ```
- *
- * @param expression
- *        The assertion fails if the expression is falsy.
- * @param message
- *        The message displayed when the assertion fails.
  */
 
 const assert = <T>(expression, message: string): void => {
@@ -926,13 +921,6 @@ const notOwnProperty = <T>(
  * Inherited properties aren't checked.
  *
  *     assert.ownPropertyVal({ coffee: 'is good'}, 'coffee', 'is good');
- *
- * @name ownPropertyVal
- * @param {Object} object
- * @param {String} property
- * @param {Mixed} value
- * @param {String} message
- * @api public
  */
 
 const ownPropertyValue = <T>(
@@ -1036,7 +1024,7 @@ const nestedProperty = <T>(
 ): void => {
     if (obj === undefined || obj === null) {
         throw new AssertionError("Object is not defined");
-    } else if (!lodash.get(obj, property)) {
+    } else if (lodash.get(obj, property, "notAProperty") === "notAProperty") {
         throw new AssertionError(message);
     }
 };
@@ -1056,7 +1044,7 @@ const notNestedProperty = <T>(
 ): void => {
     if (obj === undefined || obj === null) {
         throw new AssertionError("Object is not defined");
-    } else if (lodash.get(obj, property)) {
+    } else if (lodash.get(obj, property, "notAProperty") !== "notAProperty") {
         throw new AssertionError(message);
     }
 };
