@@ -17,7 +17,7 @@ import lodash from "lodash";
  * ```
  */
 
-const assert = <T>(expression, message: string): void => {
+const assert = (expression, message: string): void => {
     if (!expression) {
         throw new AssertionError(message);
     }
@@ -31,7 +31,7 @@ const assert = <T>(expression, message: string): void => {
  * ```
  */
 
-const fail = <T>(actual: any, expected: any, message: string): void => {
+const fail = (actual: any, expected: any, message: string): void => {
     throw new AssertionError(message, {
         actual,
         expected,
@@ -46,7 +46,7 @@ const fail = <T>(actual: any, expected: any, message: string): void => {
  * isTruthy("", "empty strings are falsy"); // This will fail.
  * ```
  */
-const isTruthy = <T>(value: any, message: string): void => {
+const isTruthy = (value: any, message: string): void => {
     if (!value) {
         throw new AssertionError(message, {
             actual: value,
@@ -63,7 +63,7 @@ const isTruthy = <T>(value: any, message: string): void => {
  * isFalsy("", "empty strings are falsy");
  * ```
  */
-const isFalsy = <T>(value: any, message: string): void => {
+const isFalsy = (value: any, message: string): void => {
     if (value) {
         throw new AssertionError(message, {
             actual: value,
@@ -80,7 +80,7 @@ const isFalsy = <T>(value: any, message: string): void => {
  * ```
  */
 
-const equal = <T>(actual: any, expected: any, message: string): void => {
+const equal = (actual: any, expected: any, message: string): void => {
     if (actual != expected) {
         throw new AssertionError(message, {
             actual,
@@ -97,7 +97,7 @@ const equal = <T>(actual: any, expected: any, message: string): void => {
  * ```
  */
 
-const notEqual = <T>(actual: any, expected: any, message: string): void => {
+const notEqual = (actual: any, expected: any, message: string): void => {
     if (actual == expected) {
         throw new AssertionError(message, {
             actual,
@@ -182,7 +182,7 @@ const notDeepEqual = (actual: any, expected: any, message: string): void => {
  * ```
  */
 
-const isAbove = <T>(
+const isAbove = (
     valueToCheck: any,
     valueToBeAbove: any,
     message: string
@@ -201,7 +201,7 @@ const isAbove = <T>(
  * ```
  */
 
-const isAtLeast = <T>(
+const isAtLeast = (
     valueToCheck: any,
     valueToBeAtLeast: any,
     message: string
@@ -219,7 +219,7 @@ const isAtLeast = <T>(
  * ```
  */
 
-const isBelow = <T>(
+const isBelow = (
     valueToCheck: any,
     valueToBeBelow: any,
     message: string
@@ -238,7 +238,7 @@ const isBelow = <T>(
  * ```
  */
 
-const isAtMost = <T>(
+const isAtMost = (
     valueToCheck: any,
     valueToBeAtMost: any,
     message: string
@@ -257,7 +257,7 @@ const isAtMost = <T>(
  * ```
  */
 
-const isTrue = <T>(value: any, message: string): void => {
+const isTrue = (value: any, message: string): void => {
     if (value !== true) {
         throw new AssertionError(message);
     }
@@ -272,7 +272,7 @@ const isTrue = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isNotTrue = <T>(value: any, message: string): void => {
+const isNotTrue = (value: any, message: string): void => {
     if (value === true) {
         throw new AssertionError(message);
     }
@@ -287,7 +287,7 @@ const isNotTrue = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isFalse = <T>(value: any, message: string): void => {
+const isFalse = (value: any, message: string): void => {
     if (value !== false) {
         throw new AssertionError(message);
     }
@@ -302,7 +302,7 @@ const isFalse = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isNotFalse = <T>(value: any, message: string): void => {
+const isNotFalse = (value: any, message: string): void => {
     if (!value === false) {
         throw new AssertionError(message);
     }
@@ -316,7 +316,7 @@ const isNotFalse = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isNull = <T>(value: any, message: string): void => {
+const isNull = (value: any, message: string): void => {
     if (value !== null) {
         throw new AssertionError(message);
     }
@@ -331,7 +331,7 @@ const isNull = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isNotNull = <T>(value: any, message: string): void => {
+const isNotNull = (value: any, message: string): void => {
     if (value === null) {
         throw new AssertionError(message);
     }
@@ -345,7 +345,7 @@ const isNotNull = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isNaN = <T>(value: any, message: string): void => {
+const isNaN = (value: any, message: string): void => {
     if (value !== value) {
         throw new AssertionError(message);
     }
@@ -358,7 +358,7 @@ const isNaN = <T>(value: any, message: string): void => {
  * assert.isNotNaN(4, '4 is not NaN');
  * ```
  */
-const isNotNaN = <T>(value: any, message: string): void => {
+const isNotNaN = (value: any, message: string): void => {
     if (value === value) {
         throw new AssertionError(message);
     }
@@ -373,7 +373,7 @@ const isNotNaN = <T>(value: any, message: string): void => {
  * ```
  */
 
-const exists = <T>(value: any, message: string): void => {
+const exists = (value: any, message: string): void => {
     if (!lodash.exists(value)) {
         throw new AssertionError(message);
     }
@@ -389,7 +389,7 @@ const exists = <T>(value: any, message: string): void => {
  * ```
  */
 
-const notExists = <T>(value: any, message: string): void => {
+const notExists = (value: any, message: string): void => {
     if (lodash.exists(value)) {
         throw new AssertionError(message);
     }
@@ -404,7 +404,7 @@ const notExists = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isUndefined = <T>(value: any, message: string): void => {
+const isUndefined = (value: any, message: string): void => {
     if (!lodash.isUndefined(value)) {
         throw new AssertionError(message);
     }
@@ -419,28 +419,28 @@ const isUndefined = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isDefined = <T>(value: any, message: string): void => {
+const isDefined = (value: any, message: string): void => {
     if (lodash.isUndefined(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * Asserts that `value` is a <T>.
+ * Asserts that `value` is a .
  *
  * ```js
  * assert.isFunction(serveTea, 'great, we can have tea now');
  * ```
  */
 
-const isFunction = <T>(value: any, message: string): void => {
+const isFunction = (value: any, message: string): void => {
     if (!lodash.isFunction(value)) {
         throw new AssertionError(message);
     }
 };
 
 /**
- * Asserts that `value` is _not_ a <T>.
+ * Asserts that `value` is _not_ a .
  *
  * ```js
  * let serveTea = [ 'heat', 'pour', 'sip' ];
@@ -448,7 +448,7 @@ const isFunction = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isNotFunction = <T>(value: any, message: string): void => {
+const isNotFunction = (value: any, message: string): void => {
     if (lodash.isFunction(value)) {
         throw new AssertionError(message);
     }
@@ -464,7 +464,7 @@ const isNotFunction = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isObject = <T>(value: any, message: string): void => {
+const isObject = (value: any, message: string): void => {
     if (!lodash.isObject(value)) {
         throw new AssertionError(message);
     }
@@ -480,7 +480,7 @@ const isObject = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isNotObject = <T>(value: any, message: string): void => {
+const isNotObject = (value: any, message: string): void => {
     if (lodash.isObject(value)) {
         throw new AssertionError(message);
     }
@@ -495,7 +495,7 @@ const isNotObject = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isArray = <T>(value: any, message: string): void => {
+const isArray = (value: any, message: string): void => {
     if (!lodash.isArray(value)) {
         throw new AssertionError(message);
     }
@@ -510,7 +510,7 @@ const isArray = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isNotArray = <T>(value: any, message: string): void => {
+const isNotArray = (value: any, message: string): void => {
     if (lodash.isArray(value)) {
         throw new AssertionError(message);
     }
@@ -525,7 +525,7 @@ const isNotArray = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isString = <T>(value: any, message: string): void => {
+const isString = (value: any, message: string): void => {
     if (!lodash.isString(value)) {
         throw new AssertionError(message);
     }
@@ -540,7 +540,7 @@ const isString = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isNotString = <T>(value: any, message: string): void => {
+const isNotString = (value: any, message: string): void => {
     if (lodash.isString(value)) {
         throw new AssertionError(message);
     }
@@ -555,7 +555,7 @@ const isNotString = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isNumber = <T>(value: any, message: string): void => {
+const isNumber = (value: any, message: string): void => {
     if (!lodash.isNumber(value)) {
         throw new AssertionError(message);
     }
@@ -570,7 +570,7 @@ const isNumber = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isNotNumber = <T>(value: any, message: string): void => {
+const isNotNumber = (value: any, message: string): void => {
     if (lodash.isNumber(value)) {
         throw new AssertionError(message);
     }
@@ -586,7 +586,7 @@ const isNotNumber = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isFinite = <T>(value: any, message: string): void => {
+const isFinite = (value: any, message: string): void => {
     if (!lodash.isFinite(value)) {
         throw new AssertionError(message);
     }
@@ -602,7 +602,7 @@ const isFinite = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isBoolean = <T>(value: any, message: string): void => {
+const isBoolean = (value: any, message: string): void => {
     if (!lodash.isBoolean(value)) {
         throw new AssertionError(message);
     }
@@ -618,7 +618,7 @@ const isBoolean = <T>(value: any, message: string): void => {
  * ```
  */
 
-const isNotBoolean = <T>(value: any, message: string): void => {
+const isNotBoolean = (value: any, message: string): void => {
     if (!lodash.isBoolean(value)) {
         throw new AssertionError(message);
     }
@@ -638,7 +638,7 @@ const isNotBoolean = <T>(value: any, message: string): void => {
  * ```
  */
 
-const typeOf = <T>(value: any, type: string, message: string): void => {
+const typeOf = (value: any, type: string, message: string): void => {
     if (typeof value !== type) {
         throw new AssertionError(message);
     }
@@ -653,7 +653,7 @@ const typeOf = <T>(value: any, type: string, message: string): void => {
  * ```
  */
 
-const notTypeOf = <T>(value: any, type, message: string): void => {
+const notTypeOf = (value: any, type, message: string): void => {
     if (typeof value === type) {
         throw new AssertionError(message);
     }
@@ -663,12 +663,12 @@ const notTypeOf = <T>(value: any, type, message: string): void => {
  * Asserts that `value` is an instance of `constructor`.
  *
  * ```js
- * let Tea = <T> (name) { this.name = name; }, chai = new Tea('chai');
+ * let Tea =  (name) { this.name = name; }, chai = new Tea('chai');
  * assert.instanceOf(chai, Tea, 'chai is an instance of tea');
  * ```
  */
 
-const instanceOf = <T>(value: any, constructor, message: string): void => {
+const instanceOf = (value: any, constructor, message: string): void => {
     if (!lodash.isInstanceOf(value, constructor)) {
         throw new AssertionError(message);
     }
@@ -678,12 +678,12 @@ const instanceOf = <T>(value: any, constructor, message: string): void => {
  * Asserts `value` is not an instance of `constructor`.
  *
  * ```js
- * let Tea = <T> (name) { this.name = name; }, chai = new String('chai');
+ * let Tea =  (name) { this.name = name; }, chai = new String('chai');
  * assert.notInstanceOf(chai, Tea, 'chai is not an instance of tea');
  * ```
  */
 
-const notInstanceOf = <T>(value: any, constructor, message: string): void => {
+const notInstanceOf = (value: any, constructor, message: string): void => {
     if (lodash.isInstanceOf(value, constructor)) {
         throw new AssertionError(message);
     }
@@ -714,7 +714,7 @@ const notInstanceOf = <T>(value: any, constructor, message: string): void => {
  * ```
  */
 
-const include = <T>(
+const include = (
     expression: any,
     includedValue: any,
     message: string
@@ -750,7 +750,7 @@ const include = <T>(
  * ```
  */
 
-const notInclude = <T>(
+const notInclude = (
     expression: any,
     includedValue: any,
     message: string
@@ -773,7 +773,7 @@ const notInclude = <T>(
  * ```
  */
 
-const deepInclude = <T>(
+const deepInclude = (
     expression: any,
     includedValue: any,
     message: string
@@ -797,7 +797,7 @@ const deepInclude = <T>(
  * ```
  */
 
-const notDeepInclude = <T>(
+const notDeepInclude = (
     expression: any,
     includedValue: any,
     message: string
@@ -816,7 +816,7 @@ const notDeepInclude = <T>(
  * ```
  */
 
-const match = <T>(
+const match = (
     expression: string,
     regularExpression: any,
     message: string
@@ -834,7 +834,7 @@ const match = <T>(
  * ```
  */
 
-const notMatch = <T>(
+const notMatch = (
     expression: string,
     regularExpression: any,
     message: string
@@ -854,11 +854,7 @@ const notMatch = <T>(
  * ```
  */
 
-const property = <T>(
-    value: object,
-    property: string,
-    message: string
-): void => {
+const property = (value: object, property: string, message: string): void => {
     if (!lodash.has(value, property)) {
         throw new AssertionError(message);
     }
@@ -872,7 +868,7 @@ const property = <T>(
  * assert.notProperty({ tea: { green: 'matcha' }}, 'coffee');
  * ```
  */
-const notProperty = <T>(
+const notProperty = (
     value: object,
     property: string,
     message: string
@@ -892,13 +888,13 @@ const notProperty = <T>(
  * ```
  */
 
-const propertyValue = <T>(
-    obj: object,
+const propertyValue = (
+    object0: object,
     property: string,
     value: any,
     message: string
 ): void => {
-    if (!lodash.has(obj, property) || obj[property] !== value) {
+    if (!lodash.has(object0, property) || object0[property] !== value) {
         throw new AssertionError(message);
     }
 };
@@ -914,13 +910,13 @@ const propertyValue = <T>(
  * ```
  */
 
-const notPropertyValue = <T>(
-    obj: object,
+const notPropertyValue = (
+    object0: object,
     property: string,
     value: any,
     message: string
 ): void => {
-    if (lodash.has(obj, property) && obj[property] === value) {
+    if (lodash.has(object0, property) && object0[property] === value) {
         throw new AssertionError(message);
     }
 };
@@ -934,13 +930,16 @@ const notPropertyValue = <T>(
  * ```
  */
 
-const deepPropertyValue = <T>(
-    obj: object,
+const deepPropertyValue = (
+    object0: object,
     property: string,
     value: any,
     message: string
 ): void => {
-    if (!lodash.has(obj, property) || !lodash.isEqual(obj[property], value)) {
+    if (
+        !lodash.has(object0, property) ||
+        !lodash.isEqual(object0[property], value)
+    ) {
         throw new AssertionError(message);
     }
 };
@@ -956,13 +955,16 @@ const deepPropertyValue = <T>(
  * ```
  */
 
-const notDeepPropertyValue = <T>(
-    obj: object,
+const notDeepPropertyValue = (
+    object0: object,
     property: string,
     value: any,
     message: string
 ): void => {
-    if (lodash.has(obj, property) && lodash.isEqual(obj[property], value)) {
+    if (
+        lodash.has(object0, property) &&
+        lodash.isEqual(object0[property], value)
+    ) {
         throw new AssertionError(message);
     }
 };
@@ -976,14 +978,16 @@ const notDeepPropertyValue = <T>(
  * ```
  */
 
-const ownProperty = <T>(
-    obj: object,
+const ownProperty = (
+    object0: object,
     property: string,
     message: string
 ): void => {
-    if (obj === undefined || obj === null) {
-        throw new AssertionError("Object is not defined");
-    } else if (!obj.hasOwnProperty(property)) {
+    if (
+        object0 === undefined ||
+        object0 === null ||
+        !object0.hasOwnProperty(property)
+    ) {
         throw new AssertionError(message);
     }
 };
@@ -997,14 +1001,16 @@ const ownProperty = <T>(
  * assert.notOwnProperty({}, 'toString');
  * ```
  */
-const notOwnProperty = <T>(
-    obj: object,
+const notOwnProperty = (
+    object0: object,
     property: string,
     message: string
 ): void => {
-    if (obj === undefined || obj === null) {
-        throw new AssertionError("Object is not defined");
-    } else if (obj.hasOwnProperty(property)) {
+    if (
+        object0 === undefined ||
+        object0 === null ||
+        object0.hasOwnProperty(property)
+    ) {
         throw new AssertionError(message);
     }
 };
@@ -1019,15 +1025,18 @@ const notOwnProperty = <T>(
  * ```
  */
 
-const ownPropertyValue = <T>(
-    obj: object,
+const ownPropertyValue = (
+    object0: object,
     property: string,
     value: any,
     message: string
 ): void => {
-    if (obj === undefined || obj === null) {
-        throw new AssertionError("Object is not defined");
-    } else if (!obj.hasOwnProperty(property) || obj[property] !== value) {
+    if (
+        object0 === undefined ||
+        object0 === null ||
+        !object0.hasOwnProperty(property) ||
+        object0[property] !== value
+    ) {
         throw new AssertionError(message);
     }
 };
@@ -1043,15 +1052,17 @@ const ownPropertyValue = <T>(
  * ```
  */
 
-const notOwnPropertyValue = <T>(
-    obj: object,
+const notOwnPropertyValue = (
+    object0: object,
     property: string,
     value: any,
     message: string
 ): void => {
-    if (obj === undefined || obj === null) {
-        throw new AssertionError("Object is not defined");
-    } else if (obj.hasOwnProperty(property) && obj[property] === value) {
+    if (
+        object0 === undefined ||
+        object0 === null ||
+        (object0.hasOwnProperty(property) && object0[property] === value)
+    ) {
         throw new AssertionError(message);
     }
 };
@@ -1066,17 +1077,17 @@ const notOwnPropertyValue = <T>(
  * ```
  */
 
-const deepOwnPropertyValue = <T>(
-    obj: object,
+const deepOwnPropertyValue = (
+    object0: object,
     property: string,
     value: any,
     message: string
 ): void => {
-    if (obj === undefined || obj === null) {
-        throw new AssertionError("Object is not defined");
-    } else if (
-        !obj.hasOwnProperty(property) ||
-        !lodash.isEqual(obj[property], value)
+    if (
+        object0 === undefined ||
+        object0 === null ||
+        !object0.hasOwnProperty(property) ||
+        !lodash.isEqual(object0[property], value)
     ) {
         throw new AssertionError(message);
     }
@@ -1095,17 +1106,17 @@ const deepOwnPropertyValue = <T>(
  * ```
  */
 
-const notDeepOwnPropertyValue = <T>(
-    obj: object,
+const notDeepOwnPropertyValue = (
+    object0: object,
     property: string,
     value: any,
     message: string
 ): void => {
-    if (obj === undefined || obj === null) {
-        throw new AssertionError("Object is not defined");
-    } else if (
-        obj.hasOwnProperty(property) &&
-        lodash.isEqual(obj[property], value)
+    if (
+        object0 === undefined ||
+        object0 === null ||
+        (object0.hasOwnProperty(property) &&
+            lodash.isEqual(object0[property], value))
     ) {
         throw new AssertionError(message);
     }
@@ -1121,14 +1132,16 @@ const notDeepOwnPropertyValue = <T>(
  * ```
  */
 
-const nestedProperty = <T>(
-    obj: object,
+const nestedProperty = (
+    object0: object,
     property: string,
     message: string
 ): void => {
-    if (obj === undefined || obj === null) {
-        throw new AssertionError("Object is not defined");
-    } else if (lodash.get(obj, property, "notAProperty") === "notAProperty") {
+    if (
+        object0 === undefined ||
+        object0 === null ||
+        lodash.get(object0, property, "notAProperty") === "notAProperty"
+    ) {
         throw new AssertionError(message);
     }
 };
@@ -1143,14 +1156,16 @@ const nestedProperty = <T>(
  * ```
  */
 
-const notNestedProperty = <T>(
-    obj: object,
+const notNestedProperty = (
+    object0: object,
     property: string,
     message: string
 ): void => {
-    if (obj === undefined || obj === null) {
-        throw new AssertionError("Object is not defined");
-    } else if (lodash.get(obj, property, "notAProperty") !== "notAProperty") {
+    if (
+        object0 === undefined ||
+        object0 === null ||
+        lodash.get(object0, property, "notAProperty") !== "notAProperty"
+    ) {
         throw new AssertionError(message);
     }
 };
@@ -1165,17 +1180,17 @@ const notNestedProperty = <T>(
  * ```
  */
 
-const nestedPropertyValue = <T>(
-    obj: object,
+const nestedPropertyValue = (
+    object0: object,
     property: string,
     value: any,
     message: string
 ): void => {
-    if (obj === undefined || obj === null) {
-        throw new AssertionError("Object is not defined");
-    } else if (
-        !lodash.get(obj, property) ||
-        lodash.get(obj, property) !== value
+    if (
+        object0 === undefined ||
+        object0 === null ||
+        !lodash.get(object0, property) ||
+        lodash.get(object0, property) !== value
     ) {
         throw new AssertionError(message);
     }
@@ -1192,17 +1207,17 @@ const nestedPropertyValue = <T>(
  * ```
  */
 
-const notNestedPropertyValue = <T>(
-    obj: object,
+const notNestedPropertyValue = (
+    object0: object,
     property: string,
     value: any,
     message: string
 ): void => {
-    if (obj === undefined || obj === null) {
-        throw new AssertionError("Object is not defined");
-    } else if (
-        lodash.get(obj, property) &&
-        lodash.get(obj, property) === value
+    if (
+        object0 === undefined ||
+        object0 === null ||
+        (lodash.get(object0, property) &&
+            lodash.get(object0, property) === value)
     ) {
         throw new AssertionError(message);
     }
@@ -1217,17 +1232,17 @@ const notNestedPropertyValue = <T>(
  * ```
  */
 
-const deepNestedPropertyValue = <T>(
-    obj: object,
+const deepNestedPropertyValue = (
+    object0: object,
     property: string,
     value: any,
     message: string
 ): void => {
-    if (obj === undefined || obj === null) {
-        throw new AssertionError("Object is not defined");
-    } else if (
-        !lodash.get(obj, property) ||
-        !lodash.isEqual(lodash.get(obj, property), value)
+    if (
+        object0 === undefined ||
+        object0 === null ||
+        !lodash.get(object0, property) ||
+        !lodash.isEqual(lodash.get(object0, property), value)
     ) {
         throw new AssertionError(message);
     }
@@ -1245,17 +1260,17 @@ const deepNestedPropertyValue = <T>(
  * ```
  */
 
-const notDeepNestedPropertyValue = <T>(
-    obj: object,
+const notDeepNestedPropertyValue = (
+    object0: object,
     property: string,
     value: any,
     message: string
 ): void => {
-    if (obj === undefined || obj === null) {
-        throw new AssertionError("Object is not defined");
-    } else if (
-        lodash.get(obj, property) &&
-        lodash.isEqual(lodash.get(obj, property), value)
+    if (
+        object0 === undefined ||
+        object0 === null ||
+        (lodash.get(object0, property) &&
+            lodash.isEqual(lodash.get(object0, property), value))
     ) {
         throw new AssertionError(message);
     }
@@ -1272,7 +1287,7 @@ const notDeepNestedPropertyValue = <T>(
  * ```
  */
 
-const length = <T>(expression: any, length: number, message: string): void => {
+const length = (expression: any, length: number, message: string): void => {
     if (lodash.size(expression) !== length) {
         throw new AssertionError(message);
     }
@@ -1291,12 +1306,12 @@ const length = <T>(expression: any, length: number, message: string): void => {
  * ```
  */
 
-const hasAnyKeys = <T>(
-    obj: object,
+const hasAnyKeys = (
+    object0: object,
     keys: string[] | Symbol[],
     message: string
 ): void => {
-    if (!lodash.some(lodash.intersection(keys, lodash.keys(obj)))) {
+    if (!lodash.some(lodash.intersection(keys, lodash.keys(object0)))) {
         throw new AssertionError(message);
     }
 };
@@ -1314,12 +1329,12 @@ const hasAnyKeys = <T>(
  * ```
  */
 
-const hasAllKeys = <T>(
-    obj: object,
+const hasAllKeys = (
+    object0: object,
     keys: string[] | Symbol[],
     message: string
 ): void => {
-    if (!lodash.isEqual(keys, lodash.keys(obj))) {
+    if (!lodash.isEqual(keys, lodash.keys(object0))) {
         throw new AssertionError(message);
     }
 };
@@ -1341,12 +1356,14 @@ const hasAllKeys = <T>(
  * ```
  */
 
-const containsAllKeys = <T>(
-    obj: object,
+const containsAllKeys = (
+    object0: object,
     keys: string[] | Symbol[],
     message: string
 ): void => {
-    if (!lodash.isEqual(lodash.intersection(keys, lodash.keys(obj)), keys)) {
+    if (
+        !lodash.isEqual(lodash.intersection(keys, lodash.keys(object0)), keys)
+    ) {
         throw new AssertionError(message);
     }
 };
@@ -1364,12 +1381,12 @@ const containsAllKeys = <T>(
  * ```
  */
 
-const doesNotHaveAnyKeys = <T>(
-    obj: object,
+const doesNotHaveAnyKeys = (
+    object0: object,
     keys: string[] | Symbol[],
     message: string
 ): void => {
-    if (lodash.some(lodash.intersection(keys, lodash.keys(obj)))) {
+    if (lodash.some(lodash.intersection(keys, lodash.keys(object0)))) {
         throw new AssertionError(message);
     }
 };
@@ -1387,12 +1404,12 @@ const doesNotHaveAnyKeys = <T>(
  * ```
  */
 
-const doesNotHaveAllKeys = <T>(
-    obj: object,
+const doesNotHaveAllKeys = (
+    object0: object,
     keys: string[] | Symbol[],
     message: string
 ): void => {
-    if (lodash.isEqual(keys, lodash.keys(obj))) {
+    if (lodash.isEqual(keys, lodash.keys(object0))) {
         throw new AssertionError(message);
     }
 };
@@ -1406,7 +1423,7 @@ const doesNotHaveAllKeys = <T>(
  * ```
  */
 
-const operator = <T>(value: any, operator, val2, message: string): void => {
+const operator = (value: any, operator, val2, message: string): void => {
     let ok;
     switch (operator) {
         case "==":
@@ -1452,7 +1469,7 @@ const operator = <T>(value: any, operator, val2, message: string): void => {
  * ```
  */
 
-const closeTo = <T>(
+const closeTo = (
     actual: number,
     expression: number,
     delta: number,
@@ -1471,7 +1488,7 @@ const closeTo = <T>(
  * ```
  */
 
-const approximately = <T>(
+const approximately = (
     actual: number,
     expression: number,
     delta: number,
@@ -1491,7 +1508,7 @@ const approximately = <T>(
  * ```
  */
 
-const sameMembers = <T>(set1: any[], set2: any[], message: string): void => {
+const sameMembers = (set1: any[], set2: any[], message: string): void => {
     if (!lodash.isEqual(set1.sort(), set2.sort())) {
         throw new AssertionError(message);
     }
@@ -1506,7 +1523,7 @@ const sameMembers = <T>(set1: any[], set2: any[], message: string): void => {
  * ```
  */
 
-const notSameMembers = <T>(set1: any[], set2: any[], message: string): void => {
+const notSameMembers = (set1: any[], set2: any[], message: string): void => {
     if (lodash.isEqual(set1.sort(), set2.sort())) {
         throw new AssertionError(message);
     }
@@ -1521,11 +1538,7 @@ const notSameMembers = <T>(set1: any[], set2: any[], message: string): void => {
  * ```
  */
 
-const sameDeepMembers = <T>(
-    set1: any[],
-    set2: any[],
-    message: string
-): void => {
+const sameDeepMembers = (set1: any[], set2: any[], message: string): void => {
     if (!lodash.isEqual(set1.sort(), set2.sort())) {
         throw new AssertionError(message);
     }
@@ -1540,7 +1553,7 @@ const sameDeepMembers = <T>(
  * ```
  */
 
-const notSameDeepMembers = <T>(
+const notSameDeepMembers = (
     set1: any[],
     set2: any[],
     message: string
@@ -1559,7 +1572,7 @@ const notSameDeepMembers = <T>(
  * ```
  */
 
-const sameOrderedMembers = <T>(
+const sameOrderedMembers = (
     set1: any[],
     set2: any[],
     message: string
@@ -1578,7 +1591,7 @@ const sameOrderedMembers = <T>(
  * ```
  */
 
-const notSameOrderedMembers = <T>(
+const notSameOrderedMembers = (
     set1: any[],
     set2: any[],
     message: string
@@ -1597,7 +1610,7 @@ const notSameOrderedMembers = <T>(
  * ```
  */
 
-const sameDeepOrderedMembers = <T>(
+const sameDeepOrderedMembers = (
     set1: any[],
     set2: any[],
     message: string
@@ -1617,7 +1630,7 @@ const sameDeepOrderedMembers = <T>(
  * ```
  */
 
-const notSameDeepOrderedMembers = <T>(
+const notSameDeepOrderedMembers = (
     set1: any[],
     set2: any[],
     message: string
@@ -1625,6 +1638,15 @@ const notSameDeepOrderedMembers = <T>(
     if (lodash.isEqual(set1, set2)) {
         throw new AssertionError(message);
     }
+};
+
+const isSubset = (subset: any[], superset: any[]): boolean => {
+    subset.map((item) => {
+        if (!lodash.includes(superset, item)) {
+            return false;
+        }
+    });
+    return true;
 };
 
 /**
@@ -1636,16 +1658,7 @@ const notSameDeepOrderedMembers = <T>(
  * ```
  */
 
-const isSubset = <T>(subset: any[], superset: any[]): boolean => {
-    subset.map((item) => {
-        if (!lodash.includes(superset, item)) {
-            return false;
-        }
-    });
-    return true;
-};
-
-const includeMembers = <T>(
+const includeMembers = (
     superset: any[],
     subset: any[],
     message: string
@@ -1664,7 +1677,7 @@ const includeMembers = <T>(
  * ```
  */
 
-const notIncludeMembers = <T>(
+const notIncludeMembers = (
     superset: any[],
     subset: any[],
     message: string
@@ -1674,16 +1687,7 @@ const notIncludeMembers = <T>(
     }
 };
 
-/**
- * Asserts that `subset` is included in `superset` in any order. Uses a deep
- * equality check. Duplicates are ignored.
- *
- * ```js
- * assert.includeDeepMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { b: 2 }, { a: 1 }, { b: 2 } ], 'include deep members');
- * ```
- */
-
-const isDeepSubset = <T>(subset: any[], superset: any[]): boolean => {
+const isDeepSubset = (subset: any[], superset: any[]): boolean => {
     subset.map((item) => {
         if (!lodash.includes(superset, item)) {
             return false;
@@ -1697,7 +1701,16 @@ const isDeepSubset = <T>(subset: any[], superset: any[]): boolean => {
     return true;
 };
 
-const includeDeepMembers = <T>(
+/**
+ * Asserts that `subset` is included in `superset` in any order. Uses a deep
+ * equality check. Duplicates are ignored.
+ *
+ * ```js
+ * assert.includeDeepMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { b: 2 }, { a: 1 }, { b: 2 } ], 'include deep members');
+ * ```
+ */
+
+const includeDeepMembers = (
     superset: any[],
     subset: any[],
     message: string
@@ -1716,7 +1729,7 @@ const includeDeepMembers = <T>(
  * ```
  */
 
-const notIncludeDeepMembers = <T>(
+const notIncludeDeepMembers = (
     superset: any[],
     subset: any[],
     message: string
@@ -1724,6 +1737,19 @@ const notIncludeDeepMembers = <T>(
     if (isDeepSubset(subset, superset)) {
         throw new AssertionError(message);
     }
+};
+
+const isOrderedSubset = (subset: any[], superset: any[]): boolean => {
+    if (!lodash.includes(superset, subset[0])) {
+        return false;
+    }
+    let index = lodash.indexOf(superset, subset[0]);
+    for (let i = 1; i < subset.length; i++) {
+        if (superset[index + i] !== subset[i]) {
+            return false;
+        }
+    }
+    return true;
 };
 
 /**
@@ -1736,21 +1762,7 @@ const notIncludeDeepMembers = <T>(
  * ```
  */
 
-const isOrderedSubset = <T>(subset: any[], superset: any[]): boolean => {
-    if (!lodash.includes(superset, subset[0])) {
-        return false;
-    } else {
-        let index = lodash.indexOf(superset, subset[0]);
-        for (let i = 1; i < subset.length; i++) {
-            if (superset[index + i] !== subset[i]) {
-                return false;
-            }
-        }
-        return true;
-    }
-};
-
-const includeOrderedMembers = <T>(
+const includeOrderedMembers = (
     superset: any[],
     subset: any[],
     message: string
@@ -1771,7 +1783,7 @@ const includeOrderedMembers = <T>(
  * ```
  */
 
-const notIncludeOrderedMembers = <T>(
+const notIncludeOrderedMembers = (
     superset: any[],
     subset: any[],
     message: string
@@ -1779,6 +1791,19 @@ const notIncludeOrderedMembers = <T>(
     if (isOrderedSubset(subset, superset)) {
         throw new AssertionError(message);
     }
+};
+
+const isDeepOrderedSubset = (subset: any[], superset: any[]): boolean => {
+    if (!lodash.includes(superset, subset[0])) {
+        return false;
+    }
+    let index = lodash.indexOf(superset, subset[0]);
+    for (let i = 1; i < subset.length; i++) {
+        if (!lodash.isEqual(superset[index + i], subset[i])) {
+            return false;
+        }
+    }
+    return true;
 };
 
 /**
@@ -1791,21 +1816,7 @@ const notIncludeOrderedMembers = <T>(
  * ```
  */
 
-const isDeepOrderedSubset = <T>(subset: any[], superset: any[]): boolean => {
-    if (!lodash.includes(superset, subset[0])) {
-        return false;
-    } else {
-        let index = lodash.indexOf(superset, subset[0]);
-        for (let i = 1; i < subset.length; i++) {
-            if (!lodash.isEqual(superset[index + i], subset[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
-};
-
-const includeDeepOrderedMembers = <T>(
+const includeDeepOrderedMembers = (
     superset: any[],
     subset: any[],
     message: string
@@ -1827,7 +1838,7 @@ const includeDeepOrderedMembers = <T>(
  * ```
  */
 
-const notIncludeDeepOrderedMembers = <T>(
+const notIncludeDeepOrderedMembers = (
     superset: any[],
     subset: any[],
     message: string
@@ -1845,7 +1856,7 @@ const notIncludeDeepOrderedMembers = <T>(
  * ```
  */
 
-const oneOf = <T>(inList: any, list: any[], message: string): void => {
+const oneOf = (inList: any, list: any[], message: string): void => {
     if (!lodash.includes(list, inList)) {
         throw new AssertionError(message);
     }
@@ -1859,8 +1870,8 @@ const oneOf = <T>(inList: any, list: any[], message: string): void => {
  * ```
  */
 
-const isExtensible = <T>(obj: object, message: string): void => {
-    if (!Object.isExtensible(obj)) {
+const isExtensible = (object0: object, message: string): void => {
+    if (!Object.isExtensible(object0)) {
         throw new AssertionError(message);
     }
 };
@@ -1878,8 +1889,8 @@ const isExtensible = <T>(obj: object, message: string): void => {
  * ```
  */
 
-const isNotExtensible = <T>(obj: object, message: string): void => {
-    if (Object.isExtensible(obj)) {
+const isNotExtensible = (object0: object, message: string): void => {
+    if (Object.isExtensible(object0)) {
         throw new AssertionError(message);
     }
 };
@@ -1896,8 +1907,8 @@ const isNotExtensible = <T>(obj: object, message: string): void => {
  * ```
  */
 
-const isSealed = <T>(obj: object, message: string): void => {
-    if (!Object.isSealed(obj)) {
+const isSealed = (object0: object, message: string): void => {
+    if (!Object.isSealed(object0)) {
         throw new AssertionError(message);
     }
 };
@@ -1910,8 +1921,8 @@ const isSealed = <T>(obj: object, message: string): void => {
  * ```
  */
 
-const isNotSealed = <T>(obj: object, message: string): void => {
-    if (Object.isSealed(obj)) {
+const isNotSealed = (object0: object, message: string): void => {
+    if (Object.isSealed(object0)) {
         throw new AssertionError(message);
     }
 };
@@ -1926,8 +1937,8 @@ const isNotSealed = <T>(obj: object, message: string): void => {
  * ```
  */
 
-const isFrozen = <T>(obj: object, message: string): void => {
-    if (!Object.isFrozen(obj)) {
+const isFrozen = (object0: object, message: string): void => {
+    if (!Object.isFrozen(object0)) {
         throw new AssertionError(message);
     }
 };
@@ -1940,8 +1951,8 @@ const isFrozen = <T>(obj: object, message: string): void => {
  * ```
  */
 
-const isNotFrozen = <T>(obj: object, message: string): void => {
-    if (Object.isFrozen(obj)) {
+const isNotFrozen = (object0: object, message: string): void => {
+    if (Object.isFrozen(object0)) {
         throw new AssertionError(message);
     }
 };
@@ -1950,7 +1961,7 @@ const isNotFrozen = <T>(obj: object, message: string): void => {
  * Asserts that the target does not contain any values.
  * For arrays and strings, it checks the `length` property.
  * For `Map` and `Set` instances, it checks the `size` property.
- * For non-<T> objects, it gets the count of own
+ * For non- objects, it gets the count of own
  * enumerable string keys.
  *
  * ```js
@@ -1961,7 +1972,7 @@ const isNotFrozen = <T>(obj: object, message: string): void => {
  * ```
  */
 
-const isEmpty = <T>(value: any, message: string): void => {
+const isEmpty = (value: any, message: string): void => {
     if (!lodash.isEmpty(value)) {
         throw new AssertionError(message);
     }
@@ -1971,7 +1982,7 @@ const isEmpty = <T>(value: any, message: string): void => {
  * Asserts that the target contains values.
  * For arrays and strings, it checks the `length` property.
  * For `Map` and `Set` instances, it checks the `size` property.
- * For non-<T> objects, it gets the count of own
+ * For non- objects, it gets the count of own
  * enumerable string keys.
  *
  * ```js
@@ -1981,7 +1992,7 @@ const isEmpty = <T>(value: any, message: string): void => {
  * assert.isNotEmpty({ key: 7 });
  * ```
  */
-const isNotEmpty = <T>(value: any, message: string): void => {
+const isNotEmpty = (value: any, message: string): void => {
     if (lodash.isEmpty(value)) {
         throw new AssertionError(message);
     }
