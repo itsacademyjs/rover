@@ -1579,12 +1579,26 @@ const notIncludeDeepMembers = <T>(
  *     assert.includeOrderedMembers([ 1, 2, 3 ], [ 1, 2 ], 'include ordered members');
  */
 
+const isOrderedSubset = <T>(subset: any[], superset: any[]): boolean => {
+    if (!lodash.includes(superset, subset[0])) {
+        return false;
+    } else {
+        let index = lodash.indexOf(superset, subset[0]);
+        for (let i = 1; i < subset.length; i++) {
+            if (superset[index + i] !== subset[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
 const includeOrderedMembers = <T>(
     superset: any[],
     subset: any[],
     message: string
 ): void => {
-    if (!isSubset(subset, superset)) {
+    if (!isOrderedSubset(subset, superset)) {
         throw new AssertionError(message);
     }
 };
@@ -1603,7 +1617,7 @@ const notIncludeOrderedMembers = <T>(
     subset: any[],
     message: string
 ): void => {
-    if (isSubset(subset, superset)) {
+    if (isOrderedSubset(subset, superset)) {
         throw new AssertionError(message);
     }
 };
@@ -1616,12 +1630,26 @@ const notIncludeOrderedMembers = <T>(
  *     assert.includeDeepOrderedMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { a: 1 }, { b: 2 } ], 'include deep ordered members');
  */
 
+const isDeepOrderedSubset = <T>(subset: any[], superset: any[]): boolean => {
+    if (!lodash.includes(superset, subset[0])) {
+        return false;
+    } else {
+        let index = lodash.indexOf(superset, subset[0]);
+        for (let i = 1; i < subset.length; i++) {
+            if (!lodash.isEqual(superset[index + i], subset[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
 const includeDeepOrderedMembers = <T>(
     superset: any[],
     subset: any[],
     message: string
 ): void => {
-    if (!isDeepSubset(subset, superset)) {
+    if (!isDeepOrderedSubset(subset, superset)) {
         throw new AssertionError(message);
     }
 };
@@ -1641,7 +1669,7 @@ const notIncludeDeepOrderedMembers = <T>(
     subset: any[],
     message: string
 ): void => {
-    if (isDeepSubset(subset, superset)) {
+    if (isDeepOrderedSubset(subset, superset)) {
         throw new AssertionError(message);
     }
 };
