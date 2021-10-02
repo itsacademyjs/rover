@@ -64,8 +64,11 @@ export interface Excercise {
     test: (context: TestContext) => Promise<AssertionResult<any>>[];
 }
 
-export interface Configuration {
-    exerciseFile: string;
-    stdError?: boolean;
-    stdOutput?: boolean;
+export interface MetaConfiguration {
+    file: string | null;
+}
+
+export interface SubmitConfiguration {
+    printError?: boolean;
+    printOutput?: boolean;
 }

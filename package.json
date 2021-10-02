@@ -18,7 +18,9 @@
         "commander": "^8.2.0",
         "date-fns": "^2.16.1",
         "dotenv": "^8.2.0",
-        "lodash": "^4.17.21"
+        "lodash": "^4.17.21",
+        "import-locals": "^2.0.0",
+        "source-map-support": "^0.5.20"
     },
     "devDependencies": {
         "@types/node": "^16.9.6",

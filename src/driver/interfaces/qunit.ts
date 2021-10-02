@@ -44,21 +44,27 @@ export function styleInterface(suite) {
         /**
          * Describe a "suite" with the given `title`.
          */
-        context.suite = function (title) {
+        context.suite = (
+            title: string,
+            handle: string,
+            description: string
+        ) => {
             if (suites.length > 1) {
                 suites.shift();
             }
             return common.suite.create({
-                title: title,
-                file: file,
+                title,
+                file,
                 fn: false,
+                handle,
+                description,
             });
         };
 
         /**
          * Exclusive Suite.
          */
-        context.suite.only = function (title) {
+        context.suite.only = (title) => {
             if (suites.length > 1) {
                 suites.shift();
             }
@@ -69,13 +75,19 @@ export function styleInterface(suite) {
             });
         };
 
+        type TestFunction = () => void | Promise<void>;
+
         /**
          * Describe a specification or test-case
          * with the given `title` and callback `fn`
          * acting as a thunk.
          */
-        context.test = function (title, fn) {
-            const test = new Test(title, fn);
+        context.test = (
+            title: string,
+            description: string,
+            fn: TestFunction
+        ) => {
+            const test = new Test(title, description, fn);
             test.file = file;
             suites[0].addTest(test);
             return test;
@@ -84,9 +96,8 @@ export function styleInterface(suite) {
         /**
          * Exclusive test-case.
          */
-        context.test.only = function (title, fn) {
-            return common.test.only(mocha, context.test(title, fn));
-        };
+        context.test.only = (title, fn) =>
+            common.test.only(mocha, context.test(title, fn));
 
         context.test.skip = common.test.skip;
     });

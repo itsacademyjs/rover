@@ -416,6 +416,11 @@ class Mocha {
         return this;
     }
 
+    addFiles(...file: string[]): this {
+        this.files.push(...file);
+        return this;
+    }
+
     /**
      * Sets reporter to `reporter`, defaults to "spec".
      *
@@ -520,6 +525,8 @@ class Mocha {
         return this;
     };
 
+    resolveFile: any = path.resolve;
+
     /**
      * Loads `files` prior to execution. Does not support ES Modules.
      *
@@ -539,7 +546,7 @@ class Mocha {
         const self = this;
         const { suite } = this;
         for (const file of this.files) {
-            const resolvedFile = path.resolve(file);
+            const resolvedFile = this.resolveFile(file);
             suite.emit(EVENT_FILE_PRE_REQUIRE, global, resolvedFile, this);
             suite.emit(
                 EVENT_FILE_REQUIRE,
@@ -1155,85 +1162,6 @@ class Mocha {
         runAsync(runner).then(done);
 
         return runner;
-    }
-
-    collect() {
-        this.guardRunningStateTransition();
-        this._state = mochaStates.RUNNING;
-        if (this._previousRunner) {
-            this._previousRunner.dispose();
-            this.suite.reset();
-        }
-        if (this.files.length && !this._lazyLoadFiles) {
-            this.loadFiles();
-        }
-        const { suite, options } = this;
-        options.files = this.files;
-        // const runner = new this._runnerClass(suite, {
-        //     cleanReferencesAfterRun: this._cleanReferencesAfterRun,
-        //     delay: options.delay,
-        //     dryRun: options.dryRun,
-        //     failZero: options.failZero,
-        // });
-        // createStatsCollector(runner);
-        // var reporter = new this._reporter(runner, options);
-        // runner.checkLeaks = options.checkLeaks === true;
-        // runner.fullStackTrace = options.fullTrace;
-        // runner.asyncOnly = options.asyncOnly;
-        // runner.allowUncaught = options.allowUncaught;
-        // runner.forbidOnly = options.forbidOnly;
-        // runner.forbidPending = options.forbidPending;
-        // if (options.grep) {
-        //     runner.grep(options.grep, options.invert);
-        // }
-        // if (options.global) {
-        //     runner.globals(options.global);
-        // }
-        // if (options.color !== undefined) {
-        //     exports.reporters.Base.useColors = options.color;
-        // }
-        // exports.reporters.Base.inlineDiffs = options.inlineDiffs;
-        // exports.reporters.Base.hideDiff = !options.diff;
-
-        // const done = (failures) => {
-        //     this._previousRunner = runner;
-        //     this._state = this._cleanReferencesAfterRun
-        //         ? mochaStates.REFERENCES_CLEANED
-        //         : mochaStates.INIT;
-        //     fn = fn || utils.noop;
-        //     if (typeof reporter.done === "function") {
-        //         reporter.done(failures, fn);
-        //     } else {
-        //         fn(failures);
-        //     }
-        // };
-
-        // const runAsync = async (runner) => {
-        //     const context =
-        //         this.options.enableGlobalSetup && this.hasGlobalSetupFixtures()
-        //             ? await this.runGlobalSetup(runner)
-        //             : {};
-        //     const failureCount = await runner.runAsync({
-        //         files: this.files,
-        //         options,
-        //     });
-        //     if (
-        //         this.options.enableGlobalTeardown &&
-        //         this.hasGlobalTeardownFixtures()
-        //     ) {
-        //         await this.runGlobalTeardown(context);
-        //     }
-        //     return failureCount;
-        // };
-
-        // // no "catch" here is intentional. errors coming out of
-        // // Runner#run are considered uncaught/unhandled and caught
-        // // by the `process` event listeners.
-        // // also: returning anything other than `runner` would be a breaking
-        // // change
-        // runAsync(runner).then(done);
-
-        // return runner;
     }
 
     /**

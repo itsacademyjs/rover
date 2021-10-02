@@ -50,6 +50,7 @@ class Runnable extends EventEmitter {
     private _timeout;
 
     title: string;
+    description: string;
     fn: /*Func | AsyncFunc*/ any | undefined;
     body: string;
     async: boolean;
@@ -75,9 +76,10 @@ class Runnable extends EventEmitter {
      * @param {String} title
      * @param {Function} fn
      */
-    constructor(title, fn?) {
+    constructor(title: string, description?: string, fn?) {
         super();
         this.title = title;
+        this.description = description;
         this.fn = fn;
         this.body = (fn || "").toString();
         this.async = fn && fn.length;

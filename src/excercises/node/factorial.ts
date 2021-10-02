@@ -1,44 +1,58 @@
-import { Excercise } from "../../types";
-
-const excercise: Excercise = {
-    handle: "node/factorial",
-
-    statement: `
-Factorial of a non-negative integer, is multiplication of all integers smaller than or equal to n.
+suite(
+    "Calculate the factorial of a given integer.",
+    "node/factorial",
+    `Factorial of a non-negative integer, is multiplication of all integers smaller than or equal to n.
 For example factorial of 6 is 6 * 5 * 4 * 3 * 2 * 1 which is 720.
 
-Factorial can be calculated iteratively or recursively. You can solve using any approach.`,
+Factorial can be calculated iteratively or recursively. You can solve using any approach.`
+);
 
-    test: (context) => {
-        const { assertFile, assertOutput, assertToolVersion } = context;
+import fs from "fs";
+import AssertionError from "assertion-error";
+import assert from "assert";
 
-        return [
-            assertFile({ path: "index.js" }, "Write the program in `index.js`"),
+import locals from "import-locals";
+import { beforeEach } from "../../driver/mocha";
 
-            assertOutput(
-                {
-                    command: "node index.js",
-                    input: "5\n",
-                    expectedOutput: "Enter an integer: 120\n",
-                },
-                "Calculate the factorial of 5"
-            ),
-
-            assertOutput(
-                {
-                    command: "node index.js",
-                    input: "6\n",
-                    expectedOutput: "Enter an integer: 720\n",
-                },
-                "Calculate the factorial of 6"
-            ),
-
-            assertToolVersion(
-                { tool: "node", version: "v16.9.1" },
-                "Use Node v16.9.1"
-            ),
-        ];
-    },
+const fileExists = async (path: string, message?: string): Promise<void> => {
+    let success = false;
+    try {
+        await fs.promises.access(path);
+        success = true;
+    } catch {
+        throw new AssertionError(message);
+    }
 };
 
-export default excercise;
+test(
+    "Write the program in 'index.js'",
+    "This is a huge description.",
+    async () => {
+        await fileExists("index.js", "Cannot find file `index.js`");
+    }
+);
+
+let factorial = null;
+let temporary = null;
+beforeEach(() => {
+    (locals as any).export(process.cwd() + "/index.js", "factorial");
+
+    factorial = require(process.cwd() + "/index.js").factorial;
+    temporary = process.stdout.write;
+});
+
+declare const afterEach;
+
+afterEach("hello", () => {
+    (locals as any).unexport(process.cwd() + "/index.js", "factorial");
+});
+
+test("Calculate the factorial of 5", "This is a huge description.", () => {
+    const actual = factorial(5);
+    assert.equal(actual, 120, "5! = 120");
+});
+
+test("Calculate the factorial of 6", "This is a huge description.", () => {
+    const actual = factorial(6);
+    assert.equal(actual, 720, "6! = 720");
+});

@@ -4,7 +4,6 @@ import {
     assignNewMochaID,
     clamp,
     constants as utilsConstants,
-    createMap,
     defineConstants,
     getMochaID,
     isString,
@@ -102,6 +101,8 @@ class Suite extends EventEmitter {
     delayed: boolean;
     parent: Suite | undefined;
     title: string;
+    handle: string;
+    description: string;
 
     /**
      * Create a new `Suite` with the given `title` and parent `Suite`.

@@ -83,7 +83,7 @@ export function styleInterface(suite) {
             if (suite.isPending()) {
                 fn = null;
             }
-            const test: any = new Test(title, fn);
+            const test: any = new Test(title, "<unavailable>", fn);
             test.file = file;
             suite.addTest(test);
             return test;

@@ -9,18 +9,19 @@ class Hook extends Runnable {
     /**
      * Initialize a new `Hook` with the given `title` and callback `fn`
      */
-    constructor(title, fn) {
-        super(title, fn);
+    constructor(title: string, fn) {
+        super(title, "<hook>", fn);
         this.type = "hook";
     }
 
+    _error: any;
     /**
      * Resets the state for a next run.
      */
-    reset = function () {
-        Runnable.prototype.reset.call(this);
+    reset() {
+        super.reset();
         delete this._error;
-    };
+    }
 
     /**
      * Get or set the test `err`.

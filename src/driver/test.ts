@@ -18,8 +18,8 @@ class Test extends Runnable {
      * @param {String} title - Test title (required)
      * @param {Function} [fn] - Test callback.  If omitted, the Test is considered "pending"
      */
-    constructor(title, fn) {
-        super(title, fn);
+    constructor(title: string, description: string, fn) {
+        super(title, description, fn);
         if (!isString(title)) {
             throw createInvalidArgumentTypeError(
                 'Test argument "title" should be a string. Received type "' +
@@ -64,7 +64,7 @@ class Test extends Runnable {
     };
 
     clone = function () {
-        const test: any = new Test(this.title, this.fn);
+        const test: any = new Test(this.title, "<unavailable>", this.fn);
         test.timeout(this.timeout());
         test.slow(this.slow());
         test.retries(this.retries());

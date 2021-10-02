@@ -354,8 +354,6 @@ Base.prototype.epilogue = function () {
     var stats = this.stats;
     var fmt;
 
-    Base.consoleLog();
-
     // passes
     fmt =
         color("bright pass", " ") +

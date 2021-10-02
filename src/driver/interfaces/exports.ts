@@ -41,7 +41,7 @@ export const styleInterface = (suite: Suite) => {
                         suites[0].afterEach(callback);
                         break;
                     default: {
-                        const test = new Test(key, callback);
+                        const test = new Test(key, "<unavailable>", callback);
                         test.file = file;
                         suites[0].addTest(test);
                     }

@@ -80,7 +80,7 @@ export const styleInterface = (suite: Suite) => {
             if (suite.isPending()) {
                 fn = null;
             }
-            const test = new Test(title, fn);
+            const test = new Test(title, "<unavailable>", fn);
             test.file = file;
             suite.addTest(test);
             return test;

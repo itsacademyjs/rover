@@ -1,3 +1,12 @@
-import node from "./node";
+import nodeFiles from "./node";
 
-export default { ...node };
+declare global {
+    const suite: (title: string, handle: string, description: string) => void;
+    const test: (
+        title: string,
+        description: string,
+        callback: () => void | Promise<void>
+    ) => void;
+}
+
+export default [...nodeFiles];

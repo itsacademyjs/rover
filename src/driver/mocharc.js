@@ -2,7 +2,7 @@ module.exports = {
     diff: true,
     extension: ["js", "cjs", "mjs"],
     package: "./package.json",
-    reporter: "spec",
+    reporter: "json_all",
     slow: 75,
     timeout: 2000,
     ui: "qunit",

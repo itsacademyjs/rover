@@ -119,7 +119,7 @@ export default function (suites, context, mocha) {
             /**
              * Creates a suite.
              *
-             * @param {Object} opts Options
+             * @param {Object} options Options
              * @param {string} opts.title Title of Suite
              * @param {Function} [opts.fn] Suite Function (not always applicable)
              * @param {boolean} [opts.pending] Is Suite pending?
@@ -127,14 +127,16 @@ export default function (suites, context, mocha) {
              * @param {boolean} [opts.isOnly] Is Suite exclusive?
              * @returns {Suite}
              */
-            create: function create(opts) {
-                context.data.push(opts);
+            create: function create(options) {
+                context.data.push(options);
 
-                var suite = Suite.create(suites[0], opts.title);
-                suite.pending = Boolean(opts.pending);
-                suite.file = opts.file;
+                const suite = Suite.create(suites[0], options.title);
+                suite.handle = options.handle || "<anonymous>";
+                suite.description = options.description || "<unavailable>";
+                suite.pending = Boolean(options.pending);
+                suite.file = options.file;
                 suites.unshift(suite);
-                if (opts.isOnly) {
+                if (options.isOnly) {
                     suite.markOnly();
                 }
                 if (
@@ -144,10 +146,13 @@ export default function (suites, context, mocha) {
                 ) {
                     throw createUnsupportedError("Pending test forbidden");
                 }
-                if (typeof opts.fn === "function") {
-                    opts.fn.call(suite);
+                if (typeof options.fn === "function") {
+                    options.fn.call(suite);
                     suites.shift();
-                } else if (typeof opts.fn === "undefined" && !suite.pending) {
+                } else if (
+                    typeof options.fn === "undefined" &&
+                    !suite.pending
+                ) {
                     throw createMissingArgumentError(
                         'Suite "' +
                             suite.fullTitle() +
@@ -156,7 +161,7 @@ export default function (suites, context, mocha) {
                         "callback",
                         "function"
                     );
-                } else if (!opts.fn && suite.pending) {
+                } else if (!options.fn && suite.pending) {
                     suites.shift();
                 }
 

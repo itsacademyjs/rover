@@ -31,10 +31,26 @@ class Spec extends Base {
 
         runner.on(EVENT_SUITE_BEGIN, (suite) => {
             ++indents;
-            Base.consoleLog(color("suite", "%s%s"), indent(), suite.title);
+            if (suite.handle) {
+                Base.consoleLog(
+                    color("suite", "%s%s"),
+                    indent(),
+                    `‣ ${suite.handle}\n`
+                );
+            }
+
+            ++indents;
+            if (suite.title) {
+                Base.consoleLog(
+                    color("suite", "%s%s"),
+                    indent(),
+                    suite.title && `↪ ${suite.title}\n`
+                );
+            }
         });
 
         runner.on(EVENT_SUITE_END, () => {
+            --indents;
             --indents;
             if (indents === 1) {
                 Base.consoleLog();
@@ -53,7 +69,7 @@ class Spec extends Base {
                     indent() +
                     color("checkmark", "  " + Base.symbols.ok) +
                     color("pass", " %s");
-                Base.consoleLog(format, test.title);
+                Base.consoleLog(format, test.title && `${test.title}\n`);
             } else {
                 format =
                     indent() +
