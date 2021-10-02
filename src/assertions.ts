@@ -784,7 +784,7 @@ const property = <T>(
     property: string,
     message: string
 ): void => {
-    if (!value[property]) {
+    if (!lodash.has(value, property)) {
         throw new AssertionError(message);
     }
 };
@@ -800,7 +800,7 @@ const notProperty = <T>(
     property: string,
     message: string
 ): void => {
-    if (value[property]) {
+    if (lodash.has(value, property)) {
         throw new AssertionError(message);
     }
 };
@@ -819,7 +819,7 @@ const propertyVal = <T>(
     value: any,
     message: string
 ): void => {
-    if (!obj[property] || obj[property] !== value) {
+    if (!lodash.has(obj, property) || obj[property] !== value) {
         throw new AssertionError(message);
     }
 };
@@ -839,7 +839,7 @@ const notPropertyVal = <T>(
     value: any,
     message: string
 ): void => {
-    if (obj[property] && obj[property] === value) {
+    if (lodash.has(obj, property) && obj[property] === value) {
         throw new AssertionError(message);
     }
 };
