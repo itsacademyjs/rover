@@ -6,6 +6,7 @@
  */
 
 import AssertionError from "assertion-error";
+import { sub } from "date-fns";
 import lodash from "lodash";
 
 /**
@@ -1486,8 +1487,14 @@ const notSameDeepOrderedMembers = <T>(
  *     assert.includeMembers([ 1, 2, 3 ], [ 2, 1, 2 ], 'include members');
  */
 
-const isSubset = <T>(subset: any[], superset: any[]): boolean =>
-    lodash.every(subset, (value, key) => value === superset[key]);
+const isSubset = <T>(subset: any[], superset: any[]): boolean => {
+    subset.map((item) => {
+        if (!lodash.includes(superset, item)) {
+            return false;
+        }
+    });
+    return true;
+};
 
 const includeMembers = <T>(
     superset: any[],
@@ -1523,8 +1530,19 @@ const notIncludeMembers = <T>(
  *     assert.includeDeepMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { b: 2 }, { a: 1 }, { b: 2 } ], 'include deep members');
  */
 
-const isDeepSubset = <T>(subset: any[], superset: any[]): boolean =>
-    lodash.every(subset, (value, key) => lodash.isEqual(value, superset[key]));
+const isDeepSubset = <T>(subset: any[], superset: any[]): boolean => {
+    subset.map((item) => {
+        if (!lodash.includes(superset, item)) {
+            return false;
+        } else {
+            const index = lodash.indexOf(superset, item);
+            if (!lodash.isEqual(item, superset[index])) {
+                return false;
+            }
+        }
+    });
+    return true;
+};
 
 const includeDeepMembers = <T>(
     superset: any[],
