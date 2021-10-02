@@ -894,7 +894,9 @@ const ownProperty = <T>(
     property: string,
     message: string
 ): void => {
-    if (!obj.hasOwnProperty(property)) {
+    if (obj === undefined || obj === null) {
+        throw new AssertionError("Object is not defined");
+    } else if (!obj.hasOwnProperty(property)) {
         throw new AssertionError(message);
     }
 };
@@ -911,7 +913,9 @@ const notOwnProperty = <T>(
     property: string,
     message: string
 ): void => {
-    if (!obj.hasOwnProperty(property)) {
+    if (obj === undefined || obj === null) {
+        throw new AssertionError("Object is not defined");
+    } else if (obj.hasOwnProperty(property)) {
         throw new AssertionError(message);
     }
 };
@@ -937,7 +941,9 @@ const ownPropertyValue = <T>(
     value: any,
     message: string
 ): void => {
-    if (!obj.hasOwnProperty(property) || obj[property] !== value) {
+    if (obj === undefined || obj === null) {
+        throw new AssertionError("Object is not defined");
+    } else if (!obj.hasOwnProperty(property) || obj[property] !== value) {
         throw new AssertionError(message);
     }
 };
@@ -957,7 +963,9 @@ const notOwnPropertyValue = <T>(
     value: any,
     message: string
 ): void => {
-    if (obj.hasOwnProperty(property) && obj[property] === value) {
+    if (obj === undefined || obj === null) {
+        throw new AssertionError("Object is not defined");
+    } else if (obj.hasOwnProperty(property) && obj[property] === value) {
         throw new AssertionError(message);
     }
 };
@@ -976,7 +984,9 @@ const deepOwnPropertyValue = <T>(
     value: any,
     message: string
 ): void => {
-    if (
+    if (obj === undefined || obj === null) {
+        throw new AssertionError("Object is not defined");
+    } else if (
         !obj.hasOwnProperty(property) ||
         !lodash.isEqual(obj[property], value)
     ) {
@@ -1001,7 +1011,12 @@ const notDeepOwnPropertyValue = <T>(
     value: any,
     message: string
 ): void => {
-    if (obj.hasOwnProperty(property) && lodash.isEqual(obj[property], value)) {
+    if (obj === undefined || obj === null) {
+        throw new AssertionError("Object is not defined");
+    } else if (
+        obj.hasOwnProperty(property) &&
+        lodash.isEqual(obj[property], value)
+    ) {
         throw new AssertionError(message);
     }
 };
@@ -1019,7 +1034,9 @@ const nestedProperty = <T>(
     property: string,
     message: string
 ): void => {
-    if (!lodash.get(obj, property)) {
+    if (obj === undefined || obj === null) {
+        throw new AssertionError("Object is not defined");
+    } else if (!lodash.get(obj, property)) {
         throw new AssertionError(message);
     }
 };
@@ -1037,7 +1054,9 @@ const notNestedProperty = <T>(
     property: string,
     message: string
 ): void => {
-    if (lodash.get(obj, property)) {
+    if (obj === undefined || obj === null) {
+        throw new AssertionError("Object is not defined");
+    } else if (lodash.get(obj, property)) {
         throw new AssertionError(message);
     }
 };
@@ -1056,7 +1075,12 @@ const nestedPropertyValue = <T>(
     value: any,
     message: string
 ): void => {
-    if (!lodash.get(obj, property) || lodash.get(obj, property) !== value) {
+    if (obj === undefined || obj === null) {
+        throw new AssertionError("Object is not defined");
+    } else if (
+        !lodash.get(obj, property) ||
+        lodash.get(obj, property) !== value
+    ) {
         throw new AssertionError(message);
     }
 };
@@ -1076,7 +1100,12 @@ const notNestedPropertyValue = <T>(
     value: any,
     message: string
 ): void => {
-    if (lodash.get(obj, property) && lodash.get(obj, property) === value) {
+    if (obj === undefined || obj === null) {
+        throw new AssertionError("Object is not defined");
+    } else if (
+        lodash.get(obj, property) &&
+        lodash.get(obj, property) === value
+    ) {
         throw new AssertionError(message);
     }
 };
@@ -1094,7 +1123,9 @@ const deepNestedPropertyValue = <T>(
     value: any,
     message: string
 ): void => {
-    if (
+    if (obj === undefined || obj === null) {
+        throw new AssertionError("Object is not defined");
+    } else if (
         !lodash.get(obj, property) ||
         !lodash.isEqual(lodash.get(obj, property), value)
     ) {
@@ -1118,7 +1149,9 @@ const notDeepNestedPropertyValue = <T>(
     value: any,
     message: string
 ): void => {
-    if (
+    if (obj === undefined || obj === null) {
+        throw new AssertionError("Object is not defined");
+    } else if (
         lodash.get(obj, property) &&
         lodash.isEqual(lodash.get(obj, property), value)
     ) {
