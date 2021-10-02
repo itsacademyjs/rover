@@ -710,7 +710,8 @@ const deepInclude = <T>(
     includedValue: any,
     message: string
 ): void => {
-    if (!lodash.includes(expression, includedValue)) {
+    const element = lodash.find(expression, includedValue);
+    if (!lodash.isEqual(element, includedValue)) {
         throw new AssertionError(message);
     }
 };
@@ -732,7 +733,8 @@ const notDeepInclude = <T>(
     includedValue: any,
     message: string
 ): void => {
-    if (lodash.includes(expression, includedValue)) {
+    const element = lodash.find(expression, includedValue);
+    if (lodash.isEqual(element, includedValue)) {
         throw new AssertionError(message);
     }
 };
