@@ -235,12 +235,12 @@ const isAtMost = <T>(
 /**
  * Asserts that `value` is true.
  *
- *     var teaServed = true;
+ *     let teaServed = true;
  *     assert.isTrue(teaServed, 'the tea has been served');
  */
 
 const isTrue = <T>(value: any, message: string): void => {
-    if (!value) {
+    if (value !== true) {
         throw new AssertionError(message);
     }
 };
@@ -248,12 +248,12 @@ const isTrue = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is not true.
  *
- *     var tea = 'tasty chai';
+ *     let tea = 'tasty chai';
  *     assert.isNotTrue(tea, 'great, time for tea!');
  */
 
 const isNotTrue = <T>(value: any, message: string): void => {
-    if (value) {
+    if (value === true) {
         throw new AssertionError(message);
     }
 };
@@ -261,12 +261,12 @@ const isNotTrue = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is false.
  *
- *     var teaServed = false;
+ *     let teaServed = false;
  *     assert.isFalse(teaServed, 'no tea yet? hmm...');
  */
 
 const isFalse = <T>(value: any, message: string): void => {
-    if (value) {
+    if (value !== false) {
         throw new AssertionError(message);
     }
 };
@@ -274,12 +274,12 @@ const isFalse = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is not false.
  *
- *     var tea = 'tasty chai';
+ *     let tea = 'tasty chai';
  *     assert.isNotFalse(tea, 'great, time for tea!');
  */
 
 const isNotFalse = <T>(value: any, message: string): void => {
-    if (!value) {
+    if (!value === false) {
         throw new AssertionError(message);
     }
 };
@@ -299,7 +299,7 @@ const isNull = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is not null.
  *
- *     var tea = 'tasty chai';
+ *     let tea = 'tasty chai';
  *     assert.isNotNull(tea, 'great, time for tea!');
  */
 
@@ -316,7 +316,7 @@ const isNotNull = <T>(value: any, message: string): void => {
  */
 
 const isNaN = <T>(value: any, message: string): void => {
-    if (value !== NaN) {
+    if (value !== value) {
         throw new AssertionError(message);
     }
 };
@@ -327,7 +327,7 @@ const isNaN = <T>(value: any, message: string): void => {
  *     assert.isNotNaN(4, '4 is not NaN');
  */
 const isNotNaN = <T>(value: any, message: string): void => {
-    if (value === NaN) {
+    if (value === value) {
         throw new AssertionError(message);
     }
 };
@@ -335,7 +335,7 @@ const isNotNaN = <T>(value: any, message: string): void => {
 /**
  * Asserts that the target is neither `null` nor `undefined`.
  *
- *     var foo = 'hi';
+ *     let foo = 'hi';
  *
  *     assert.exists(foo, 'foo is neither `null` nor `undefined`');
  */
@@ -349,7 +349,7 @@ const exists = <T>(value: any, message: string): void => {
 /**
  * Asserts that the target is either `null` or `undefined`.
  *
- *     var bar = null
+ *     let bar = null
  *       , baz;
  *
  *     assert.notExists(bar);
@@ -365,7 +365,7 @@ const notExists = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is `undefined`.
  *
- *     var tea;
+ *     let tea;
  *     assert.isUndefined(tea, 'no tea defined');
  */
 
@@ -378,7 +378,7 @@ const isUndefined = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is not `undefined`.
  *
- *     var tea = 'cup of chai';
+ *     let tea = 'cup of chai';
  *     assert.isDefined(tea, 'tea has been defined');
  */
 
@@ -404,7 +404,7 @@ const isFunction = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is _not_ a <T>.
  *
- *     var serveTea = [ 'heat', 'pour', 'sip' ];
+ *     let serveTea = [ 'heat', 'pour', 'sip' ];
  *     assert.isNotFunction(serveTea, 'great, we have listed the steps');
  */
 
@@ -418,7 +418,7 @@ const isNotFunction = <T>(value: any, message: string): void => {
  * Asserts that `value` is an object of type 'Object' (as revealed by `Object.prototype.toString`).
  * _The assertion does not match subclassed objects._
  *
- *     var selection = { name: 'Chai', serve: 'with spices' };
+ *     let selection = { name: 'Chai', serve: 'with spices' };
  *     assert.isObject(selection, 'tea selection is an object');
  */
 
@@ -431,7 +431,7 @@ const isObject = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is _not_ an object of type 'Object' (as revealed by `Object.prototype.toString`).
  *
- *     var selection = 'chai'
+ *     let selection = 'chai'
  *     assert.isNotObject(selection, 'tea selection is not an object');
  *     assert.isNotObject(null, 'null is not an object');
  */
@@ -445,7 +445,7 @@ const isNotObject = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is an array.
  *
- *     var menu = [ 'green', 'chai', 'oolong' ];
+ *     let menu = [ 'green', 'chai', 'oolong' ];
  *     assert.isArray(menu, 'what kind of tea do we want?');
  */
 
@@ -458,7 +458,7 @@ const isArray = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is _not_ an array.
  *
- *     var menu = 'green|chai|oolong';
+ *     let menu = 'green|chai|oolong';
  *     assert.isNotArray(menu, 'what kind of tea do we want?');
  */
 
@@ -471,7 +471,7 @@ const isNotArray = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is a string.
  *
- *     var teaOrder = 'chai';
+ *     let teaOrder = 'chai';
  *     assert.isString(teaOrder, 'order placed');
  */
 
@@ -484,7 +484,7 @@ const isString = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is _not_ a string.
  *
- *     var teaOrder = 4;
+ *     let teaOrder = 4;
  *     assert.isNotString(teaOrder, 'order placed');
  */
 
@@ -497,7 +497,7 @@ const isNotString = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is a number.
  *
- *     var cups = 2;
+ *     let cups = 2;
  *     assert.isNumber(cups, 'how many cups');
  */
 
@@ -510,7 +510,7 @@ const isNumber = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is _not_ a number.
  *
- *     var cups = '2 cups please';
+ *     let cups = '2 cups please';
  *     assert.isNotNumber(cups, 'how many cups');
  */
 
@@ -523,7 +523,7 @@ const isNotNumber = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is a finite number. Unlike `.isNumber`, this will fail for `NaN` and `Infinity`.
  *
- *     var cups = 2;
+ *     let cups = 2;
  *     assert.isFinite(cups, 'how many cups');
  *
  *     assert.isFinite(NaN); // throws
@@ -538,7 +538,7 @@ const isFinite = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is a boolean.
  *
- *     var teaReady = true
+ *     let teaReady = true
  *       , teaServed = false;
  *
  *     assert.isBoolean(teaReady, 'is the tea ready');
@@ -554,7 +554,7 @@ const isBoolean = <T>(value: any, message: string): void => {
 /**
  * Asserts that `value` is _not_ a boolean.
  *
- *     var teaReady = 'yep'
+ *     let teaReady = 'yep'
  *       , teaServed = 'nope';
  *
  *     assert.isNotBoolean(teaReady, 'is the tea ready');
@@ -601,7 +601,7 @@ const notTypeOf = <T>(value: any, type, message: string): void => {
 /**
  * Asserts that `value` is an instance of `constructor`.
  *
- *     var Tea = <T> (name) { this.name = name; }
+ *     let Tea = <T> (name) { this.name = name; }
  *       , chai = new Tea('chai');
  *
  *     assert.instanceOf(chai, Tea, 'chai is an instance of tea');
@@ -616,7 +616,7 @@ const instanceOf = <T>(value: any, constructor, message: string): void => {
 /**
  * Asserts `value` is not an instance of `constructor`.
  *
- *     var Tea = <T> (name) { this.name = name; }
+ *     let Tea = <T> (name) { this.name = name; }
  *       , chai = new String('chai');
  *
  *     assert.notInstanceOf(chai, Tea, 'chai is not an instance of tea');
@@ -643,7 +643,7 @@ const notInstanceOf = <T>(value: any, constructor, message: string): void => {
  * is searched for the given property keys, checking that each one is present
  * and strictly equal to the given property value. For instance:
  *
- *     var obj1 = {a: 1}
+ *     let obj1 = {a: 1}
  *       , obj2 = {b: 2};
  *     assert.include([obj1, obj2], obj1);
  *     assert.include({foo: obj1, bar: obj2}, {foo: obj1});
@@ -676,7 +676,7 @@ const include = <T>(
  * property keys is either not present or not strictly equal to the given
  * property value. For instance:
  *
- *     var obj1 = {a: 1}
+ *     let obj1 = {a: 1}
  *       , obj2 = {b: 2};
  *     assert.notInclude([obj1, obj2], {a: 1});
  *     assert.notInclude({foo: obj1, bar: obj2}, {foo: {a: 1}});
@@ -698,7 +698,7 @@ const notInclude = <T>(
  * inclusion of a value in an array or a subset of properties in an object.
  * Deep equality is used.
  *
- *     var obj1 = {a: 1}
+ *     let obj1 = {a: 1}
  *       , obj2 = {b: 2};
  *     assert.deepInclude([obj1, obj2], {a: 1});
  *     assert.deepInclude({foo: obj1, bar: obj2}, {foo: {a: 1}});
@@ -720,7 +720,7 @@ const deepInclude = <T>(
  * the absence of a value in an array or a subset of properties in an object.
  * Deep equality is used.
  *
- *     var obj1 = {a: 1}
+ *     let obj1 = {a: 1}
  *       , obj2 = {b: 2};
  *     assert.notDeepInclude([obj1, obj2], {a: 9});
  *     assert.notDeepInclude({foo: obj1, bar: obj2}, {foo: {a: 9}});
@@ -1260,7 +1260,7 @@ const doesNotHaveAllKeys = <T>(
  */
 
 const operator = <T>(value: any, operator, val2, message: string): void => {
-    var ok;
+    let ok;
     switch (operator) {
         case "==":
             ok = value == val2;
@@ -1427,13 +1427,6 @@ const notSameOrderedMembers = <T>(
  * Uses a deep equality check.
  *
  *     assert.sameDeepOrderedMembers([ { a: 1 }, { b: 2 }, { c: 3 } ], [ { a: 1 }, { b: 2 }, { c: 3 } ], 'same deep ordered members');
- *
- * @name sameDeepOrderedMembers
- * @param {Array} set1
- * @param {Array} set2
- * @param {String} message
- * @namespace Assert
- * @api public
  */
 
 const sameDeepOrderedMembers = <T>(
@@ -1625,21 +1618,6 @@ const oneOf = <T>(inList: any, list: any[], message: string): void => {
     }
 };
 
-/*!
- * Asserts if value is not a false value, and throws if it is a true value.
- * This is added to allow for chai to be a drop-in replacement for Node's
- * assert class.
- *
- *     var err = new Error('I am a custom error');
- *     assert.ifError(err); // Rethrows err!
- */
-
-const ifError = <T>(value: any): void => {
-    if (value) {
-        throw value;
-    }
-};
-
 /**
  * Asserts that `object` is extensible (can have new properties added to it).
  *
@@ -1655,9 +1633,9 @@ const isExtensible = <T>(obj: Object, message: string): void => {
 /**
  * Asserts that `object` is _not_ extensible.
  *
- *     var nonExtensibleObject = Object.preventExtensions({});
- *     var sealedObject = Object.seal({});
- *     var frozenObject = Object.freeze({});
+ *     let nonExtensibleObject = Object.preventExtensions({});
+ *     let sealedObject = Object.seal({});
+ *     let frozenObject = Object.freeze({});
  *
  *     assert.isNotExtensible(nonExtensibleObject);
  *     assert.isNotExtensible(sealedObject);
@@ -1674,8 +1652,8 @@ const isNotExtensible = <T>(obj: Object, message: string): void => {
  * Asserts that `object` is sealed (cannot have new properties added to it
  * and its existing properties cannot be removed).
  *
- *     var sealedObject = Object.seal({});
- *     var frozenObject = Object.seal({});
+ *     let sealedObject = Object.seal({});
+ *     let frozenObject = Object.seal({});
  *
  *     assert.isSealed(sealedObject);
  *     assert.isSealed(frozenObject);
@@ -1703,7 +1681,7 @@ const isNotSealed = <T>(obj: Object, message: string): void => {
  * Asserts that `object` is frozen (cannot have new properties added to it
  * and its existing properties cannot be modified).
  *
- *     var frozenObject = Object.freeze({});
+ *     let frozenObject = Object.freeze({});
  *     assert.frozen(frozenObject);
  */
 
