@@ -780,7 +780,7 @@ const notMatch = <T>(
  */
 
 const property = <T>(
-    value: Object,
+    value: object,
     property: string,
     message: string
 ): void => {
@@ -796,7 +796,7 @@ const property = <T>(
  *     assert.notProperty({ tea: { green: 'matcha' }}, 'coffee');
  */
 const notProperty = <T>(
-    value: Object,
+    value: object,
     property: string,
     message: string
 ): void => {
@@ -813,8 +813,8 @@ const notProperty = <T>(
  *     assert.propertyVal({ tea: 'is good' }, 'tea', 'is good');
  */
 
-const propertyVal = <T>(
-    obj: Object,
+const propertyValue = <T>(
+    obj: object,
     property: string,
     value: any,
     message: string
@@ -833,8 +833,8 @@ const propertyVal = <T>(
  *     assert.notPropertyVal({ tea: 'is good' }, 'coffee', 'is good');
  */
 
-const notPropertyVal = <T>(
-    obj: Object,
+const notPropertyValue = <T>(
+    obj: object,
     property: string,
     value: any,
     message: string
@@ -851,13 +851,13 @@ const notPropertyVal = <T>(
  *     assert.deepPropertyVal({ tea: { green: 'matcha' } }, 'tea', { green: 'matcha' });
  */
 
-const deepPropertyVal = <T>(
-    obj: Object,
+const deepPropertyValue = <T>(
+    obj: object,
     property: string,
     value: any,
     message: string
 ): void => {
-    if (!obj[property] || !lodash.isEqual(obj[property], value)) {
+    if (!lodash.has(obj, property) || !lodash.isEqual(obj[property], value)) {
         throw new AssertionError(message);
     }
 };
@@ -871,13 +871,13 @@ const deepPropertyVal = <T>(
  *     assert.notDeepPropertyVal({ tea: { green: 'matcha' } }, 'coffee', { green: 'matcha' });
  */
 
-const notDeepPropertyVal = <T>(
-    obj: Object,
+const notDeepPropertyValue = <T>(
+    obj: object,
     property: string,
     value: any,
     message: string
 ): void => {
-    if (obj[property] && lodash.isEqual(obj[property], value)) {
+    if (lodash.has(obj, property) && lodash.isEqual(obj[property], value)) {
         throw new AssertionError(message);
     }
 };
@@ -890,7 +890,7 @@ const notDeepPropertyVal = <T>(
  */
 
 const ownProperty = <T>(
-    obj: Object,
+    obj: object,
     property: string,
     message: string
 ): void => {
@@ -907,7 +907,7 @@ const ownProperty = <T>(
  *     assert.notOwnProperty({}, 'toString');
  */
 const notOwnProperty = <T>(
-    obj: Object,
+    obj: object,
     property: string,
     message: string
 ): void => {
@@ -931,8 +931,8 @@ const notOwnProperty = <T>(
  * @api public
  */
 
-const ownPropertyVal = <T>(
-    obj: Object,
+const ownPropertyValue = <T>(
+    obj: object,
     property: string,
     value: any,
     message: string
@@ -951,8 +951,8 @@ const ownPropertyVal = <T>(
  *     assert.notOwnPropertyVal({}, 'toString', Object.prototype.toString);
  */
 
-const notOwnPropertyVal = <T>(
-    obj: Object,
+const notOwnPropertyValue = <T>(
+    obj: object,
     property: string,
     value: any,
     message: string
@@ -970,8 +970,8 @@ const notOwnPropertyVal = <T>(
  *     assert.deepOwnPropertyVal({ tea: { green: 'matcha' } }, 'tea', { green: 'matcha' });
  */
 
-const deepOwnPropertyVal = <T>(
-    obj: Object,
+const deepOwnPropertyValue = <T>(
+    obj: object,
     property: string,
     value: any,
     message: string
@@ -995,8 +995,8 @@ const deepOwnPropertyVal = <T>(
  *     assert.notDeepOwnPropertyVal({}, 'toString', Object.prototype.toString);
  */
 
-const notDeepOwnPropertyVal = <T>(
-    obj: Object,
+const notDeepOwnPropertyValue = <T>(
+    obj: object,
     property: string,
     value: any,
     message: string
@@ -1015,7 +1015,7 @@ const notDeepOwnPropertyVal = <T>(
  */
 
 const nestedProperty = <T>(
-    obj: Object,
+    obj: object,
     property: string,
     message: string
 ): void => {
@@ -1033,7 +1033,7 @@ const nestedProperty = <T>(
  */
 
 const notNestedProperty = <T>(
-    obj: Object,
+    obj: object,
     property: string,
     message: string
 ): void => {
@@ -1050,8 +1050,8 @@ const notNestedProperty = <T>(
  *     assert.nestedPropertyVal({ tea: { green: 'matcha' }}, 'tea.green', 'matcha');
  */
 
-const nestedPropertyVal = <T>(
-    obj: Object,
+const nestedPropertyValue = <T>(
+    obj: object,
     property: string,
     value: any,
     message: string
@@ -1070,8 +1070,8 @@ const nestedPropertyVal = <T>(
  *     assert.notNestedPropertyVal({ tea: { green: 'matcha' }}, 'coffee.green', 'matcha');
  */
 
-const notNestedPropertyVal = <T>(
-    obj: Object,
+const notNestedPropertyValue = <T>(
+    obj: object,
     property: string,
     value: any,
     message: string
@@ -1088,8 +1088,8 @@ const notNestedPropertyVal = <T>(
  *     assert.deepNestedPropertyVal({ tea: { green: { matcha: 'yum' } } }, 'tea.green', { matcha: 'yum' });
  */
 
-const deepNestedPropertyVal = <T>(
-    obj: Object,
+const deepNestedPropertyValue = <T>(
+    obj: object,
     property: string,
     value: any,
     message: string
@@ -1112,8 +1112,8 @@ const deepNestedPropertyVal = <T>(
  *     assert.notDeepNestedPropertyVal({ tea: { green: { matcha: 'yum' } } }, 'tea.black', { matcha: 'yum' });
  */
 
-const notDeepNestedPropertyVal = <T>(
-    obj: Object,
+const notDeepNestedPropertyValue = <T>(
+    obj: object,
     property: string,
     value: any,
     message: string
@@ -1135,11 +1135,7 @@ const notDeepNestedPropertyVal = <T>(
  *     assert.lengthOf(new Map([['a',1],['b',2],['c',3]]), 3, 'map has size of 3');
  */
 
-const lengthOf = <T>(
-    expression: any,
-    length: number,
-    message: string
-): void => {
+const length = <T>(expression: any, length: number, message: string): void => {
     if (lodash.size(expression) !== length) {
         throw new AssertionError(message);
     }
@@ -1157,7 +1153,7 @@ const lengthOf = <T>(
  */
 
 const hasAnyKeys = <T>(
-    obj: Object,
+    obj: object,
     keys: string[] | Symbol[],
     message: string
 ): void => {
@@ -1178,7 +1174,7 @@ const hasAnyKeys = <T>(
  */
 
 const hasAllKeys = <T>(
-    obj: Object,
+    obj: object,
     keys: string[] | Symbol[],
     message: string
 ): void => {
@@ -1203,7 +1199,7 @@ const hasAllKeys = <T>(
  */
 
 const containsAllKeys = <T>(
-    obj: Object,
+    obj: object,
     keys: string[] | Symbol[],
     message: string
 ): void => {
@@ -1224,7 +1220,7 @@ const containsAllKeys = <T>(
  */
 
 const doesNotHaveAnyKeys = <T>(
-    obj: Object,
+    obj: object,
     keys: string[] | Symbol[],
     message: string
 ): void => {
@@ -1245,7 +1241,7 @@ const doesNotHaveAnyKeys = <T>(
  */
 
 const doesNotHaveAllKeys = <T>(
-    obj: Object,
+    obj: object,
     keys: string[] | Symbol[],
     message: string
 ): void => {
@@ -1291,7 +1287,10 @@ const operator = <T>(value: any, operator, val2, message: string): void => {
         default:
             message = message ? message + ": " : message;
             throw new AssertionError(
-                message + 'Invalid operator "' + operator + '"'
+                message + 'Invalid operator "' + operator + '"',
+                {
+                    operator,
+                }
             );
     }
 };
@@ -1626,7 +1625,7 @@ const oneOf = <T>(inList: any, list: any[], message: string): void => {
  *     assert.isExtensible({});
  */
 
-const isExtensible = <T>(obj: Object, message: string): void => {
+const isExtensible = <T>(obj: object, message: string): void => {
     if (!Object.isExtensible(obj)) {
         throw new AssertionError(message);
     }
@@ -1644,7 +1643,7 @@ const isExtensible = <T>(obj: Object, message: string): void => {
  *     assert.isNotExtensible(frozenObject);
  */
 
-const isNotExtensible = <T>(obj: Object, message: string): void => {
+const isNotExtensible = <T>(obj: object, message: string): void => {
     if (Object.isExtensible(obj)) {
         throw new AssertionError(message);
     }
@@ -1661,7 +1660,7 @@ const isNotExtensible = <T>(obj: Object, message: string): void => {
  *     assert.isSealed(frozenObject);
  */
 
-const isSealed = <T>(obj: Object, message: string): void => {
+const isSealed = <T>(obj: object, message: string): void => {
     if (!Object.isSealed(obj)) {
         throw new AssertionError(message);
     }
@@ -1673,7 +1672,7 @@ const isSealed = <T>(obj: Object, message: string): void => {
  *     assert.isNotSealed({});
  */
 
-const isNotSealed = <T>(obj: Object, message: string): void => {
+const isNotSealed = <T>(obj: object, message: string): void => {
     if (Object.isSealed(obj)) {
         throw new AssertionError(message);
     }
@@ -1687,7 +1686,7 @@ const isNotSealed = <T>(obj: Object, message: string): void => {
  *     assert.frozen(frozenObject);
  */
 
-const isFrozen = <T>(obj: Object, message: string): void => {
+const isFrozen = <T>(obj: object, message: string): void => {
     if (!Object.isFrozen(obj)) {
         throw new AssertionError(message);
     }
@@ -1699,7 +1698,7 @@ const isFrozen = <T>(obj: Object, message: string): void => {
  *     assert.isNotFrozen({});
  */
 
-const isNotFrozen = <T>(obj: Object, message: string): void => {
+const isNotFrozen = <T>(obj: object, message: string): void => {
     if (Object.isFrozen(obj)) {
         throw new AssertionError(message);
     }
