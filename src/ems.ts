@@ -19,10 +19,16 @@ const syncExercises = async (configuration: SyncConfiguration) => {
         })),
     }));
 
-    mongoose.connect("mongodb://localhost:27017/test");
-    const syncData = new TestSuite(data);
-    await syncData.save();
-    console.log("Exercises synced");
+    try {
+        mongoose.connect("mongodb://localhost:27017/test");
+        TestSuite.insertMany(data, (error) => {
+            console.log(error);
+        });
+        console.log("Exercises synced");
+    } catch (error) {
+        console.log(error);
+    }
+
     return;
 };
 
