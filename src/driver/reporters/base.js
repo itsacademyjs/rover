@@ -1,16 +1,10 @@
 "use strict";
-/**
- * @module Base
- */
-/**
- * Module dependencies.
- */
 
+const chalk = require("chalk");
 var diff = require("diff");
 var milliseconds = require("ms");
 var utils = require("../utils");
-var supportsColor = require("supports-color");
-var symbols = require("log-symbols");
+
 const runner = require("../runner");
 var constants = require("../runner").default.constants;
 var EVENT_TEST_PASS = constants.EVENT_TEST_PASS;
@@ -47,9 +41,8 @@ var consoleLog = console.log;
  * Enable coloring by default, except in the browser interface.
  */
 
-exports.useColors =
-    !isBrowser &&
-    (supportsColor.stdout || process.env.MOCHA_COLORS !== undefined);
+exports.useColors = !isBrowser;
+// && (supportsColor.stdout || process.env.MOCHA_COLORS !== undefined);
 
 /**
  * Inline diffs instead of +/-
@@ -88,10 +81,9 @@ exports.colors = {
 /**
  * Default symbol map.
  */
-
 exports.symbols = {
-    ok: symbols.success,
-    err: symbols.error,
+    ok: chalk.green("✔"),
+    err: chalk.red("✖"),
     dot: ".",
     comma: ",",
     bang: "!",

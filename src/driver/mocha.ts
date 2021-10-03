@@ -4,7 +4,6 @@
  * MIT Licensed
  */
 
-import escapeRe from "escape-string-regexp";
 import path from "path";
 import * as builtinReporters from "./reporters";
 import * as utils from "./utils";
@@ -27,10 +26,18 @@ import Runner from "./runner";
 import Hook from "./hook";
 import Test from "./test";
 
+function escapeStringRegexp(string: string) {
+    if (typeof string !== "string") {
+        throw new TypeError("Expected a string");
+    }
+
+    // Escape characters with special meaning either inside or outside character sets.
+    // Use a simple backslash escape when it’s always valid, and a `\xnn` escape when the simpler form would be disallowed by Unicode patterns’ stricter grammar.
+    return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&").replace(/-/g, "\\x2d");
+}
+
 const { EVENT_FILE_PRE_REQUIRE, EVENT_FILE_POST_REQUIRE, EVENT_FILE_REQUIRE } =
     Suite.constants;
-
-const debug = require("debug")("mocha:mocha");
 
 /**
  * A Mocha instance is a finite state machine.
@@ -382,7 +389,6 @@ class Mocha {
             options.parallel &&
             (typeof options.jobs === "undefined" || options.jobs > 1)
         ) {
-            debug("attempting to enable parallel mode");
             this.parallelMode(true);
         }
     }
@@ -661,7 +667,7 @@ class Mocha {
         if (!str) {
             return this;
         }
-        return this.grep(new RegExp(escapeRe(str)));
+        return this.grep(new RegExp(escapeStringRegexp(str)));
     };
 
     /**
@@ -1252,7 +1258,6 @@ class Mocha {
      */
     lazyLoadFiles = function lazyLoadFiles(enable) {
         this._lazyLoadFiles = enable === true;
-        debug("set lazy load to %s", enable);
         return this;
     };
 
@@ -1268,7 +1273,6 @@ class Mocha {
     globalSetup = function globalSetup(setupFns = []) {
         setupFns = utils.castArray(setupFns);
         this.options.globalSetup = setupFns;
-        debug("configured %d global setup functions", setupFns.length);
         return this;
     };
 
@@ -1284,7 +1288,6 @@ class Mocha {
     globalTeardown = function globalTeardown(teardownFns = []) {
         teardownFns = utils.castArray(teardownFns);
         this.options.globalTeardown = teardownFns;
-        debug("configured %d global teardown functions", teardownFns.length);
         return this;
     };
 
@@ -1301,9 +1304,7 @@ class Mocha {
     runGlobalSetup = async function runGlobalSetup(context = {}) {
         const { globalSetup } = this.options;
         if (globalSetup && globalSetup.length) {
-            debug("run(): global setup starting");
             await this._runGlobalFixtures(globalSetup, context);
-            debug("run(): global setup complete");
         }
         return context;
     };
@@ -1321,10 +1322,8 @@ class Mocha {
     runGlobalTeardown = async function runGlobalTeardown(context = {}) {
         const { globalTeardown } = this.options;
         if (globalTeardown && globalTeardown.length) {
-            debug("run(): global teardown starting");
             await this._runGlobalFixtures(globalTeardown, context);
         }
-        debug("run(): global teardown complete");
         return context;
     };
 

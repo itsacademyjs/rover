@@ -12,8 +12,6 @@ import {
     constants as errorConstants,
 } from "./errors";
 
-const debug = require("debug")("mocha:runner");
-
 const {
     HOOK_TYPE_BEFORE_EACH,
     HOOK_TYPE_AFTER_EACH,
@@ -218,15 +216,8 @@ class Runner extends EventEmitter {
         this.uncaught = this._uncaught.bind(this);
         this.unhandled = (reason, promise) => {
             if (isMochaError(reason)) {
-                debug(
-                    "trapped unhandled rejection coming out of Mocha; forwarding to uncaught handler:",
-                    reason
-                );
                 this.uncaught(reason);
             } else {
-                debug(
-                    "trapped unhandled rejection from (probably) user code; re-emitting on process"
-                );
                 this._removeEventListener(
                     process,
                     "unhandledRejection",
@@ -261,21 +252,11 @@ class Runner extends EventEmitter {
      * @private
      */
     _addEventListener = function (target, eventName, listener) {
-        debug(
-            "_addEventListener(): adding for event %s; %d current listeners",
-            eventName,
-            target.listenerCount(eventName)
-        );
-        /* istanbul ignore next */
         if (
             this._eventListeners.has(target) &&
             this._eventListeners.get(target).has(eventName) &&
             this._eventListeners.get(target).get(eventName).has(listener)
         ) {
-            debug(
-                "warning: tried to attach duplicate event listener for %s",
-                eventName
-            );
             return;
         }
         target.on(eventName, listener);
@@ -313,7 +294,6 @@ class Runner extends EventEmitter {
                 this._eventListeners.delete(target);
             }
         } else {
-            debug("trying to remove listener for untracked object %s", target);
         }
     };
 
@@ -344,7 +324,6 @@ class Runner extends EventEmitter {
      * @return {Runner} Runner instance.
      */
     grep = function (re, invert?) {
-        debug("grep(): setting to %s", re);
         this._grep = re;
         this._invert = invert;
         this.total = this.grepTotal(this.suite);
@@ -409,7 +388,6 @@ class Runner extends EventEmitter {
         if (!arguments.length) {
             return this._globals;
         }
-        debug("globals(): setting to %O", arr);
         this._globals = this._globals.concat(arr);
         return this;
     };
@@ -485,7 +463,6 @@ class Runner extends EventEmitter {
         }
 
         ++this.failures;
-        debug("total number of failures: %d", this.failures);
         test.state = STATE_FAILED;
 
         if (!isError(err)) {
@@ -907,10 +884,7 @@ class Runner extends EventEmitter {
         var self = this;
         var total = this.grepTotal(suite);
 
-        debug("runSuite(): running %s", suite.fullTitle());
-
         if (!total || (self.failures && suite._bail)) {
-            debug("runSuite(): bailing");
             return fn();
         }
 
@@ -1001,24 +975,19 @@ class Runner extends EventEmitter {
             );
         }
         if (err instanceof Pending) {
-            debug("uncaught(): caught a Pending");
             return;
         }
         // browser does not exit script when throwing in global.onerror()
         if (this.allowUncaught && !utils.isBrowser()) {
-            debug("uncaught(): bubbling exception due to --allow-uncaught");
             throw err;
         }
 
         if (this.state === constants.STATE_STOPPED) {
-            debug("uncaught(): throwing after run has completed!");
             throw err;
         }
 
         if (err) {
-            debug("uncaught(): got truthy exception %O", err);
         } else {
-            debug("uncaught(): undefined/falsy exception");
             err = createInvalidExceptionError(
                 "Caught falsy/undefined exception which would otherwise be uncaught. No stack trace found; try a debugger",
                 err
@@ -1027,7 +996,6 @@ class Runner extends EventEmitter {
 
         if (!isError(err)) {
             err = thrown2Error(err);
-            debug('uncaught(): converted "error" %o to Error', err);
         }
         err.uncaught = true;
 
@@ -1035,17 +1003,12 @@ class Runner extends EventEmitter {
 
         if (!runnable) {
             runnable = new Runnable("Uncaught error outside test suite");
-            debug("uncaught(): no current Runnable; created a phony one");
             runnable.parent = this.suite;
 
             if (this.state === constants.STATE_RUNNING) {
-                debug("uncaught(): failing gracefully");
                 this.fail(runnable, err);
             } else {
                 // Can't recover from this failure
-                debug(
-                    "uncaught(): test run has not yet started; unrecoverable"
-                );
                 this.emit(constants.EVENT_RUN_BEGIN);
                 this.fail(runnable, err);
                 this.emit(constants.EVENT_RUN_END);
@@ -1057,11 +1020,9 @@ class Runner extends EventEmitter {
         runnable.clearTimeout();
 
         if (runnable.isFailed()) {
-            debug("uncaught(): Runnable has already failed");
             // Ignore error if already failed
             return;
         } else if (runnable.isPending()) {
-            debug("uncaught(): pending Runnable wound up failing!");
             // report 'pending test' retrospectively as failed
             this.fail(runnable, err, true);
             return;
@@ -1070,13 +1031,9 @@ class Runner extends EventEmitter {
         // we cannot recover gracefully if a Runnable has already passed
         // then fails asynchronously
         if (runnable.isPassed()) {
-            debug(
-                "uncaught(): Runnable has already passed; bailing gracefully"
-            );
             this.fail(runnable, err);
             this.abort();
         } else {
-            debug("uncaught(): forcing Runnable to complete with Error");
             return runnable.callback(err);
         }
     };
@@ -1095,38 +1052,27 @@ class Runner extends EventEmitter {
         var rootSuite = this.suite;
         var options = (opts as any).options || {};
 
-        debug("run(): got options: %O", options);
         fn = fn || function () {};
 
         const end = () => {
             if (!this.total && this._opts.failZero) this.failures = 1;
 
-            debug(
-                "run(): root suite completed; emitting %s",
-                constants.EVENT_RUN_END
-            );
             this.emit(constants.EVENT_RUN_END);
         };
 
         const begin = () => {
-            debug("run(): emitting %s", constants.EVENT_RUN_BEGIN);
             this.emit(constants.EVENT_RUN_BEGIN);
-            debug("run(): emitted %s", constants.EVENT_RUN_BEGIN);
-
             this.runSuite(rootSuite, end);
         };
 
         const prepare = () => {
-            debug("run(): starting");
             // If there is an `only` filter
             if (rootSuite.hasOnly()) {
                 rootSuite.filterOnly();
-                debug("run(): filtered exclusive Runnables");
             }
             this.state = constants.STATE_RUNNING;
             if (this._delay) {
                 this.emit(constants.EVENT_DELAY_END);
-                debug('run(): "delay" ended');
             }
 
             return begin();
@@ -1142,7 +1088,6 @@ class Runner extends EventEmitter {
         // callback
         this.on(constants.EVENT_RUN_END, function () {
             this.state = constants.STATE_STOPPED;
-            debug("run(): emitted %s", constants.EVENT_RUN_END);
             fn(this.failures);
         });
 
@@ -1160,7 +1105,6 @@ class Runner extends EventEmitter {
             // might be nice to debounce some dots while we wait.
             this.emit(constants.EVENT_DELAY_BEGIN, rootSuite);
             rootSuite.once(EVENT_ROOT_SUITE_RUN, prepare);
-            debug("run(): waiting for green light due to --delay");
         } else {
             Runner.immediately(prepare);
         }
@@ -1217,7 +1161,6 @@ class Runner extends EventEmitter {
      * @return {Runner} Runner instance.
      */
     abort = function () {
-        debug("abort(): aborting");
         this._abort = true;
 
         return this;

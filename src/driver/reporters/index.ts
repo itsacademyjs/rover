@@ -7,7 +7,6 @@ export { default as Dot, default as dot } from "./dot";
 export { default as Doc, default as doc } from "./doc";
 export { default as Tap, default as tap } from "./tap";
 export { default as JSON, default as json } from "./json";
-export { default as HTML, default as html } from "./html";
 export { default as List, default as list } from "./list";
 export { default as Min, default as min } from "./min";
 export { default as Spec, default as spec } from "./spec";

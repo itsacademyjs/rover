@@ -13,8 +13,6 @@ import * as errors from "./errors";
 import Context from "./context";
 import Test from "./test";
 
-const debug = require("debug")("mocha:suite");
-
 const { MOCHA_ID_PROP_NAME } = utilsConstants;
 
 const constants = defineConstants({
@@ -195,7 +193,6 @@ class Suite extends EventEmitter {
      */
     clone = function () {
         var suite = new Suite(this.title);
-        debug("clone");
         suite.ctx = this.ctx;
         suite.root = this.root;
         suite.timeout(this.timeout());
@@ -226,7 +223,6 @@ class Suite extends EventEmitter {
         var range = [0, INT_MAX];
         ms = clamp(ms, range);
 
-        debug("timeout %d", ms);
         this._timeout = parseInt(ms, 10);
         return this;
     };
@@ -242,7 +238,6 @@ class Suite extends EventEmitter {
         if (!arguments.length) {
             return this._retries;
         }
-        debug("retries %d", n);
         this._retries = parseInt(n, 10) || 0;
         return this;
     };
@@ -261,7 +256,6 @@ class Suite extends EventEmitter {
         if (typeof ms === "string") {
             ms = milliseconds(ms);
         }
-        debug("slow %d", ms);
         this._slow = ms;
         return this;
     };
@@ -277,7 +271,6 @@ class Suite extends EventEmitter {
         if (!arguments.length) {
             return this._bail;
         }
-        debug("bail %s", bail);
         this._bail = bail;
         return this;
     };

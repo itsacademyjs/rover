@@ -15,7 +15,7 @@ Hello, world!⏎
 );
 
 import { execute } from "../../util";
-import assert from "assert":
+import assert from "assert";
 
 const assertOutput = async (
     command: string,

@@ -8,8 +8,6 @@ import {
     createTimeoutError,
 } from "./errors";
 
-const debug = require("debug")("mocha:runnable");
-
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
  * @private
@@ -147,7 +145,6 @@ class Runnable extends EventEmitter {
         } else {
             this._timeout = ms;
         }
-        debug("timeout %d", this._timeout);
 
         if (this.timer) {
             this.resetTimeout();
@@ -169,7 +166,6 @@ class Runnable extends EventEmitter {
         if (typeof ms === "string") {
             ms = milliseconds(ms);
         }
-        debug("slow %d", ms);
         this._slow = ms;
         return this;
     }
