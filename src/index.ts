@@ -1,131 +1,56 @@
+import "source-map-support/register";
+
 import { Command } from "commander";
 import chalk from "chalk";
 
-import {
-    Excercise,
-    Configuration,
-    AssertFunction,
-    AssertionResult,
-    OutputAssertionResult,
-} from "./types";
-import * as assertions from "./assertions";
+import Driver from "./driver/mocha";
+import { MetaConfiguration, SubmitConfiguration } from "./types";
 import excercises from "./excercises";
 
-const printLines = (prefix: string = "", text: string, suffix: string = "") => {
-    process.stdout.write(
-        text
-            .split("\n")
-            .map((line) => `${prefix}${line}${suffix}`)
-            .join("\n")
-    );
-    console.log("\n");
-};
+const handleRunComplete = (errors) => {};
 
 const validateSolution = async (
     handle: string,
-    configuration: Configuration
+    configuration: SubmitConfiguration
 ) => {
-    const excercise = excercises[handle] as Excercise;
-    if (!excercise) {
+    const driver = new Driver({
+        reporter: "spec",
+    });
+    /* Since `require` is invoked from `./driver`, we need to force prepend `..`
+     * to the excercise file path.
+     */
+    driver.resolveFile = (file) => `../excercises/${file}`;
+
+    const index = excercises.indexOf(handle);
+    if (index < 0) {
         console.log(
-            `${chalk.redBright.bold(
-                "[error]"
-            )} Cannot find excercise ${chalk.whiteBright.bold(
+            `${chalk.redBright("[error]")} Cannot find excercise ${chalk.bold(
                 handle
-            )}. Try updating Rover to fix the issue.`
+            )}. Please update to the latest version and try again.`
         );
         return;
     }
 
-    const interceptResult =
-        <V, A extends AssertFunction<V>>(assert: A): AssertFunction<V> =>
-        async (
-            options: V,
-            description?: string
-        ): Promise<AssertionResult<V> | null> => {
-            /* Read more about this here: https://stackoverflow.com/a/14968691/3068233 */
-            const roundToHundredths = (n: number) => Math.round(n * 100) / 100;
-            const startTimeInNanoseconds = process.hrtime.bigint();
-            let durationInSeconds = 0;
-            let result: AssertionResult<V> | null = null;
+    driver.addFile(excercises[index]);
+    driver.run(handleRunComplete);
+};
 
-            try {
-                result = await assert(options, description);
-            } catch (error) {
-                console.log(
-                    `${chalk.redBright("[error]")} Something went wrong!`
-                );
-                console.log(error);
-            } finally {
-                const endTimeInNanoseconds = process.hrtime.bigint();
-                const durationInNanoseconds =
-                    endTimeInNanoseconds - startTimeInNanoseconds;
-                const durationInSeconds = roundToHundredths(
-                    Number(durationInNanoseconds) / 1e9
-                ); // https://stackoverflow.com/a/53970656/3068233
-
-                if (result) {
-                    result.time = durationInNanoseconds;
-                }
-            }
-            return result;
-        };
-
-    const { assertOutput, assertToolVersion, assertFile, assertDirectory } =
-        assertions;
-    const promises = excercise.test({
-        assertOutput: interceptResult(assertOutput),
-        assertToolVersion: interceptResult(assertToolVersion),
-        assertFile: interceptResult(assertFile),
-        assertDirectory: interceptResult(assertDirectory),
+const generateMeta = async (configuration: MetaConfiguration) => {
+    const driver = new Driver({
+        dryRun: true,
+        reporter: "json_all",
+        reporterOption: {
+            output: configuration.file || undefined,
+        },
     });
-    const results = await Promise.all(promises);
-
-    for (const result of results) {
-        const { type, success, description } = result;
-        console.log(
-            chalk.bold(
-                `\n ${
-                    success ? chalk.greenBright("✓") : chalk.redBright("✕")
-                }  ${description}\n`
-            )
-        );
-
-        if (type === "assert-output") {
-            const { execution, options } = result as OutputAssertionResult;
-
-            if (execution.standardOutput) {
-                console.log(chalk.yellowBright("    Standard Output"));
-                printLines(
-                    chalk.whiteBright.bold("        > "),
-                    execution.standardOutput
-                );
-            }
-
-            if (execution.standardError) {
-                console.log(chalk.yellowBright("    Standard Error"));
-                printLines(
-                    chalk.redBright.bold("        > "),
-                    execution.standardError
-                );
-            }
-
-            if (!success) {
-                console.log(chalk.redBright.bold("Actual"));
-                printLines(
-                    chalk.redBright.bold("        - "),
-                    execution.standardOutput
-                );
-                console.log(chalk.greenBright.bold("Expected"));
-                printLines(
-                    chalk.greenBright.bold("        + "),
-                    options.expectedOutput
-                );
-            }
-        }
-    }
-
-    console.log(`Done in ${process.uptime().toFixed(2)}s.`);
+    /* Since `require` is invoked from `./driver`, we need to force prepend `..`
+     * to the excercise file path.
+     */
+    driver.resolveFile = (file) => `../${file}`;
+    driver.addFiles(
+        ...excercises.map((excerciseFile) => `./excercises/${excerciseFile}`)
+    );
+    driver.run(handleRunComplete);
 };
 
 const configureCommands = (): Command => {
@@ -137,12 +62,12 @@ const configureCommands = (): Command => {
         .name("submit")
         .argument("<handle>", "the handle for the exercise")
         .option(
-            "--std-error",
+            "--print-error",
             "print the standard error generated by the solution",
             true
         )
         .option(
-            "--std-output",
+            "--print-output",
             "print the standard output generated by the solution",
             true
         )
@@ -152,10 +77,31 @@ const configureCommands = (): Command => {
             const configuration = {
                 ...program.opts(),
                 ...submitCommand.opts(),
-            } as Configuration;
+            } as SubmitConfiguration;
             await validateSolution(handle, configuration);
         });
     program.addCommand(submitCommand);
+
+    const metaCommand = new Command();
+    metaCommand
+        .name("meta")
+        .argument(
+            "[file]",
+            "the resulting output file (default: standard output stream)",
+            null
+        )
+        .alias("m")
+        .description("extract excercise metadata as JSON")
+        .action(async (file: string | null) => {
+            const configuration = {
+                file,
+                ...program.opts(),
+                ...metaCommand.opts(),
+            } as MetaConfiguration;
+            await generateMeta(configuration);
+        });
+    program.addCommand(metaCommand);
+
     program.option(
         "-f, --exercise-file <file>",
         "specify the exercise file",
@@ -165,22 +111,18 @@ const configureCommands = (): Command => {
     return program;
 };
 
-const VERSION = "v0.1.0";
+const packageData = require("../../package");
 
 const main = () => {
-    console.log(chalk.bold(`rover ${VERSION}`));
+    console.log(
+        chalk.bold(
+            `rover ${packageData.version} ${chalk.greenBright(
+                "(https://academyjs.com/rover)"
+            )}`
+        )
+    );
     const program = configureCommands();
     program.parse(process.argv);
 };
 
 export { main };
-
-// execute("node", ["./hello.js"], {
-//     standardOutputEncoding: "utf8",
-//     standardOutputLimit: 65 * 1024,
-//     standardErrorEncoding: "utf8",
-//     standardErrorLimit: 65 * 1024,
-//     timeout: 1000 * 3,
-// })
-//     .then((result) => console.log(result))
-//     .catch(console.log);
