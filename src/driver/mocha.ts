@@ -10,7 +10,7 @@ import * as builtinReporters from "./reporters";
 import * as utils from "./utils";
 import mocharc from "./mocharc";
 import Suite from "./suite";
-import esmUtils from "./nodejs/esm-utils";
+import * as esmUtils from "./nodejs/esm-utils";
 import createStatsCollector from "./stats-collector";
 import {
     warn,
