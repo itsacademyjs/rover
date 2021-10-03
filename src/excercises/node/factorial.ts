@@ -25,26 +25,26 @@ const fileExists = async (path: string, message?: string): Promise<void> => {
 };
 
 test(
-    "Write the program in 'index.js'",
+    "Write the program in 'factorial.js'",
     "This is a huge description.",
     async () => {
-        await fileExists("index.js", "Cannot find file `index.js`");
+        await fileExists("factorial.js", "Cannot find file `factorial.js`");
     }
 );
 
 let factorial = null;
 let temporary = null;
 beforeEach(() => {
-    (locals as any).export(process.cwd() + "/index.js", "factorial");
+    (locals as any).export(process.cwd() + "/factorial.js", "factorial");
 
-    factorial = require(process.cwd() + "/index.js").factorial;
+    factorial = require(process.cwd() + "/factorial.js").factorial;
     temporary = process.stdout.write;
 });
 
 declare const afterEach;
 
 afterEach("hello", () => {
-    (locals as any).unexport(process.cwd() + "/index.js", "factorial");
+    (locals as any).unexport(process.cwd() + "/factorial.js", "factorial");
 });
 
 test("Calculate the factorial of 5", "This is a huge description.", () => {
