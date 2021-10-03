@@ -76,7 +76,7 @@ class Spec extends Base {
                     color("checkmark", "  " + Base.symbols.ok) +
                     color("pass", " %s") +
                     color(test.speed, " (%dms)");
-                Base.consoleLog(format, test.title, test.duration);
+                Base.consoleLog(format, test.title, test.duration, "\n");
             }
         });
 
