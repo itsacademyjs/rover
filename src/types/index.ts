@@ -79,3 +79,7 @@ export interface SubmitConfiguration {
     printError?: boolean;
     printOutput?: boolean;
 }
+
+export interface ListConfiguration {
+    tags: string[];
+}

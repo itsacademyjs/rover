@@ -10,7 +10,11 @@ import { Command } from "commander";
 import chalk from "chalk";
 
 import Driver from "./driver/mocha";
-import { MetaConfiguration, SubmitConfiguration } from "./types";
+import {
+    MetaConfiguration,
+    SubmitConfiguration,
+    ListConfiguration,
+} from "./types";
 import excercises from "./excercises";
 
 const handleRunComplete = (errors) => {};
@@ -18,7 +22,7 @@ const handleRunComplete = (errors) => {};
 const validateSolution = async (
     handle: string,
     configuration: SubmitConfiguration
-) => {
+): Promise<void> => {
     const driver = new Driver({
         reporter: "spec",
     });
@@ -41,7 +45,9 @@ const validateSolution = async (
     driver.run(handleRunComplete);
 };
 
-const generateMeta = async (configuration: MetaConfiguration) => {
+const generateMeta = async (
+    configuration: MetaConfiguration
+): Promise<void> => {
     const driver = new Driver({
         dryRun: true,
         reporter: "json_all",
@@ -57,6 +63,12 @@ const generateMeta = async (configuration: MetaConfiguration) => {
         ...excercises.map((excerciseFile) => `./excercises/${excerciseFile}`)
     );
     driver.run(handleRunComplete);
+};
+
+const listExercises = async (
+    configuration: ListConfiguration
+): Promise<void> => {
+    console.log(configuration.tags);
 };
 
 const configureCommands = (): Command => {
@@ -107,6 +119,22 @@ const configureCommands = (): Command => {
             await generateMeta(configuration);
         });
     program.addCommand(metaCommand);
+
+    const listCommand = new Command();
+    listCommand
+        .name("list")
+        .alias("ls")
+        .argument("[tags...]", "tags to filter the result by")
+        .description("list exercises")
+        .action(async (tags: string[]) => {
+            const configuration = {
+                tags,
+                ...program.opts(),
+                ...listCommand.opts(),
+            } as ListConfiguration;
+            await listExercises(configuration);
+        });
+    program.addCommand(listCommand);
 
     return program;
 };
