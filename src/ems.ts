@@ -37,6 +37,7 @@ const syncExercises = async (configuration: SyncConfiguration) => {
     } catch (error) {
         console.log(error);
     }
+    process.exit();
 };
 
 const configureCommands = (): Command => {
