@@ -2,8 +2,12 @@ import { Command } from "commander";
 import chalk from "chalk";
 import mongoose from "mongoose";
 import { readFileSync } from "fs";
+import dotenv from "dotenv";
 import { SyncConfiguration } from "./types";
 import { TestSuite } from "./models";
+
+dotenv.config();
+const { DATABASE_URL } = process.env;
 
 const syncExercises = async (
     configuration: SyncConfiguration
@@ -32,7 +36,7 @@ const syncExercises = async (
     }));
 
     try {
-        mongoose.connect("mongodb://localhost:27017/test");
+        mongoose.connect(DATABASE_URL);
         await TestSuite.bulkWrite(updateQueries);
         console.log("Exercises synced");
     } catch (error) {
@@ -40,12 +44,13 @@ const syncExercises = async (
     } finally {
         mongoose.disconnect();
     }
-    process.exit();
 };
+
+const packageData = require("../../package");
 
 const configureCommands = (): Command => {
     const program = new Command();
-    program.version("0.1.0");
+    program.version(packageData.version);
 
     const syncCommand = new Command();
     syncCommand
@@ -65,8 +70,6 @@ const configureCommands = (): Command => {
 
     return program;
 };
-
-const packageData = require("../../package");
 
 const main = () => {
     console.log(
