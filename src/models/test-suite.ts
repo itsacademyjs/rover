@@ -8,7 +8,7 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const testCaseSchema = new Schema({
+const testSchema = new Schema({
     title: {
         type: String,
         maxlength: 1024,
@@ -41,8 +41,8 @@ const testSuiteSchema = new Schema(
             required: true,
             unique: true,
         },
-        testCases: {
-            type: [testCaseSchema],
+        tests: {
+            type: [testSchema],
         },
     },
     { timestamps: true }
