@@ -1,7 +1,7 @@
 import { Command } from "commander";
 import chalk from "chalk";
 import mongoose from "mongoose";
-const fs = require("fs");
+import { readFileSync } from "fs";
 import { SyncConfiguration } from "./types";
 import { TestSuite } from "./models";
 
@@ -9,8 +9,8 @@ const syncExercises = async (
     configuration: SyncConfiguration
 ): Promise<void> => {
     const file = configuration.file ?? "meta.json";
-    const rawData = fs.readFileSync(file);
-    const data = JSON.parse(rawData).suites[0].suites.map((suite) => ({
+    const rawData = readFileSync(file);
+    const data = JSON.parse(String(rawData)).suites[0].suites.map((suite) => ({
         title: suite.title,
         description: suite.description,
         handle: suite.handle,

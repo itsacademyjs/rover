@@ -1,6 +1,20 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
+const testCaseSchema = new Schema({
+    title: {
+        type: String,
+        maxlength: 1024,
+        trim: true,
+        required: true,
+    },
+    description: {
+        type: String,
+        maxlength: 2048,
+        trim: true,
+    },
+});
+
 const testSuiteSchema = new Schema(
     {
         title: {
@@ -11,7 +25,7 @@ const testSuiteSchema = new Schema(
         },
         description: {
             type: String,
-            maxlength: 10240,
+            maxlength: 2048,
             trim: true,
         },
         handle: {
@@ -21,20 +35,7 @@ const testSuiteSchema = new Schema(
             unique: true,
         },
         testCases: {
-            type: [
-                {
-                    title: {
-                        type: String,
-                        maxlength: 1024,
-                        trim: true,
-                    },
-                    description: {
-                        type: String,
-                        maxlength: 10240,
-                        trim: true,
-                    },
-                },
-            ],
+            type: [testCaseSchema],
         },
     },
     { timestamps: true }
