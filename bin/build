@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if [[ -e dist ]]
+then
+rm -rf dist
+fi
+
+npx tsc
