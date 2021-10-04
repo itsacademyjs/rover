@@ -74,8 +74,8 @@ const configureCommands = (): Command => {
 const main = () => {
     console.log(
         chalk.bold(
-            `rover ${packageData.version} ${chalk.greenBright(
-                "(https://academyjs.com/rover)"
+            `odyssey ${packageData.version} ${chalk.greenBright(
+                "(https://academyjs.com/odyssey)"
             )}`
         )
     );
