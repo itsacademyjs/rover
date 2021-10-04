@@ -123,9 +123,11 @@ const listExercises = async (
     }
 };
 
+const packageData = require("../../package");
+
 const configureCommands = (): Command => {
     const program = new Command();
-    program.version("0.1.0");
+    program.version(packageData.version);
 
     const submitCommand = new Command();
     submitCommand
@@ -190,8 +192,6 @@ const configureCommands = (): Command => {
 
     return program;
 };
-
-const packageData = require("../../package");
 
 const main = () => {
     console.log(
