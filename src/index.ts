@@ -108,12 +108,6 @@ const configureCommands = (): Command => {
         });
     program.addCommand(metaCommand);
 
-    program.option(
-        "-f, --exercise-file <file>",
-        "specify the exercise file",
-        "rover.json"
-    );
-
     return program;
 };
 
