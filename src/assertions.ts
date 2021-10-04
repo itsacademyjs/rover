@@ -10,6 +10,7 @@
 
 import AssertionError from "assertion-error";
 import lodash from "lodash";
+import fs from "fs";
 
 /**
  * Create your own test expressions.
@@ -1941,6 +1942,17 @@ export const isEmpty = (value: any, message: string): void => {
  */
 export const isNotEmpty = (value: any, message: string): void => {
     if (lodash.isEmpty(value)) {
+        throw new AssertionError(message);
+    }
+};
+
+/**
+ * Asserts that the specified path resolves to a file.
+ */
+export const fileExists = async (path: string, message?: string): Promise<void> => {
+    try {
+        await fs.promises.access(path);
+    } catch {
         throw new AssertionError(message);
     }
 };
