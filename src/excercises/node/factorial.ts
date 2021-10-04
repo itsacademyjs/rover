@@ -1,3 +1,6 @@
+import locals from "import-locals";
+import { fileExists, strictEqual } from "../../assertions";
+
 suite(
     "Calculate the factorial of a given integer.",
     "node/factorial",
@@ -6,9 +9,6 @@ For example factorial of 6 is 6 * 5 * 4 * 3 * 2 * 1 which is 720.
 
 Factorial can be calculated iteratively or recursively. You can solve using any approach.`
 );
-
-import locals from "import-locals";
-import { fileExists, strictEqual } from "../../assertions";
 
 test(
     "Write the program in 'factorial.js'",

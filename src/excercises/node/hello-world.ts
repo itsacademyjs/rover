@@ -1,3 +1,5 @@
+import { fileExists, spawnPrints } from "../../assertions";
+
 suite(
     "Print a text message on the console.",
     "node/hello-world",
@@ -14,32 +16,16 @@ Hello, world!⏎
 `
 );
 
-import { execute } from "../../util";
-import assert from "assert";
-
-const assertOutput = async (
-    command: string,
-    input: string = "",
-    expectedOutput: string = "",
-    expectedError: string = "",
-    message: string = ""
-): Promise<void> => {
-    if (!command) {
-        throw new Error("Please specify a command to execute.");
+test(
+    "Write the program in 'hello.js'",
+    "This is a huge description.",
+    async () => {
+        await fileExists("hello.js", "Cannot find file 'hello.js'");
     }
-
-    const [executable, ...argumentVector] = command.split(" ");
-
-    const execution = await execute(executable, argumentVector, {
-        standardInput: input,
-    });
-
-    assert.strictEqual(execution.standardOutput, expectedOutput, message);
-    assert.strictEqual(execution.standardError, expectedError, message);
-};
+);
 
 test("Print 'Hello, world!\\n' to the standard output stream", "", async () => {
-    await assertOutput(
+    await spawnPrints(
         "node hello.js",
         "",
         "Hello, world!\n",

@@ -11,6 +11,7 @@
 import AssertionError from "assertion-error";
 import lodash from "lodash";
 import fs from "fs";
+import { execute } from "./util";
 
 /**
  * Create your own test expressions.
@@ -1949,10 +1950,47 @@ export const isNotEmpty = (value: any, message: string): void => {
 /**
  * Asserts that the specified path resolves to a file.
  */
-export const fileExists = async (path: string, message?: string): Promise<void> => {
+export const fileExists = async (
+    path: string,
+    message?: string
+): Promise<void> => {
     try {
         await fs.promises.access(path);
     } catch {
         throw new AssertionError(message);
     }
+};
+
+/**
+ * Executes the specified command and checks for the standard output and standard error
+ * generated.
+ *
+ * @param command The command to execute
+ * @param input The standard input to the process.
+ * @param expectedOutput The execpted output from the process.
+ * @param expectedError The expected error from the process.
+ * @param message The message used for throwing an assertion error.
+ */
+export const spawnPrints = async (
+    command: string,
+    input: string = "",
+    expectedOutput: string = "",
+    expectedError: string = "",
+    message: string = ""
+): Promise<void> => {
+    if (!command) {
+        throw new Error("Please specify a command to execute.");
+    }
+
+    const [executable, ...argumentVector] = command.split(" ");
+
+    /* TODO: Spawning a child process could throw an exception. Should we catch the error and
+     * throw an assertion error instead?
+     */
+    const execution = await execute(executable, argumentVector, {
+        standardInput: input,
+    });
+
+    strictEqual(execution.standardOutput, expectedOutput, message);
+    strictEqual(execution.standardError, expectedError, message);
 };
