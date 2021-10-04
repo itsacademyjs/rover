@@ -8,6 +8,8 @@
 import "source-map-support/register";
 import { Command } from "commander";
 import chalk from "chalk";
+import path from "path";
+import fs from "fs";
 
 import Driver from "./driver/mocha";
 import {
@@ -45,30 +47,68 @@ const validateSolution = async (
     driver.run(handleRunComplete);
 };
 
+const extractMeta = (): Promise<any> =>
+    new Promise((resolve) => {
+        const handleComplete = (result) => {
+            resolve(result);
+        };
+
+        const driver = new Driver({
+            dryRun: true,
+            reporter: "json_all",
+            reporterOption: {
+                onComplete: handleComplete,
+            },
+        });
+        /* Since `require` is invoked from `./driver`, we need to force prepend `..`
+         * to the excercise file path.
+         */
+        driver.resolveFile = (file) => `../${file}`;
+        driver.addFiles(
+            ...excercises.map(
+                (excerciseFile) => `./excercises/${excerciseFile}`
+            )
+        );
+        driver.run(handleRunComplete);
+    });
+
 const generateMeta = async (
     configuration: MetaConfiguration
 ): Promise<void> => {
-    const driver = new Driver({
-        dryRun: true,
-        reporter: "json_all",
-        reporterOption: {
-            output: configuration.file || undefined,
-        },
-    });
-    /* Since `require` is invoked from `./driver`, we need to force prepend `..`
-     * to the excercise file path.
-     */
-    driver.resolveFile = (file) => `../${file}`;
-    driver.addFiles(
-        ...excercises.map((excerciseFile) => `./excercises/${excerciseFile}`)
-    );
-    driver.run(handleRunComplete);
+    const result = await extractMeta();
+    const json = JSON.stringify(result, null, 2);
+    if (configuration.file) {
+        try {
+            fs.mkdirSync(path.dirname(configuration.file), { recursive: true });
+            fs.writeFileSync(configuration.file, json);
+        } catch (error) {
+            console.error(
+                `${chalk.redBright("[error]")} Cannot write output to "${
+                    configuration.file
+                }". (${error.message})\n`
+            );
+            console.log(json);
+        }
+    } else {
+        console.log(json);
+    }
 };
 
 const listExercises = async (
     configuration: ListConfiguration
 ): Promise<void> => {
-    console.log(configuration.tags);
+    const result = await extractMeta();
+
+    console.log();
+    const { suites } = result.suites[0];
+    for (let i = 0; i < suites.length; i++) {
+        const suite = suites[i];
+        console.log(
+            `     ${(i + 1 + ".").padEnd(4, " ")} ${chalk.yellowBright(
+                suite.handle.padEnd(30, " ")
+            )} ${suite.title}\n`
+        );
+    }
 };
 
 const configureCommands = (): Command => {
