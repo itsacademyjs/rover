@@ -18,13 +18,21 @@ const syncExercises = async (configuration: SyncConfiguration) => {
             description: test.description,
         })),
     }));
-    const handles = data.map((item) => item.handle);
+    const updateQueries = data.map((item) => ({
+        updateOne: {
+            filter: {
+                handle: item.handle,
+            },
+            update: {
+                $set: item,
+            },
+            upsert: true,
+        },
+    }));
 
     try {
         mongoose.connect("mongodb://localhost:27017/test");
-        TestSuite.updateMany({ handle: { $eq: handles } }, data, {
-            upsert: true,
-        });
+        TestSuite.bulkWrite(updateQueries);
         console.log("Exercises synced");
     } catch (error) {
         console.log(error);

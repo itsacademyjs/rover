@@ -1,0 +1,65 @@
+{
+    "suites": [
+        {
+            "id": "nU_Yg5RnsNfgx83S8O7gR",
+            "title": "",
+            "tests": [],
+            "suites": [
+                {
+                    "id": "AMvbstef-WzIaxdSiSzrs",
+                    "file": ".././excercises/node/factorial",
+                    "title": "Calculate the factorial of a given integer.",
+                    "handle": "node/factorial",
+                    "description": "Factorial of a non-negative integer, is multiplication of all integers smaller than or equal to n.\nFor example factorial of 6 is 6 * 5 * 4 * 3 * 2 * 1 which is 720.\n\nFactorial can be calculated iteratively or recursively. You can solve using any approach.",
+                    "tests": [
+                        {
+                            "title": "Write the program in 'index.js'",
+                            "description": "This is a huge description."
+                        },
+                        {
+                            "title": "Calculate the factorial of 5",
+                            "description": "This is a huge description."
+                        },
+                        {
+                            "title": "Calculate the factorial of 6",
+                            "description": "This is a huge description."
+                        },
+                        {
+                            "title": "Calculate the factorial of 6 - joel",
+                            "description": "This is a huge description."
+                        }
+                    ],
+                    "suites": []
+                },
+                {
+                    "id": "qW4Op9f_pFOfLfr99Tl-V",
+                    "file": ".././excercises/node/hello-world",
+                    "title": "Print a text message on the console.",
+                    "handle": "node/hello-world",
+                    "description": "The Hello World program is a program that prints \"Hello, world!\". It is very simple in most\nprogramming languages, and is used to show the basic syntax of a programming language.\n\nWrite a program to print \"Hello, world!\" on the console.\n\nExample run:\n```\n$ node index.js\nHello, world!⏎\n```\n",
+                    "tests": [
+                        {
+                            "title": "Print 'Hello, world!\\n' to the standard output stream",
+                            "description": ""
+                        },
+                        {
+                            "title": "Print 'Hello, world!\\n' to the standard output stream",
+                            "description": ""
+                        }
+                    ],
+                    "suites": []
+                }
+            ]
+        }
+    ],
+    "stats": {
+        "suites": 2,
+        "tests": 6,
+        "passes": 6,
+        "pending": 0,
+        "failures": 0,
+        "start": "2021-10-04T17:02:20.124Z",
+        "end": "2021-10-04T17:02:20.126Z",
+        "duration": 2
+    }
+}
