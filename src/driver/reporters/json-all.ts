@@ -24,13 +24,14 @@ class JSONAllReporter extends Base {
         const stackedSuites = [];
 
         runner.on(EVENT_SUITE_BEGIN, (suite) => {
-            const { id, file, title, handle, description } = suite;
+            const { id, file, title, handle, description, tags } = suite;
             const newRecord = {
                 id,
                 file,
                 title,
                 handle,
                 description,
+                tags,
                 tests: [],
                 suites: [],
             };

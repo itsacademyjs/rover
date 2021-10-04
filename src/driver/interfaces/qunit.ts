@@ -44,20 +44,19 @@ export function styleInterface(suite) {
         /**
          * Describe a "suite" with the given `title`.
          */
-        context.suite = (
-            title: string,
-            handle: string,
-            description: string
-        ) => {
+        context.suite = (options: {
+            title: string;
+            handle: string;
+            description: string;
+            tags: string[];
+        }) => {
             if (suites.length > 1) {
                 suites.shift();
             }
             return common.suite.create({
-                title,
                 file,
                 fn: false,
-                handle,
-                description,
+                ...options,
             });
         };
 

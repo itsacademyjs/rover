@@ -99,15 +99,27 @@ const listExercises = async (
 ): Promise<void> => {
     const result = await extractMeta();
 
-    console.log();
     const { suites } = result.suites[0];
-    for (let i = 0; i < suites.length; i++) {
-        const suite = suites[i];
-        console.log(
-            `     ${(i + 1 + ".").padEnd(4, " ")} ${chalk.yellowBright(
-                suite.handle.padEnd(30, " ")
-            )} ${suite.title}\n`
-        );
+    const filteredSuites =
+        configuration.tags.length === 0
+            ? suites
+            : suites.filter((suite) =>
+                  suite.tags.some((tag) => configuration.tags.includes(tag))
+              );
+
+    if (filteredSuites.length > 0) {
+        console.log();
+        for (let i = 0; i < filteredSuites.length; i++) {
+            const suite = filteredSuites[i];
+
+            console.log(
+                `     ${(i + 1 + ".").padEnd(4, " ")} ${chalk.yellowBright(
+                    suite.handle.padEnd(30, " ")
+                )}\n          ${chalk.bold(
+                    suite.title
+                )}\n          ${suite.tags.join(", ")}\n`
+            );
+        }
     }
 };
 

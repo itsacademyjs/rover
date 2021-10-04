@@ -133,6 +133,7 @@ export default function (suites, context, mocha) {
                 const suite = Suite.create(suites[0], options.title);
                 suite.handle = options.handle || "<anonymous>";
                 suite.description = options.description || "<unavailable>";
+                suite.tags = options.tags || [];
                 suite.pending = Boolean(options.pending);
                 suite.file = options.file;
                 suites.unshift(suite);
