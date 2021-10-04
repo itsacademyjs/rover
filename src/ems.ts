@@ -18,18 +18,17 @@ const syncExercises = async (configuration: SyncConfiguration) => {
             description: test.description,
         })),
     }));
+    const handles = data.map((item) => item.handle);
 
     try {
         mongoose.connect("mongodb://localhost:27017/test");
-        TestSuite.insertMany(data, (error) => {
-            console.log(error);
+        TestSuite.updateMany({ handle: { $eq: handles } }, data, {
+            upsert: true,
         });
         console.log("Exercises synced");
     } catch (error) {
         console.log(error);
     }
-
-    return;
 };
 
 const configureCommands = (): Command => {
