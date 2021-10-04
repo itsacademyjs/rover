@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const testSuiteSchema = new Schema(
@@ -7,6 +7,7 @@ const testSuiteSchema = new Schema(
             type: String,
             maxlength: 1024,
             trim: true,
+            required: true,
         },
         description: {
             type: String,
@@ -39,4 +40,4 @@ const testSuiteSchema = new Schema(
     { timestamps: true }
 );
 
-module.exports = mongoose.model("TestSuite", testSuiteSchema);
+export default mongoose.model("TestSuite", testSuiteSchema);

@@ -1,15 +1,16 @@
 import { Command } from "commander";
 import chalk from "chalk";
+import mongoose from "mongoose";
+const fs = require("fs");
 import { SyncConfiguration } from "./types";
 import { TestSuite } from "./models";
 
-const mongoose = require("mongoose");
-const fs = require("fs");
-
-const syncExercises = async (configuration: SyncConfiguration) => {
+const syncExercises = async (
+    configuration: SyncConfiguration
+): Promise<void> => {
     const file = configuration.file ?? "meta.json";
-    const rawdata = fs.readFileSync(file);
-    const data = JSON.parse(rawdata).suites[0].suites.map((suite) => ({
+    const rawData = fs.readFileSync(file);
+    const data = JSON.parse(rawData).suites[0].suites.map((suite) => ({
         title: suite.title,
         description: suite.description,
         handle: suite.handle,
@@ -32,10 +33,12 @@ const syncExercises = async (configuration: SyncConfiguration) => {
 
     try {
         mongoose.connect("mongodb://localhost:27017/test");
-        TestSuite.bulkWrite(updateQueries);
+        await TestSuite.bulkWrite(updateQueries);
         console.log("Exercises synced");
     } catch (error) {
         console.log(error);
+    } finally {
+        mongoose.disconnect();
     }
     process.exit();
 };
@@ -60,12 +63,6 @@ const configureCommands = (): Command => {
         });
     program.addCommand(syncCommand);
 
-    program.option(
-        "-f, --exercise-file <file>",
-        "specify the exercise file",
-        "rover.json"
-    );
-
     return program;
 };
 
@@ -84,13 +81,3 @@ const main = () => {
 };
 
 export { main };
-
-// execute("node", ["./hello.js"], {
-//     standardOutputEncoding: "utf8",
-//     standardOutputLimit: 65 * 1024,
-//     standardErrorEncoding: "utf8",
-//     standardErrorLimit: 65 * 1024,
-//     timeout: 1000 * 3,
-// })
-//     .then((result) => console.log(result))
-//     .catch(console.log);

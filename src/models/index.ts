@@ -1,5 +1,1 @@
-const TestSuite = require("./testSuite");
-
-module.exports = {
-    TestSuite,
-};
+export { default as TestSuite } from "./testSuite";
