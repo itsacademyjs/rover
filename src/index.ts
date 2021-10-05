@@ -48,7 +48,7 @@ const validateSolution = async (
     driver.run(handleRunComplete);
 };
 
-const extractMeta = (): Promise<any> =>
+export const extractMeta = (): Promise<any> =>
     new Promise((resolve) => {
         const handleComplete = (meta, suites) => {
             resolve({ meta, suites });
