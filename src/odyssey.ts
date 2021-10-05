@@ -18,37 +18,18 @@ dotenv.config();
 const { DATABASE_URL } = process.env;
 
 const syncExercises = async (): Promise<void> => {
-    const result = await extractMeta();
-    const data = result.suites[0].suites.map((suite) => ({
-        title: suite.title,
-        description: suite.description,
-        handle: suite.handle,
-        tests: suite.tests.map((test) => ({
+    const { suites } = await extractMeta();
+    const handles = Object.keys(suites);
+    const data = handles.map((handle) => ({
+        title: suites[handle].title,
+        description: suites[handle].description,
+        handle: suites[handle].handle,
+        tests: suites[handle].tests.map((test) => ({
             title: test.title,
             description: test.description,
         })),
-        tags: suite.tags,
+        tags: suites[handle].tags,
     }));
-    const handles = data.map((item) => item.handle);
-
-    if (lodash.uniq(handles).length !== handles.length) {
-        for (let i = 0; i < handles.length; i++) {
-            for (let j = i + 1; j < handles.length; j++) {
-                if (i !== j && handles[i] === handles[j]) {
-                    console.log(
-                        `${chalk.redBright(
-                            "[error]"
-                        )} Duplicate handle detected: ${
-                            handles[j]
-                        }. \nDuplicate found in: ${
-                            result.suites[0].suites[j].file
-                        }`
-                    );
-                }
-            }
-        }
-        return;
-    }
 
     const updateQueries = data.map((item) => ({
         updateOne: {
