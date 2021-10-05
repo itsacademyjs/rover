@@ -8,14 +8,15 @@
 import locals from "import-locals";
 import { fileExists, strictEqual } from "../../assertions";
 
-suite(
-    "Calculate the factorial of a given integer.",
-    "node/factorial",
-    `Factorial of a non-negative integer, is multiplication of all integers smaller than or equal to n.
+suite({
+    title: "Calculate the factorial of a given integer.",
+    handle: "node/factorial",
+    description: `Factorial of a non-negative integer, is multiplication of all integers smaller than or equal to n.
 For example factorial of 6 is 6 * 5 * 4 * 3 * 2 * 1 which is 720.
 
-Factorial can be calculated iteratively or recursively. You can solve using any approach.`
-);
+Factorial can be calculated iteratively or recursively. You can solve using any approach.`,
+    tags: ["node", "javascript", "js", "factorial"],
+});
 
 test(
     "Write the program in 'factorial.js'",

@@ -19,28 +19,19 @@ class JSONAllReporter extends Base {
     constructor(runner: Runner, options: RunnerOptions = {}) {
         super(runner, options);
 
-        let output;
         const rootSuites = [];
         const cachedSuites = {};
         const stackedSuites = [];
 
-        if (options.reporterOption && options.reporterOption.output) {
-            if (utils.isBrowser()) {
-                throw createUnsupportedError(
-                    "file output not supported in browser"
-                );
-            }
-            output = options.reporterOption.output;
-        }
-
         runner.on(EVENT_SUITE_BEGIN, (suite) => {
-            const { id, file, title, handle, description } = suite;
+            const { id, file, title, handle, description, tags } = suite;
             const newRecord = {
                 id,
                 file,
                 title,
                 handle,
                 description,
+                tags,
                 tests: [],
                 suites: [],
             };
@@ -68,26 +59,14 @@ class JSONAllReporter extends Base {
         });
 
         runner.once(EVENT_RUN_END, () => {
-            const object = {
+            const result = {
                 suites: rootSuites,
                 stats: this.stats,
             };
-            runner.testResults = object;
+            runner.testResults = result;
 
-            const json = JSON.stringify(object, null, 2);
-            if (output) {
-                try {
-                    fs.mkdirSync(path.dirname(output), { recursive: true });
-                    fs.writeFileSync(output, json);
-                } catch (error) {
-                    console.error(
-                        `${Base.symbols.err} [mocha] writing output to "${output}" failed: ${error.message}\n`
-                    );
-                    console.log(json);
-                }
-            } else {
-                console.log(json);
-            }
+            this.options.reporterOption.onComplete &&
+                this.options.reporterOption.onComplete(result);
         });
     }
 

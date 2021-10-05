@@ -7,8 +7,15 @@
 
 import nodeFiles from "./node";
 
+interface SuiteOptions {
+    title: string;
+    handle: string;
+    description: string;
+    tags: string[];
+}
+
 declare global {
-    const suite: (title: string, handle: string, description: string) => void;
+    const suite: (options: SuiteOptions) => void;
     const test: (
         title: string,
         description: string,

@@ -8,9 +8,15 @@
 import "source-map-support/register";
 import { Command } from "commander";
 import chalk from "chalk";
+import path from "path";
+import fs from "fs";
 
 import Driver from "./driver/mocha";
-import { MetaConfiguration, SubmitConfiguration } from "./types";
+import {
+    MetaConfiguration,
+    SubmitConfiguration,
+    ListConfiguration,
+} from "./types";
 import excercises from "./excercises";
 
 const handleRunComplete = (errors) => {};
@@ -18,7 +24,7 @@ const handleRunComplete = (errors) => {};
 const validateSolution = async (
     handle: string,
     configuration: SubmitConfiguration
-) => {
+): Promise<void> => {
     const driver = new Driver({
         reporter: "spec",
     });
@@ -41,27 +47,87 @@ const validateSolution = async (
     driver.run(handleRunComplete);
 };
 
-const generateMeta = async (configuration: MetaConfiguration) => {
-    const driver = new Driver({
-        dryRun: true,
-        reporter: "json_all",
-        reporterOption: {
-            output: configuration.file || undefined,
-        },
+const extractMeta = (): Promise<any> =>
+    new Promise((resolve) => {
+        const handleComplete = (result) => {
+            resolve(result);
+        };
+
+        const driver = new Driver({
+            dryRun: true,
+            reporter: "json_all",
+            reporterOption: {
+                onComplete: handleComplete,
+            },
+        });
+        /* Since `require` is invoked from `./driver`, we need to force prepend `..`
+         * to the excercise file path.
+         */
+        driver.resolveFile = (file) => `../${file}`;
+        driver.addFiles(
+            ...excercises.map(
+                (excerciseFile) => `./excercises/${excerciseFile}`
+            )
+        );
+        driver.run(handleRunComplete);
     });
-    /* Since `require` is invoked from `./driver`, we need to force prepend `..`
-     * to the excercise file path.
-     */
-    driver.resolveFile = (file) => `../${file}`;
-    driver.addFiles(
-        ...excercises.map((excerciseFile) => `./excercises/${excerciseFile}`)
-    );
-    driver.run(handleRunComplete);
+
+const generateMeta = async (
+    configuration: MetaConfiguration
+): Promise<void> => {
+    const result = await extractMeta();
+    const json = JSON.stringify(result, null, 2);
+    if (configuration.file) {
+        try {
+            fs.mkdirSync(path.dirname(configuration.file), { recursive: true });
+            fs.writeFileSync(configuration.file, json);
+        } catch (error) {
+            console.error(
+                `${chalk.redBright("[error]")} Cannot write output to "${
+                    configuration.file
+                }". (${error.message})\n`
+            );
+            console.log(json);
+        }
+    } else {
+        console.log(json);
+    }
 };
+
+const listExercises = async (
+    configuration: ListConfiguration
+): Promise<void> => {
+    const result = await extractMeta();
+
+    const { suites } = result.suites[0];
+    const filteredSuites =
+        configuration.tags.length === 0
+            ? suites
+            : suites.filter((suite) =>
+                  suite.tags.some((tag) => configuration.tags.includes(tag))
+              );
+
+    if (filteredSuites.length > 0) {
+        console.log();
+        for (let i = 0; i < filteredSuites.length; i++) {
+            const suite = filteredSuites[i];
+
+            console.log(
+                `     ${(i + 1 + ".").padEnd(4, " ")} ${chalk.yellowBright(
+                    suite.handle.padEnd(30, " ")
+                )}\n          ${chalk.bold(
+                    suite.title
+                )}\n          ${suite.tags.join(", ")}\n`
+            );
+        }
+    }
+};
+
+const packageData = require("../../package");
 
 const configureCommands = (): Command => {
     const program = new Command();
-    program.version("0.1.0");
+    program.version(packageData.version);
 
     const submitCommand = new Command();
     submitCommand
@@ -108,16 +174,24 @@ const configureCommands = (): Command => {
         });
     program.addCommand(metaCommand);
 
-    program.option(
-        "-f, --exercise-file <file>",
-        "specify the exercise file",
-        "rover.json"
-    );
+    const listCommand = new Command();
+    listCommand
+        .name("list")
+        .alias("ls")
+        .argument("[tags...]", "tags to filter the result by")
+        .description("list exercises")
+        .action(async (tags: string[]) => {
+            const configuration = {
+                tags,
+                ...program.opts(),
+                ...listCommand.opts(),
+            } as ListConfiguration;
+            await listExercises(configuration);
+        });
+    program.addCommand(listCommand);
 
     return program;
 };
-
-const packageData = require("../../package");
 
 const main = () => {
     console.log(

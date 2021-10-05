@@ -101,6 +101,7 @@ class Suite extends EventEmitter {
     title: string;
     handle: string;
     description: string;
+    tags: string[];
 
     /**
      * Create a new `Suite` with the given `title` and parent `Suite`.
