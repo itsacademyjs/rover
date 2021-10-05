@@ -83,3 +83,7 @@ export interface SubmitConfiguration {
 export interface ListConfiguration {
     tags: string[];
 }
+
+export interface ShowConfiguration {
+    handle: string;
+}
