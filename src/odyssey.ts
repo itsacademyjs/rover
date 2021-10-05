@@ -26,10 +26,11 @@ const syncExercises = async (
         title: suite.title,
         description: suite.description,
         handle: suite.handle,
-        testCases: suite.tests.map((test) => ({
+        tests: suite.tests.map((test) => ({
             title: test.title,
             description: test.description,
         })),
+        tags: suite.tags
     }));
     const handles = data.map((item) => item.handle);
 

@@ -44,6 +44,9 @@ const testSuiteSchema = new Schema(
         tests: {
             type: [testSchema],
         },
+        tags: {
+            type: [String],
+        },
     },
     { timestamps: true }
 );
