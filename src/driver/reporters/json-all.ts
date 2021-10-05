@@ -22,6 +22,7 @@ class JSONAllReporter extends Base {
         const rootSuites = [];
         const cachedSuites = {};
         const stackedSuites = [];
+        const suites = {};
 
         runner.on(EVENT_SUITE_BEGIN, (suite) => {
             const { id, file, title, handle, description, tags } = suite;
@@ -41,6 +42,9 @@ class JSONAllReporter extends Base {
                 cachedSuites[suite.parent.id].suites.push(newRecord);
             }
             cachedSuites[suite.id] = newRecord;
+            if (suite.handle) {
+                suites[suite.handle] = newRecord;
+            }
 
             stackedSuites.push(newRecord);
         });
@@ -66,7 +70,7 @@ class JSONAllReporter extends Base {
             runner.testResults = result;
 
             this.options.reporterOption.onComplete &&
-                this.options.reporterOption.onComplete(result);
+                this.options.reporterOption.onComplete(result, suites);
         });
     }
 

@@ -16,6 +16,7 @@ import {
     MetaConfiguration,
     SubmitConfiguration,
     ListConfiguration,
+    ShowConfiguration,
 } from "./types";
 import excercises from "./excercises";
 
@@ -49,8 +50,8 @@ const validateSolution = async (
 
 const extractMeta = (): Promise<any> =>
     new Promise((resolve) => {
-        const handleComplete = (result) => {
-            resolve(result);
+        const handleComplete = (meta, suites) => {
+            resolve({ meta, suites });
         };
 
         const driver = new Driver({
@@ -75,8 +76,8 @@ const extractMeta = (): Promise<any> =>
 const generateMeta = async (
     configuration: MetaConfiguration
 ): Promise<void> => {
-    const result = await extractMeta();
-    const json = JSON.stringify(result, null, 2);
+    const { meta } = await extractMeta();
+    const json = JSON.stringify(meta, null, 2);
     if (configuration.file) {
         try {
             fs.mkdirSync(path.dirname(configuration.file), { recursive: true });
@@ -97,9 +98,9 @@ const generateMeta = async (
 const listExercises = async (
     configuration: ListConfiguration
 ): Promise<void> => {
-    const result = await extractMeta();
+    const { meta } = await extractMeta();
 
-    const { suites } = result.suites[0];
+    const { suites } = meta.suites[0];
     const filteredSuites =
         configuration.tags.length === 0
             ? suites
@@ -120,6 +121,36 @@ const listExercises = async (
                 )}\n          ${suite.tags.join(", ")}\n`
             );
         }
+    }
+};
+
+const showExercise = async (
+    configuration: ShowConfiguration
+): Promise<void> => {
+    const { handle } = configuration;
+    const { suites } = await extractMeta();
+    const suite = suites[handle];
+
+    if (!suite) {
+        console.log(
+            `${chalk.redBright("[error]")} Unknown excercise ${chalk.bold(
+                handle
+            )}`
+        );
+        return;
+    }
+
+    console.log(
+        `\n${chalk.yellowBright.bold(suite.handle)}\n\n${chalk.bold(
+            suite.title
+        )}\n\n${suite.description}\n\n`
+    );
+    for (const test of suite.tests) {
+        console.log(
+            `    ${chalk.green("✔")} ${chalk.bold(test.title)}\n      ${
+                test.description
+            }\n`
+        );
     }
 };
 
@@ -154,6 +185,38 @@ const configureCommands = (): Command => {
         });
     program.addCommand(submitCommand);
 
+    const listCommand = new Command();
+    listCommand
+        .name("list")
+        .alias("ls")
+        .argument("[tags...]", "tags to filter the result by")
+        .description("list exercises")
+        .action(async (tags: string[]) => {
+            const configuration = {
+                tags,
+                ...program.opts(),
+                ...listCommand.opts(),
+            } as ListConfiguration;
+            await listExercises(configuration);
+        });
+    program.addCommand(listCommand);
+
+    const showCommand = new Command();
+    showCommand
+        .name("show")
+        .alias("s")
+        .argument("<handle>", "handle of the exercise to show")
+        .description("prints the details of an exercise")
+        .action(async (handle: string) => {
+            const configuration = {
+                handle,
+                ...program.opts(),
+                ...showCommand.opts(),
+            } as ShowConfiguration;
+            await showExercise(configuration);
+        });
+    program.addCommand(showCommand);
+
     const metaCommand = new Command();
     metaCommand
         .name("meta")
@@ -173,22 +236,6 @@ const configureCommands = (): Command => {
             await generateMeta(configuration);
         });
     program.addCommand(metaCommand);
-
-    const listCommand = new Command();
-    listCommand
-        .name("list")
-        .alias("ls")
-        .argument("[tags...]", "tags to filter the result by")
-        .description("list exercises")
-        .action(async (tags: string[]) => {
-            const configuration = {
-                tags,
-                ...program.opts(),
-                ...listCommand.opts(),
-            } as ListConfiguration;
-            await listExercises(configuration);
-        });
-    program.addCommand(listCommand);
 
     return program;
 };

@@ -19,8 +19,7 @@ Example run:
 \`\`\`
 $ node index.js
 Hello, world!⏎
-\`\`\`
-`,
+\`\`\``,
     tags: ["node", "javascript", "js"],
 });
 
@@ -32,12 +31,16 @@ test(
     }
 );
 
-test("Print 'Hello, world!\\n' to the standard output stream", "", async () => {
-    await spawnPrints(
-        "node hello.js",
-        "",
-        "Hello, world!\n",
-        "",
-        "Print 'Hello, world!\n' to using `console.log`"
-    );
-});
+test(
+    "Print 'Hello, world!\\n' to the standard output stream",
+    "This is a sample description.",
+    async () => {
+        await spawnPrints(
+            "node hello.js",
+            "",
+            "Hello, world!\n",
+            "",
+            "Print 'Hello, world!\n' to using `console.log`"
+        );
+    }
+);
