@@ -1,6 +1,6 @@
 {
     "name": "@academyjs/rover",
-    "version": "0.1.13",
+    "version": "0.1.14",
     "main": "dist/src/index.js",
     "description": "Rover allows you to learn programming interactively.",
     "private": false,
