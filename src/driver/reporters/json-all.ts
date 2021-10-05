@@ -1,5 +1,4 @@
-import fs from "fs";
-import path from "path";
+import chalk from "chalk";
 
 import Base from "./base";
 import { createUnsupportedError } from "../errors";
@@ -23,6 +22,7 @@ class JSONAllReporter extends Base {
         const cachedSuites = {};
         const stackedSuites = [];
         const suites = {};
+        let error = false;
 
         runner.on(EVENT_SUITE_BEGIN, (suite) => {
             const { id, file, title, handle, description, tags } = suite;
@@ -43,6 +43,19 @@ class JSONAllReporter extends Base {
             }
             cachedSuites[suite.id] = newRecord;
             if (suite.handle) {
+                const previousSuite = suites[suite.handle];
+                if (previousSuite) {
+                    console.log(
+                        `${chalk.redBright(
+                            "[internal error]"
+                        )} Multiple test suites cannot have the same handle ${chalk.bold(
+                            suite.handle
+                        )}.\nprevious: ${previousSuite.file}, duplicate: ${
+                            suite.file
+                        }`
+                    );
+                    error = true;
+                }
                 suites[suite.handle] = newRecord;
             }
 
@@ -70,7 +83,7 @@ class JSONAllReporter extends Base {
             runner.testResults = result;
 
             this.options.reporterOption.onComplete &&
-                this.options.reporterOption.onComplete(result, suites);
+                this.options.reporterOption.onComplete(result, suites, error);
         });
     }
 

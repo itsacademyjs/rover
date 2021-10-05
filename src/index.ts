@@ -50,8 +50,8 @@ const validateSolution = async (
 
 export const extractMeta = (): Promise<any> =>
     new Promise((resolve) => {
-        const handleComplete = (meta, suites) => {
-            resolve({ meta, suites });
+        const handleComplete = (meta, suites, error) => {
+            resolve({ meta, suites, error });
         };
 
         const driver = new Driver({
@@ -76,7 +76,12 @@ export const extractMeta = (): Promise<any> =>
 const generateMeta = async (
     configuration: MetaConfiguration
 ): Promise<void> => {
-    const { meta } = await extractMeta();
+    const { meta, error } = await extractMeta();
+
+    if (error) {
+        return;
+    }
+
     const json = JSON.stringify(meta, null, 2);
     if (configuration.file) {
         try {
@@ -98,7 +103,11 @@ const generateMeta = async (
 const listExercises = async (
     configuration: ListConfiguration
 ): Promise<void> => {
-    const { meta } = await extractMeta();
+    const { meta, error } = await extractMeta();
+
+    if (error) {
+        return;
+    }
 
     const { suites } = meta.suites[0];
     const filteredSuites =
@@ -128,7 +137,12 @@ const showExercise = async (
     configuration: ShowConfiguration
 ): Promise<void> => {
     const { handle } = configuration;
-    const { suites } = await extractMeta();
+    const { suites, error } = await extractMeta();
+
+    if (error) {
+        return;
+    }
+
     const suite = suites[handle];
 
     if (!suite) {
