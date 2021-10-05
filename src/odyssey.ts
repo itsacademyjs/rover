@@ -10,6 +10,7 @@ import chalk from "chalk";
 import mongoose from "mongoose";
 import fs from "fs";
 import dotenv from "dotenv";
+import lodash from "lodash";
 import { SyncConfiguration } from "./types";
 import { TestSuite } from "./models";
 
@@ -30,6 +31,13 @@ const syncExercises = async (
             description: test.description,
         })),
     }));
+    const handles = data.map((item) => item.handle);
+
+    if (lodash.uniq(handles).length !== handles.length) {
+        console.log("You have duplicate handles. Terminating sync...");
+        process.exit();
+    }
+
     const updateQueries = data.map((item) => ({
         updateOne: {
             filter: {
