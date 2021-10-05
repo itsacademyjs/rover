@@ -1,8 +1,17 @@
 {
     "name": "@academyjs/rover",
-    "version": "0.1.14",
+    "version": "0.1.15",
     "main": "dist/src/index.js",
     "description": "Rover allows you to learn programming interactively.",
+    "homepage": "https://academyjs.com/rover",
+    "bugs": {
+        "url": "https://github.com/itsganymede/rover/issues",
+        "email": "samuel@academyjs.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/itsganymede/rover.git"
+    },
     "private": false,
     "bin": "./bin/rover",
     "files": [
