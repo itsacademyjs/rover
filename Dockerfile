@@ -12,3 +12,9 @@ RUN rm -rf node_modules && yarn install --frozen-lockfile
 
 # Bundle app source
 COPY . .
+
+RUN [ "yarn", "build" ]
+
+RUN [ "chmod", "u+x", "./bin/odyssey"]
+
+CMD [ "./bin/odyssey", "sync" ]
